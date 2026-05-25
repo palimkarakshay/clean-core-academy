@@ -16,7 +16,7 @@ import { test, expect } from "@playwright/test";
 
 // Direct deep-link is more reliable than picker -> pack -> section
 // chain (which depends on whichever pack happens to render first).
-const SECTION_URL = "/cca-f-prep/section/s1-claude-101";
+const SECTION_URL = "/clean-core-academy/section/m01-foundations";
 
 async function gotoFirstSection(page: import("@playwright/test").Page) {
   await page.goto(SECTION_URL);

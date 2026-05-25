@@ -6,6 +6,35 @@
 
 export type Bloom = "R" | "U" | "A" | "An" | "E" | "C";
 
+/**
+ * Learner track a module is authored for. A module may belong to
+ * several. The four developer tiers run new → admin; the three
+ * business tiers are independent stakeholder lenses.
+ *
+ *   Developer tiers
+ *   - new           : onboarding ABAP/SAP developers
+ *   - intermediate  : developers building extensions day-to-day
+ *   - expert         : architects / leads owning the strategy
+ *   - admin          : Basis / DevOps / landscape-facing developers
+ *
+ *   Business / stakeholder tiers (independent)
+ *   - management     : L&D leads, dev managers, decision-makers
+ *   - end-user       : key users / functional / business end-users
+ *   - stakeholder    : anyone needing a plain-language orientation
+ *
+ * The shell-level registry (src/content/audiences.ts) carries the
+ * display metadata (labels, ordering, family grouping) so the track
+ * filter renders without the curriculum knowing about the UI.
+ */
+export type Audience =
+  | "new"
+  | "intermediate"
+  | "expert"
+  | "admin"
+  | "management"
+  | "end-user"
+  | "stakeholder";
+
 export type LessonStatus = "draft" | "ready";
 
 export interface LessonExample {
@@ -197,6 +226,14 @@ export interface Section {
   title: string;
   sourceCourse?: string;
   blurb: string;
+  /**
+   * Learner tracks this module belongs to. Drives the track filter on
+   * the course home. A module may serve several tracks (e.g. a
+   * foundations module serves new + intermediate + management). A
+   * module with no `audiences` is treated as belonging to every track
+   * (so untagged content is never hidden).
+   */
+  audiences?: Audience[];
   concepts: Concept[];
   sectionTest: SectionTest | null;
   /**

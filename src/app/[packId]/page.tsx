@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
+import { ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
 import { SectionList } from "@/components/dashboard/SectionList";
+import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { MockExamPanel } from "@/components/dashboard/MockExamPanel";
 import { StatsPanel } from "@/components/dashboard/StatsPanel";
 import { ProgressCharts } from "@/components/dashboard/ProgressCharts";
@@ -47,13 +48,6 @@ export default async function PackHomePage({
         href={`/${pack.config.id}`}
       />
       <header className="flex flex-col gap-2">
-        <Link
-          href="/"
-          className="inline-flex w-fit items-center gap-1 text-xs text-(--muted) hover:text-(--ink)"
-        >
-          <ArrowLeft aria-hidden className="h-3.5 w-3.5" />
-          All courses
-        </Link>
         <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
           Course
         </p>
@@ -146,7 +140,10 @@ export default async function PackHomePage({
             <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
               Modules
             </h2>
-            <SectionList />
+            <div className="flex flex-col gap-4">
+              <TrackFilter />
+              <SectionList />
+            </div>
           </section>
           <MockExamPanel />
         </div>

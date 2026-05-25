@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const GAME_URL = "/cca-f-prep/section/s1-claude-101/games/time-trivia";
+const GAME_URL = "/clean-core-academy/section/m01-foundations/games/time-trivia";
 
 test.describe("games — Time Trivia", () => {
   test("Start screen renders the rules + a Start button", async ({ page }) => {

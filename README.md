@@ -1,9 +1,11 @@
 # Clean Core Academy
 
-An interactive course that turns the SAP-modernization **cookbooks** in the
-[`palimkarakshay/abap-utilities`](https://github.com/palimkarakshay/abap-utilities)
-reference repo into hands-on lessons, delivered through a content-agnostic
-learning-app shell (ported from `cca-f-prep/web/`).
+An interactive ABAP developer academy for **SAP Clean Core & S/4HANA
+readiness**, delivered through a content-agnostic learning-app shell. The
+curriculum follows the 14-module *Clean Core & HANA Readiness* brief and is
+restructured for four developer tracks (new → intermediate → expert → admin)
+plus three independent business tracks (management, key & end users, other
+stakeholders).
 
 Every lesson pairs:
 
@@ -13,42 +15,50 @@ Every lesson pairs:
 - a **"spot the Clean-Core violation" quiz** — 4-option MCQs that name the
   *principle*, not just the answer.
 
-> **v0.1 status.** The **ABAP Anti-Patterns → Clean Core** module renders
-> end-to-end (notes + before/after + MCQ + a "spot the violation" module check)
-> in the shell, and its guard-clauses lesson ships an **in-app code exercise**
-> whose submissions are linted live by abaplint — the planted `exit_or_check`
-> violation is flagged until you refactor it to guard clauses. All five
-> cookbook modules are authored, the **Clean-Core readiness self-audit**
-> (questionnaire → score → prioritized remediation) is live at `/<pack>/audit`,
-> and a **per-module skills matrix** (rate your confidence per competency, jump
-> to the lesson that builds it) is live at `/<pack>/skills`.
+> **Status.** The full **Clean Core & HANA Readiness** curriculum is authored —
+> 13 developer/cross-cutting modules plus 3 business-track modules, each with
+> concept notes + before/after ABAP + quizzes and a module check. The
+> language-modernization module ships an **in-app code exercise** whose
+> submissions are linted live by abaplint (the planted `exit_or_check` violation
+> is flagged until you refactor to guard clauses). A **practice exam**, the
+> **Clean-Core readiness self-audit** (`/<pack>/audit`), and a **per-module
+> skills matrix** (`/<pack>/skills`) are all live.
 
-The reference repo is **read-only** for this project — the academy only reads
-its `docs/` and `src/*`; it never modifies `abap-utilities`.
+Every lesson pairs concept notes, before/after ABAP, and quizzes; code shown is
+written against S/4HANA 2023 (ABAP Platform 758).
 
 ---
 
-## Modules (one per cookbook)
+## Tracks & modules
 
-| # | Module | Source cookbook | Highlights |
-|---|--------|-----------------|------------|
-| 1 | **ABAP Anti-Patterns → Clean Core** *(v0.1 hero)* | `anti-patterns-playbook.md` | `SELECT *`, N+1 reads, unsorted dedup, deep nesting → guards, magic numbers, SQL injection |
-| 2 | **Clean Core & ATC: don't touch the standard** | `clean-core-atc-cookbook.md` | table writes → API/RAP, table reads → CDS, non-released → wrapper, sy-fields → context API |
-| 3 | **From BDC / CALL TRANSACTION to API / RAP** | `bdc-to-api-cookbook.md` | why batch input breaks, the API→RAP→OData decision tree, mass runs via EML |
-| 4 | **Modernizing toward RAP / CDS** | `rap-cds-modernization.md` | report → CDS consumption view, module pool → RAP managed behaviour, VDM layering |
-| 5 | **Converting classic apps to Fiori** | `fiori-conversion-cookbook.md` | SM30/SE16 → managed RAP app, ALV → Fiori List Report |
-| 6 | **Clean Core Readiness: the self-audit** | `clean-core-readiness.md` | the ✅/⚠️/❌ buckets + a live **readiness self-audit** (questionnaire → score → remediation) |
+The course is **one body of content tagged for several audiences**. The course
+home carries a **track filter** so each reader sees the modules for their role:
+
+- **Developer ladder** — New → Intermediate → Expert → Admin.
+- **Business lenses** — Management · Key & end users · Other stakeholders.
+
+A module can serve several tracks (Foundations serves everyone; Performance
+serves intermediate + admin). Modules with no tag appear in every track.
+
+**Developer & cross-cutting (m01–m13)** — Clean Core Foundations · HANA Readiness
+(the DB mindset) · ABAP Language Modernization · ABAP Cloud & RAP · Released APIs
+& Extensibility Contracts · CDS, AMDP & Code Pushdown · Performance & SQL on HANA
+· ATC, Custom-Code Migration & Simplification · Lesser-Known Tools & Utilities ·
+The Gotchas Catalog · Did You Know? · How-To Recipes · Capstone Scenarios.
+
+**Business tracks (b01–b03)** — Clean Core for Management & Leads · Clean Core for
+Key & End Users · Clean Core Orientation for Stakeholders.
+
+A **practice exam** (`/<pack>/mock`) distils the curriculum's quiz bank.
 
 ### The readiness self-audit (`/<pack>/audit`)
 
-A standalone interactive built from the reference repo's clean-core-readiness
-matrix and cookbooks: a weighted **questionnaire** about your own codebase
+A standalone interactive: a weighted **questionnaire** about your own codebase
 (direct table writes, BDC, GUI apps, sy-fields, dynamic SQL, ATC usage, …)
 produces a **readiness score + verdict** and a **prioritized remediation list**
 sorted worst-first, each finding deep-linked to the module that fixes it. It is
 data-driven from `Curriculum.readinessAudit`, so any pack can ship one; the
-shell renders it generically and the home page surfaces a CTA when present.
-(Module 6's own lessons + module check additionally drill the ✅/⚠️/❌ buckets.)
+shell renders it generically and the course home surfaces a CTA when present.
 
 ---
 
@@ -59,16 +69,19 @@ The app is a **content-agnostic Next.js shell** + a single **content pack**:
 ```
 content-packs/clean-core-academy/   ← the course (the only thing that's course-specific)
   ├── pack.config.ts                ← branding, palette, nav, terminology, prerequisites
-  ├── curriculum.ts                 ← 6 modules → lessons + quizzes + module checks,
-  │                                   the m1-c4 code exercise, and the readinessAudit
+  ├── curriculum.ts                 ← assembles the modules + practice exam + readinessAudit
+  ├── modules/                      ← one Section per file (m01–m13, b01–b03) + exams.ts
+  │                                   (m03-c1 ships the in-app abaplint code exercise)
   ├── icons.ts  index.ts  _types.ts
 src/                                ← the shell (framework, components, progress engine) — pack-agnostic
   ├── app/[packId]/audit/           ← the readiness self-audit route
   ├── app/[packId]/skills/          ← the per-module skills matrix route
   ├── app/api/lint-abap/            ← server route: lints exercise submissions
+  ├── content/audiences.ts          ← learner-track registry (new/intermediate/expert/admin + business)
+  ├── lib/track-filter.ts           ← selected-track store backing the course-home filter
   ├── lib/abap/lintAbap.ts          ← @abaplint/core + the shared ruleset
   ├── lib/skills-store.ts           ← per-pack skill self-ratings (localStorage)
-  └── components/{concept/CodeExercisePanel, audit/ReadinessAuditView, skills/SkillsMatrix}.tsx
+  └── components/{dashboard/TrackFilter, concept/CodeExercisePanel, audit/ReadinessAuditView, skills/SkillsMatrix}.tsx
 exercises/                          ← abaplint.json (shared ruleset) + clean reference solutions
 ```
 
@@ -82,11 +95,8 @@ shell's pack contract and authoring guide.
 `LessonBody` renders `variant: "before" | "after"` snippets as colour-coded
 monospace blocks (`src/components/concept/LessonBody.tsx`).
 
-The shell ships a second pack, **`acme-onboarding`** (a B2B demo fixture). It is
-hidden from the course picker (`audience: "b2b"`) and its designer-lane surface
-(`/adept`, `/for-teams`) is disabled via `NEXT_PUBLIC_ADEPT_ENABLED=0`, so the
-academy is the only course a visitor sees. It is kept so the shell's B2B/contract
-tests retain a fixture.
+The academy is the only course the shell delivers: the root path redirects
+straight into it, and there is no multi-course picker or B2B/designer surface.
 
 ---
 
@@ -94,7 +104,7 @@ tests retain a fixture.
 
 ```sh
 npm install
-npm run dev            # http://localhost:3000  → pick "Clean Core Academy"
+npm run dev            # http://localhost:3000  → opens the Clean Core Academy course
 ```
 
 Verification loop:

@@ -13,9 +13,9 @@ function findExercise(id: string): CodeExercise | null {
 }
 
 describe("in-app abaplint check", () => {
-  it("flags the planted Clean-Core violation in the m1-c4 exercise starter", () => {
-    const ex = findExercise("m1-c4-ex");
-    expect(ex, "m1-c4 exercise should exist in the active pack").not.toBeNull();
+  it("flags the planted Clean-Core violation in the m03-c1 exercise starter", () => {
+    const ex = findExercise("m03-c1-ex");
+    expect(ex, "m03-c1 exercise should exist in the active pack").not.toBeNull();
     const issues = lintAbap(ex!.starterCode);
     const rules = issues.map((i) => i.rule);
     expect(issues.length, `expected findings, got ${JSON.stringify(rules)}`).toBeGreaterThan(0);

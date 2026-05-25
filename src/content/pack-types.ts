@@ -183,15 +183,6 @@ export interface PackConfig {
    */
   heroImagePath?: string;
   /**
-   * Audience this pack targets. `consumer` packs surface on the
-   * public picker at `/`. `b2b` packs surface only on the Adept
-   * area at `/adept` (company-approved, SME-verified content with
-   * its own create/edit/validate/deploy workbench). Omitting the
-   * field defaults to `consumer` so existing packs don't need to
-   * declare it explicitly.
-   */
-  audience?: "consumer" | "b2b";
-  /**
    * Optional pre-flight gate surfaced on the pack home page above
    * the section list. Use for packs that lead to a real-world
    * certification or step with hard prerequisites (the PMP exam's

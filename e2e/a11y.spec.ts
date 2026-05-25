@@ -27,10 +27,10 @@ import AxeBuilder from "@axe-core/playwright";
 
 const STATIC_PATHS = [
   "/",
-  "/cca-f-prep",
-  "/cca-f-prep/mock",
-  "/sample-pack",
-  "/sewing-beginners",
+  "/clean-core-academy",
+  "/clean-core-academy/mock",
+  "/clean-core-academy/audit",
+  "/clean-core-academy/skills",
 ];
 
 const A11Y_TAGS = [
@@ -77,8 +77,8 @@ test.describe("a11y — WCAG 2.1+2.2 AA, no critical or serious", () => {
   test("post-interaction state on a lesson page (depth-picker toggle)", async ({
     page,
   }) => {
-    // Sample-pack's first authored concept has a depth picker.
-    await page.goto("/sample-pack/concept/s1-foundations/c1-1");
+    // The first foundations concept has a depth picker (easy/deeper).
+    await page.goto("/clean-core-academy/concept/m01-foundations/m01-c1");
 
     // Toggle Easy if it's available.
     const easyButton = page.getByRole("radio", { name: "Easy" });
