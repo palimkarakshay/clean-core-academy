@@ -241,7 +241,7 @@ export const m12Recipes: Section = {
     },
     {
       id: "m12-c3",
-      code: "12.4",
+      code: "12.3",
       title: "Migrate FORM/PERFORM to classes",
       bloom: "A",
       lesson: {
@@ -373,7 +373,7 @@ export const m12Recipes: Section = {
     },
     {
       id: "m12-c4",
-      code: "12.5",
+      code: "12.4",
       title: "Write a CDS unit test",
       bloom: "A",
       lesson: {
@@ -503,7 +503,7 @@ export const m12Recipes: Section = {
     },
     {
       id: "m12-c5",
-      code: "12.6",
+      code: "12.5",
       title: "ATC in a CI/CD pipeline",
       bloom: "A",
       lesson: {
@@ -595,7 +595,7 @@ export const m12Recipes: Section = {
     },
     {
       id: "m12-c6",
-      code: "12.8",
+      code: "12.6",
       title: "Write an AMDP that respects MANDT",
       bloom: "A",
       lesson: {

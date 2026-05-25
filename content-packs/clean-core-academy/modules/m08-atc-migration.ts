@@ -41,7 +41,7 @@ export const m08AtcMigration: Section = {
     },
     {
       id: "m08-s5",
-      label: "Map high-impact Simplification Items to their successor tables and bridge old reads with released compatibility CDS views",
+      label: "Map high-impact Simplification Items to their successor tables and bridge old reads with the released interface views (I_*) over the new model",
       conceptId: "m08-c5",
     },
   ],
@@ -356,7 +356,7 @@ export const m08AtcMigration: Section = {
     },
     {
       id: "m08-c4",
-      code: "8.5",
+      code: "8.4",
       title: "The full Custom Code Migration loop",
       bloom: "An",
       lesson: {
@@ -455,7 +455,7 @@ export const m08AtcMigration: Section = {
     },
     {
       id: "m08-c5",
-      code: "8.6",
+      code: "8.5",
       title: "Simplification Items that bite",
       bloom: "An",
       lesson: {
@@ -464,14 +464,14 @@ export const m08AtcMigration: Section = {
         paragraphs: [
           "A Simplification Item is SAP's record of something that changed in S/4 — a table redesigned, a field removed, a process reworked — and a handful of them account for most of the pain a custom-code base feels in a conversion. The biggest are data-model changes. Pricing moved from the cluster-era `konv` to the transparent `prcd_elements`. Inventory's `mseg` is now augmented by the `matdoc` material-document table. The FI line-item world that used to live in `bseg` is subsumed by the universal journal `acdoca`. Output determination that ran on `nast` is replaced by the new Output Management framework.",
           "Code that reads these tables directly will frequently still compile and even run on 758 for backward compatibility, which is exactly why these items are dangerous: nothing screams, but the source of truth for current data and analytics has moved. Reading `bseg` for new reporting, for instance, can quietly miss postings that only exist in `acdoca`. So the readiness variant flags the direct dependency precisely so you treat it as a decision, not an accident.",
-          "The clean remedy is the compatibility CDS views SAP ships for exactly this transition — the `I_*Compatibility` family bridges an old-style read onto the new model and, crucially, they are released (C1). Pointing a legacy `select` at the compatibility view instead of the raw table gets you upgrade-safe, contract-backed access without rewriting all the surrounding logic at once. Use them: they are the sanctioned bridge from the old shape to the new world.",
+          "The clean remedy is the released interface views SAP ships over the new model — for the universal journal that means `I_OperationalAcctgDocItem` and its siblings in the `I_*` family, which are released (C1). Pointing a legacy `select` at the released interface view instead of the raw table gets you upgrade-safe, contract-backed access without rewriting all the surrounding logic at once. (SAP also ships old-name *compatibility views* that preserve the legacy table shape for a lift-and-shift; the durable target is the released interface view.)",
         ],
         keyPoints: [
           "Pricing konv → prcd_elements; inventory mseg augmented by matdoc.",
           "FI document bseg → the universal journal acdoca.",
           "Output management nast → the new Output Management framework.",
           "Direct reads often still work on 758 but miss the new source of truth — the danger is silence.",
-          "Compatibility CDS views (I_*Compatibility) bridge old reads, are released (C1) — use them.",
+          "Released interface views over the new model (the I_* family, e.g. I_OperationalAcctgDocItem) are released (C1) — read through them.",
         ],
         examples: [
           {
@@ -486,23 +486,23 @@ export const m08AtcMigration: Section = {
             ].join("\n"),
           },
           {
-            title: "Through the released compatibility view",
+            title: "Through the released interface view",
             variant: "after",
             lang: "ABAP",
-            body: "Reading the released I_*Compatibility view keeps the same shape but is contract-backed and upgrade-safe.",
+            body: "Reading the released interface view (I_OperationalAcctgDocItem) over the universal journal is contract-backed and upgrade-safe.",
             code: [
               "select * from i_operationalacctgdocitem",
               "  into table @data(lt_items)",
-              '" ... a released (c1) compatibility view over the acdoca model',
+              '" ... a released (c1) interface view over the acdoca universal journal',
               "  where companycode = @lv_bukrs.",
             ].join("\n"),
           },
         ],
         simplified: {
           oneLiner:
-            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) bite hardest — bridge old reads with the released I_*Compatibility CDS views.",
+            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) bite hardest — bridge old reads with the released I_* interface views (e.g. I_OperationalAcctgDocItem).",
           analogy:
-            "The old address still gets some mail, but the household has moved — forward your reads through the released compatibility view to reach the real, current data.",
+            "The old address still gets some mail, but the household has moved — forward your reads through the released interface view to reach the real, current data.",
         },
       },
       quiz: {
@@ -659,20 +659,20 @@ export const m08AtcMigration: Section = {
         question:
           "How should custom code reach FI document data after the move from bseg to acdoca, without a full rewrite?",
         options: {
-          A: "Through the released I_*Compatibility CDS views that bridge old reads to the new model.",
+          A: "Through the released interface views (I_*) that map old reads onto the new model.",
           B: "By calling CALL TRANSACTION on the FI dialog.",
           C: "By reading nast directly.",
           D: "By writing native EXEC SQL against acdoca.",
         },
         correct: "A",
         explanations: {
-          A: "Correct — the released (C1) compatibility views bridge the old shape onto acdoca, giving upgrade-safe access.",
+          A: "Correct — the released (C1) interface views map the old shape onto acdoca, giving upgrade-safe access.",
           B: "CALL TRANSACTION is forbidden in cloud code and is not a data-access strategy.",
           C: "nast is output determination, not FI document data.",
           D: "Native SQL bypasses the model and is a Clean Core violation.",
         },
         principle:
-          "Released compatibility CDS views are the sanctioned bridge from old reads to the new model.",
+          "Released interface views (I_*) are the sanctioned bridge from old reads to the new model.",
       },
     ],
   },

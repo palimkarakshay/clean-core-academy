@@ -212,7 +212,7 @@ export const m10Gotchas: Section = {
               "sort lt_data stable by id.",
               "loop at lt_data assigning field-symbol(<row>).",
               "  <row>-status = 'DONE'.",
-              'enddo. " <- the assignment above already updated the table',
+              'endloop. " <- the assignment above already updated the table',
             ].join("\n"),
           },
         ],

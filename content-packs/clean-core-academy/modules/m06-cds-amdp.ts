@@ -329,7 +329,6 @@ export const m06CdsAmdp: Section = {
             body: "Declares the returned columns and a client parameter bound to the system field; the body lives in an AMDP method.",
             code: [
               "@EndUserText.label: 'Order Ranking'",
-              "@ClientHandling.algorithm: #SESSION_VARIABLE",
               "define table function ZI_OrderRanking",
               "  with parameters",
               "    @Environment.systemField: #CLIENT",
