@@ -5,6 +5,7 @@ import { getConceptFrom } from "@/content/curriculum-loader";
 import { Breadcrumbs } from "@/components/primitives/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { LessonView } from "@/components/concept/LessonView";
+import { CodeExercisePanel } from "@/components/concept/CodeExercisePanel";
 import { ConceptHeaderNav } from "@/components/concept/ConceptHeaderNav";
 import { LastVisitTracker } from "@/components/layout/LastVisitTracker";
 import { journeyTrail } from "@/lib/nav-trail";
@@ -76,6 +77,9 @@ export default async function ConceptPage({
       />
       <ConceptHeaderNav pack={pack} section={section} concept={concept} />
       <LessonView section={section} concept={concept} />
+      {concept.exercise ? (
+        <CodeExercisePanel exercise={concept.exercise} />
+      ) : null}
     </Container>
   );
 }

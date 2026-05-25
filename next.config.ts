@@ -63,6 +63,10 @@ const SECURITY_HEADERS = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
+  // @abaplint/core is a large Node library with internal dynamic
+  // requires that don't survive webpack bundling — keep it external so
+  // the /api/lint-abap serverless function `require()`s it at runtime.
+  serverExternalPackages: ["@abaplint/core"],
   images: {
     formats: ["image/avif", "image/webp"],
   },

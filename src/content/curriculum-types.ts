@@ -163,6 +163,32 @@ export interface Concept {
   bloom?: Bloom;
   lesson: Lesson | null;
   quiz: Quiz | null;
+  /** Optional hands-on code exercise. When present, the concept page
+   *  renders an editor whose submissions are linted in-app
+   *  (POST /api/lint-abap). Backward-compatible — packs omit it. */
+  exercise?: CodeExercise | null;
+}
+
+/**
+ * A code exercise: starter source carrying a planted violation, which
+ * the learner fixes until the in-app linter reports zero issues. Used by
+ * code-centric packs; the shell renders it via CodeExercisePanel.
+ */
+export interface CodeExercise {
+  /** Stable id (progress keying). */
+  id: string;
+  /** What the learner must do, in 1–3 sentences. */
+  prompt: string;
+  /** Starter code — contains the planted violation to fix. */
+  starterCode: string;
+  /** Editor language label (e.g. "ABAP"). Cosmetic. */
+  lang?: string;
+  /** Lint rule(s) the planted violation triggers — surfaced as a hint. */
+  flaggedRules?: string[];
+  /** Optional nudge toward the fix. */
+  hint?: string;
+  /** Optional note shown once the submission lints clean. */
+  successNote?: string;
 }
 
 export interface Section {
@@ -231,10 +257,44 @@ export interface MockExam {
   questions: Question[];
 }
 
+/**
+ * One question in the Clean Core readiness self-audit. The learner
+ * answers yes / partial / no about their own codebase or practice;
+ * the answer that signals a Clean-Core risk is `riskAnswer`. A risky
+ * answer contributes `weight` (partial = half) to the risk score and
+ * surfaces `remediation` (linked to `moduleId`) in the prioritized list.
+ */
+export interface ReadinessAuditQuestion {
+  id: string;
+  /** Short dimension label, e.g. "Data access", "UI", "Tooling". */
+  dimension: string;
+  question: string;
+  detail?: string;
+  /** Severity if the practice is a risk. Higher = worse. */
+  weight: number;
+  /** Which answer indicates the risky practice. */
+  riskAnswer: "yes" | "no";
+  /** Shown in the remediation list when the answer is risky. */
+  remediation: string;
+  /** Module id to deep-link the fix (matches a Section.id). */
+  moduleId?: string;
+}
+
+export interface ReadinessAudit {
+  title: string;
+  intro: string;
+  questions: ReadinessAuditQuestion[];
+  /** Verdict bands keyed by readiness % (0–100). */
+  bands: { min: number; max: number; verdict: string; message: string }[];
+}
+
 export interface Curriculum {
   schemaVersion: number;
   sections: Section[];
   mockExams?: MockExam[];
+  /** Optional self-audit: questionnaire → score → prioritized
+   *  remediation. Surfaced at /[packId]/audit when present. */
+  readinessAudit?: ReadinessAudit;
 }
 
 /* ------------------------------------------------------------------
