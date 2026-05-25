@@ -21,7 +21,7 @@ export const m02HanaReadiness: Section = {
   skills: [
     {
       id: "m02-s1",
-      label: "Explain the six conceptual shifts HANA introduces (columnar, no implicit sort, MVCC)",
+      label: "Explain the five conceptual shifts HANA introduces (columnar, no implicit sort, MVCC)",
       conceptId: "m02-c1",
     },
     {
@@ -57,9 +57,9 @@ export const m02HanaReadiness: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §2.1",
         paragraphs: [
-          "The conceptual shift to HANA is not 'faster' — it is six structural changes, and every well-known gotcha derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
+          "The conceptual shift to HANA is not 'faster' — it is five structural changes, and every well-known gotcha derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
           "Reads no longer take row locks, and HANA serves them from an MVCC snapshot — a consistent view as of the statement's start — so concurrent writers don't block your SELECT and you don't block them. Pool and cluster tables were dissolved into transparent tables (BSEG, KONV, CDPOS and friends), so reads against them now behave like any other table but with subtly different cardinality.",
-          "Finally the optimizer thinks differently: it favours set-based, projected, pushed-down access and is unimpressed by row-at-a-time loops and AnyDB-era hints. Internalising these six shifts is what turns 'my code broke after the migration' into 'of course it did, and here is why.'",
+          "Finally the optimizer thinks differently: it favours set-based, projected, pushed-down access and is unimpressed by row-at-a-time loops and AnyDB-era hints. Internalising these five shifts is what turns 'my code broke after the migration' into 'of course it did, and here is why.'",
         ],
         keyPoints: [
           "Columnar by default — no implicit physical row order to rely on.",
@@ -174,7 +174,7 @@ export const m02HanaReadiness: Section = {
           "SELECT SINGLE on a partial key returns an arbitrary row; supply the full key.",
           "FOR ALL ENTRIES de-duplicates the driver AND returns ALL rows on an empty driver — guard it.",
           "Implicit type conversion in WHERE can cost the index; match the field's type.",
-          "COUNT(*) on a wide table is a column scan, not a free count.",
+          "COUNT(*) with a filter on a non-key column is a column scan, not a free count.",
         ],
         examples: [
           {
@@ -283,7 +283,7 @@ export const m02HanaReadiness: Section = {
           {
             n: 3,
             question:
-              "Why can SELECT COUNT(*) on a wide column-store table be surprisingly expensive on HANA?",
+              "Why can SELECT COUNT(*) with a WHERE filter on a wide column-store table be surprisingly expensive on HANA?",
             options: {
               A: "Because it locks the whole table while counting.",
               B: "Because it copies the table into the ABAP buffer first.",

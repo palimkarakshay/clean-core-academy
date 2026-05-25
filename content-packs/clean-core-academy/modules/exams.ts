@@ -312,7 +312,7 @@ export const practiceExam: MockExam = {
       correct: "B",
       explanations: {
         A: "KONV is pricing, replaced by PRCD_ELEMENTS.",
-        B: "Correct — ACDOCA is the Universal Journal; read it through released CDS / compatibility views.",
+        B: "Correct — ACDOCA is the Universal Journal; read it through released CDS interface views (I_*).",
         C: "NAST is output management.",
         D: "MSEG is inventory, augmented by MATDOC.",
       },
