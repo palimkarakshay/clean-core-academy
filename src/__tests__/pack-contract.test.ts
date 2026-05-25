@@ -11,12 +11,10 @@
 
 import { describe, expect, it } from "vitest";
 import { pack as cleanCorePack } from "../../content-packs/clean-core-academy";
-import { pack as acmePack } from "../../content-packs/acme-onboarding";
 import type { ContentPack } from "@/content/pack-types";
 
 const PACKS: Array<[string, ContentPack]> = [
   ["clean-core-academy", cleanCorePack],
-  ["acme-onboarding", acmePack],
 ];
 
 describe.each(PACKS)("pack %s satisfies the contract", (id, pack) => {

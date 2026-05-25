@@ -8,8 +8,6 @@ import {
   Layers,
   Award,
   TrendingUp,
-  Grid3X3,
-  Briefcase,
   type LucideIcon,
 } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
@@ -48,57 +46,25 @@ function packIdFromPathname(pathname: string | null): string | null {
 function prefixWithPack(href: string, packId: string | null): string {
   if (!packId) return href;
   if (href === "/") return `/${packId}`;
-  if (href.startsWith("/#") || href.startsWith("#")) return `/${packId}${href.startsWith("/") ? href : `/${href}`}`;
-  // already-prefixed absolute paths (e.g. "/picker") stay as-is
-  return href.startsWith(`/${packId}/`) || href === `/${packId}` ? href : `/${packId}${href}`;
+  if (href.startsWith("/#") || href.startsWith("#"))
+    return `/${packId}${href.startsWith("/") ? href : `/${href}`}`;
+  return href.startsWith(`/${packId}/`) || href === `/${packId}`
+    ? href
+    : `/${packId}${href}`;
 }
 
 export function Header() {
   const pathname = usePathname();
   const firstSegment = packIdFromPathname(pathname);
   // The chrome lives in the root layout, *outside* the [packId]
-  // PackProvider, so `usePack()`/`useSiteConfig()` falls back to the
-  // default pack and the chrome's nav would lock to that pack's
-  // items regardless of which pack the URL points at (e.g. showing
-  // "Mock" on /acme-onboarding/... even though Acme has no mock
-  // exams). Resolving the pack from the URL keeps the chrome's nav
-  // in sync with the route. Non-pack routes (e.g. /for-teams) return
-  // null from getPack and fall through to the picker-style chrome
-  // (no nav, no Switch-topic button) so the chrome doesn't pretend
-  // you're inside a pack.
+  // PackProvider, so resolve the pack from the URL so the nav stays
+  // in sync with the route.
   const pack = firstSegment ? getPack(firstSegment) : null;
   const packId = pack ? firstSegment : null;
-  // Top header surfaces the actionable destinations on tablet+ where there
-  // is no bottom nav. On mobile, the brand stays visible but the nav
-  // collapses to the bottom-tab bar.
-  //
-  // On the picker (packId null), every nav item is pack-relative (the
-  // pack.config.nav hrefs assume a pack context — e.g. "/mock" really
-  // means "/<active pack>/mock"). Surfacing them un-prefixed leads
-  // visitors to 404s like /mock or anchor-only pages. Hide the inline
-  // nav until the user has picked a pack; the brand + ThemeToggle stay.
-  //
-  // Brand-line discipline: the second line always reads `BRAND.tagline`
-  // ("Learn anything."), never the pack name. Pack identity surfaces
-  // on the page H1 + the Switch-topic affordance, so the top chrome
-  // doesn't accidentally surface a single pack's identity (e.g. "CCA-F
-  // Prep") to a visitor who is exploring multiple topics.
   const visibleNav = pack
     ? pack.config.nav.filter((n) => n.href !== "/")
     : [];
   const homeHref = packId ? `/${packId}` : "/";
-  // Adept mark on B2B routes (/adept, /adept/*, /for-teams), Curio mark
-  // everywhere else. Both marks share the same dark-canvas + accent
-  // design so the swap is decorative, not load-bearing — the wordmark
-  // text remains the source of truth for which brand the visitor is
-  // looking at.
-  const isB2BRoute =
-    pathname === "/adept" ||
-    pathname?.startsWith("/adept/") ||
-    pathname === "/for-teams";
-  const markSrc = isB2BRoute
-    ? "/images/brand/final/adept-mark.jpg"
-    : "/images/brand/final/curio-mark.jpg";
 
   return (
     <header className="border-b border-(--border) mb-6">
@@ -110,7 +76,7 @@ export function Header() {
         >
           <Image
             aria-hidden
-            src={markSrc}
+            src="/images/brand/final/curio-mark.jpg"
             alt=""
             width={32}
             height={32}
@@ -151,40 +117,6 @@ export function Header() {
               );
             })}
           </ul>
-          {packId ? (
-            <Link
-              href="/"
-              aria-label="Switch course — back to all courses"
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-md border border-(--border) bg-(--panel) px-3 py-2 text-xs font-medium text-(--ink) no-underline shadow-sm",
-                "transition-colors hover:border-(--accent) hover:text-(--accent-2)",
-                "min-h-9"
-              )}
-            >
-              <Grid3X3 aria-hidden className="h-4 w-4" />
-              <span className="hidden sm:inline">Switch course</span>
-              <span className="sm:hidden">Courses</span>
-            </Link>
-          ) : null}
-          {/* Persistent For-teams CTA — visible on every route so a B2B
-              prospect can find the Adept demo from anywhere in the
-              consumer surface. We surface this even *inside* a pack
-              because pack browsing is also part of the sales journey
-              (prospect tries the consumer experience, then asks "can
-              we have this for our team?"). */}
-          <Link
-            href="/adept"
-            aria-label={`${BRAND.b2bName} — ${BRAND.name} for teams`}
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-md border border-(--accent)/40 bg-(--accent)/10 px-3 py-2 text-xs font-semibold text-(--accent-2) no-underline shadow-sm",
-              "transition-colors hover:border-(--accent) hover:bg-(--accent)/15",
-              "min-h-9"
-            )}
-          >
-            <Briefcase aria-hidden className="h-4 w-4" />
-            <span className="hidden sm:inline">{BRAND.b2bName} (teams)</span>
-            <span className="sm:hidden">{BRAND.b2bName}</span>
-          </Link>
           <DisplayPrefsMenu />
           <ThemeToggle />
         </nav>

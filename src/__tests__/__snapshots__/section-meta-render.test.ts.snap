@@ -2,11 +2,21 @@
 
 exports[`section meta render > formatMinutes renders human-readable time for every section 1`] = `
 {
-  "m1-anti-patterns": "1 hr 15 min",
-  "m2-clean-core-atc": "1 hr",
-  "m3-bdc-to-api": "50 min",
-  "m4-rap-cds": "1 hr 10 min",
-  "m5-fiori": "50 min",
-  "m6-readiness-audit": "45 min",
+  "b01-management": "40 min",
+  "b02-key-users": "35 min",
+  "b03-orientation": "30 min",
+  "m01-foundations": "55 min",
+  "m02-hana-readiness": "55 min",
+  "m03-language": "50 min",
+  "m04-abap-cloud": "1 hr 5 min",
+  "m05-released-apis": "50 min",
+  "m06-cds-amdp": "1 hr",
+  "m07-performance": "55 min",
+  "m08-atc-migration": "1 hr",
+  "m09-tools": "55 min",
+  "m10-gotchas": "55 min",
+  "m11-did-you-know": "40 min",
+  "m12-recipes": "55 min",
+  "m13-capstones": "1 hr",
 }
 `;

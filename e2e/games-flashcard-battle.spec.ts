@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const GAME_URL = "/cca-f-prep/section/s1-claude-101/games/flashcard-battle";
+const GAME_URL = "/clean-core-academy/section/m01-foundations/games/flashcard-battle";
 
 test.describe("games — Flashcard Battle", () => {
   test("Start screen renders rules + a Start button", async ({ page }) => {

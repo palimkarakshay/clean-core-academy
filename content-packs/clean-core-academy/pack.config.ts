@@ -19,7 +19,6 @@ export const packConfig: PackConfig = {
   url: "https://clean-core-academy.vercel.app",
   repoUrl: "https://github.com/palimkarakshay/clean-core-academy",
   author: "palimkarakshay",
-  audience: "consumer",
   nav: [
     { label: "Home", href: "/", icon: "home", mobile: true, match: ["/"] },
     {

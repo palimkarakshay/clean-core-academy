@@ -5,7 +5,9 @@ import { DOMAINS } from "./domains";
 import { DOMAIN_MAP } from "./domain-map";
 import { SECTION_META } from "./section-meta";
 import { deriveFlashcards } from "@/lib/flashcard-derive";
+import { audienceMatches } from "./audiences";
 import type {
+  Audience,
   CCAFDomain,
   CCAFDomainInfo,
   Concept,
@@ -21,6 +23,17 @@ import type { ContentPack } from "./pack-types";
 
 export function getSectionsFrom(curriculum: Curriculum): Section[] {
   return curriculum.sections;
+}
+
+/** Modules tagged for a given learner track (untagged modules match
+ *  every track). */
+export function sectionsForAudience(
+  curriculum: Curriculum,
+  audience: Audience
+): Section[] {
+  return curriculum.sections.filter((s) =>
+    audienceMatches(s.audiences, audience)
+  );
 }
 
 export function getMockExamsFrom(curriculum: Curriculum): MockExam[] {

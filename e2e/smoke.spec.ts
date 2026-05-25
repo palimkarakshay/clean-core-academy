@@ -9,30 +9,32 @@ async function readManifest(request: { get: (url: string) => Promise<{ json: () 
   return (await res.json()) as { name: string; description: string };
 }
 
+const COURSE = "/clean-core-academy";
+
 test.describe("smoke", () => {
-  test("picker at / renders without console errors", async ({ page }) => {
+  test("root redirects into the single course without console errors", async ({
+    page,
+  }) => {
     const errors: ConsoleMessage[] = [];
     page.on("console", (msg) => {
       if (msg.type() === "error") errors.push(msg);
     });
 
     await page.goto("/");
+    // Single-course academy: / lands directly on the course home.
+    await expect(page).toHaveURL(new RegExp(`${COURSE}$`));
     await expect(
-      page.getByRole("heading", { name: /What do you want to learn/i })
+      page.getByRole("heading", { name: /Clean Core Academy/i })
     ).toBeVisible();
 
     expect(errors, errors.map((e) => e.text()).join("\n")).toEqual([]);
   });
 
-  test("primary nav links from any pack route resolve (no 4xx)", async ({
+  test("primary nav links from the course route resolve (no 4xx)", async ({
     page,
     request,
   }) => {
-    // Land on a pack via the picker so the chrome nav is pack-prefixed.
-    await page.goto("/");
-    const firstPackLink = page.locator("a[href^='/']:not([href='/'])").first();
-    await firstPackLink.click();
-    await expect(page).toHaveURL(/^.*\/[^/]+$/);
+    await page.goto(COURSE);
 
     const links = page.locator("nav a[href^='/']");
     const count = await links.count();
@@ -46,21 +48,21 @@ test.describe("smoke", () => {
     }
   });
 
-  test("from a pack, first section card links to its detail page", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    // Enter the first pack
-    await page.locator("a[href^='/']:not([href='/'])").first().click();
-    // Click the first section link inside that pack
-    const firstSectionLink = page
-      .locator("a[href*='/section/']")
-      .first();
+  test("first section card links to its detail page", async ({ page }) => {
+    await page.goto(COURSE);
+    const firstSectionLink = page.locator("a[href*='/section/']").first();
     await firstSectionLink.click();
     await expect(page).toHaveURL(/\/section\//);
     await expect(
       page.getByRole("navigation", { name: /Breadcrumb/i })
     ).toBeVisible();
+  });
+
+  test("track filter narrows the module list", async ({ page }) => {
+    await page.goto(COURSE);
+    // The "Management" track chip filters to the business modules.
+    await page.getByRole("button", { name: /Management/i }).first().click();
+    await expect(page.locator("a[href*='/section/']").first()).toBeVisible();
   });
 
   test("manifest reflects the active pack", async ({ request }) => {

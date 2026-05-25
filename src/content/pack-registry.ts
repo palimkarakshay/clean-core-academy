@@ -1,73 +1,38 @@
 /* ------------------------------------------------------------------
    Pack registry.
 
-   Every pack ships a static export. The registry is the runtime
-   index of all packs the app knows about. Add a new pack by:
-     1. Authoring `web/content-packs/<your-pack>/`.
-     2. Adding the import + entry below.
-
-   Pack lookup happens at request time from the URL `[packId]`
-   segment (see `app/[packId]/layout.tsx`). Build-time env-var
-   single-pack mode (NEXT_PUBLIC_CONTENT_PACK_ID) is preserved as a
-   backward-compat fallback for existing parallel-Vercel deploys.
+   This academy ships a single course — the Clean Core Academy ABAP
+   curriculum. The registry stays as the runtime index (so the
+   `[packId]` routes, the chrome's URL→pack resolution, and the
+   per-pack storage keys keep working unchanged), but there is only
+   one entry. Pack lookup happens at request time from the URL
+   `[packId]` segment (see `app/[packId]/layout.tsx`).
 ------------------------------------------------------------------ */
 
 import { pack as cleanCorePack } from "../../content-packs/clean-core-academy";
-import { pack as acmePack } from "../../content-packs/acme-onboarding";
 import type { ContentPack } from "./pack-types";
 
-/*
-  Order matters: `Object.values(PACK_REGISTRY)` preserves insertion
-  order, and the consumer picker on `/` renders in that order.
-
-  Clean Core Academy is the single consumer course this shell delivers,
-  so it leads (and is the DEFAULT_PACK_ID fallback). `acme-onboarding`
-  is the shell's built-in B2B demo fixture — it stays registered so the
-  audience-filter / B2B contract tests keep a fixture, but it never
-  appears on the consumer picker (audience: "b2b") and the Adept surface
-  that would surface it is disabled via NEXT_PUBLIC_ADEPT_ENABLED=0.
-*/
 export const PACK_REGISTRY: Record<string, ContentPack> = {
   "clean-core-academy": cleanCorePack,
-  "acme-onboarding": acmePack,
 };
 
 export const ALL_PACK_IDS: string[] = Object.keys(PACK_REGISTRY);
 
 export const ALL_PACKS: ContentPack[] = Object.values(PACK_REGISTRY);
 
-/**
- * Packs targeting individual learners. Surfaced on the public picker
- * at `/`. A pack with no `audience` field is treated as consumer so
- * existing packs don't need to declare it explicitly.
- */
-export const CONSUMER_PACKS: ContentPack[] = ALL_PACKS.filter(
-  (p) => (p.config.audience ?? "consumer") === "consumer"
-);
-
-/**
- * Packs authored for a company (SME-verified, company-approved
- * content). Surfaced only on the Adept area at `/adept`. Kept off
- * the consumer picker so the consumer pitch isn't muddied by
- * single-tenant demo content.
- */
-export const B2B_PACKS: ContentPack[] = ALL_PACKS.filter(
-  (p) => p.config.audience === "b2b"
-);
-
 export function getPack(id: string): ContentPack | null {
   // Object.hasOwn guards against prototype-key leakage — route params
-  // like "toString" or "__proto__" must return null, not Object.prototype
-  // members. Same fix as SECTION_META / DOMAIN_MAP lookups.
+  // like "toString" or "__proto__" must return null, not
+  // Object.prototype members.
   return Object.hasOwn(PACK_REGISTRY, id) ? PACK_REGISTRY[id] : null;
 }
 
 /**
  * Default pack id: env-var override if present, otherwise the first
- * registered pack. Used by layouts that want a sensible fallback.
+ * (only) registered pack.
  */
 export const DEFAULT_PACK_ID: string =
   (process.env.NEXT_PUBLIC_CONTENT_PACK_ID &&
   PACK_REGISTRY[process.env.NEXT_PUBLIC_CONTENT_PACK_ID]
     ? process.env.NEXT_PUBLIC_CONTENT_PACK_ID
-    : ALL_PACK_IDS[0]) ?? "cca-f-prep";
+    : ALL_PACK_IDS[0]) ?? "clean-core-academy";

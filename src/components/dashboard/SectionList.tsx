@@ -10,6 +10,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { useCopy, usePackId } from "@/content/pack-hooks";
 import { usePack } from "@/content/pack-context";
 import { countsAsMastered } from "@/lib/progress";
+import { useTrack } from "@/lib/track-filter";
+import { audienceMatches, getAudienceInfo } from "@/content/audiences";
 import { cn } from "@/lib/utils";
 
 /**
@@ -70,11 +72,25 @@ export function SectionList() {
   const pack = usePack();
   const packId = usePackId();
   const copy = useCopy();
+  const track = useTrack();
   const CURRICULUM = pack.curriculum;
+  const sections =
+    track === "all"
+      ? CURRICULUM.sections
+      : CURRICULUM.sections.filter((s) => audienceMatches(s.audiences, track));
+
+  if (sections.length === 0) {
+    return (
+      <p className="rounded-lg border border-dashed border-(--border) bg-(--panel-2) px-4 py-6 text-center text-sm text-(--muted)">
+        No modules are tagged for this track yet. Pick another track above, or
+        choose <span className="font-semibold text-(--ink)">All modules</span>.
+      </p>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-      {CURRICULUM.sections.map((section) => {
+      {sections.map((section) => {
         const status: "complete" | "in-progress" | "upcoming" = hydrated
           ? sectionStatus(section.id)
           : "upcoming";
@@ -130,6 +146,23 @@ export function SectionList() {
               </div>
             </div>
             <p className="text-sm text-(--muted)">{section.blurb}</p>
+
+            {section.audiences && section.audiences.length > 0 ? (
+              <ul className="flex flex-wrap gap-1.5" aria-label="Tracks">
+                {section.audiences.map((a) => {
+                  const info = getAudienceInfo(a);
+                  if (!info) return null;
+                  return (
+                    <li
+                      key={a}
+                      className="rounded-full border border-(--border) bg-(--panel-2) px-2 py-0.5 text-[10px] font-medium text-(--muted)"
+                    >
+                      {info.shortLabel}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : null}
 
             {/* Aggregate progress bar — uses copy.conceptsMasteredLabel. */}
             <div>
