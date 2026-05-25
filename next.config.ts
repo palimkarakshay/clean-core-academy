@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import path from "path";
+import fs from "fs";
 
 /**
  * Content-pack selection.
@@ -10,15 +11,28 @@ import path from "path";
  * import in `src/content/active-pack.ts` resolves to the selected
  * pack and tree-shaking eliminates inactive packs from the bundle.
  *
- * Default (no env var): `cca-f-prep`. To run a parallel Vercel
- * deploy for a different pack, set
- * `NEXT_PUBLIC_CONTENT_PACK_ID=<pack-id>` in the project env vars.
+ * Default (no env var): `clean-core-academy` — the only pack this
+ * single-course repo ships.
  *
- * The id is also exposed to client code via the `NEXT_PUBLIC_*`
- * convention, which is how `src/content/active-pack.ts` selects
- * the right pack from the registry as a runtime safety net.
+ * Robustness: this repo used to host several packs and parallel Vercel
+ * deploys keyed off `NEXT_PUBLIC_CONTENT_PACK_ID`. If a stale deploy
+ * env var still points at a pack folder that no longer exists, fall
+ * back to `clean-core-academy` rather than failing the build with an
+ * unresolved `@active-pack` alias.
  */
-const PACK_ID = process.env.NEXT_PUBLIC_CONTENT_PACK_ID || "clean-core-academy";
+const FALLBACK_PACK_ID = "clean-core-academy";
+const REQUESTED_PACK_ID =
+  process.env.NEXT_PUBLIC_CONTENT_PACK_ID || FALLBACK_PACK_ID;
+const PACK_ID = fs.existsSync(
+  path.resolve(__dirname, "content-packs", REQUESTED_PACK_ID)
+)
+  ? REQUESTED_PACK_ID
+  : FALLBACK_PACK_ID;
+if (PACK_ID !== REQUESTED_PACK_ID) {
+  console.warn(
+    `[next.config] content pack "${REQUESTED_PACK_ID}" not found under content-packs/ — falling back to "${FALLBACK_PACK_ID}".`
+  );
+}
 
 /**
  * Strict-ish CSP baseline.

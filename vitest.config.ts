@@ -1,7 +1,17 @@
 import { defineConfig } from "vitest/config";
 import path from "path";
+import fs from "fs";
 
-const PACK_ID = process.env.NEXT_PUBLIC_CONTENT_PACK_ID || "clean-core-academy";
+// Mirror next.config.ts: fall back to the only pack if a stale env var
+// points at a pack folder that no longer exists.
+const FALLBACK_PACK_ID = "clean-core-academy";
+const REQUESTED_PACK_ID =
+  process.env.NEXT_PUBLIC_CONTENT_PACK_ID || FALLBACK_PACK_ID;
+const PACK_ID = fs.existsSync(
+  path.resolve(__dirname, "content-packs", REQUESTED_PACK_ID)
+)
+  ? REQUESTED_PACK_ID
+  : FALLBACK_PACK_ID;
 
 export default defineConfig({
   test: {
