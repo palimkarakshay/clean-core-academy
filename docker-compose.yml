@@ -1,0 +1,38 @@
+# Self-hosted MCP services for clean-core-academy pack authoring.
+#
+#   sap-docs — marianfoo/mcp-sap-docs, ABAP-only profile. Gives lesson
+#              authors real SAP Help Portal + SAP Community search (and
+#              an abap_lint tool) over MCP, so ABAP API examples are
+#              sourced, not guessed. See docs/AUTHORING.md and .mcp.json.
+#
+# Usage:
+#   docker compose up -d --build sap-docs      # first run builds from upstream
+#   # then connect the `sap-docs` MCP server (http://localhost:3124/mcp)
+name: clean-core-academy
+
+services:
+  sap-docs:
+    # The ABAP variant is the smaller/faster build. MCP_VARIANT is a
+    # build arg in the upstream Dockerfile; pin the ref for reproducibility.
+    build:
+      context: "https://github.com/marianfoo/mcp-sap-docs.git#main"
+      args:
+        MCP_VARIANT: abap
+    container_name: clean-core-sap-docs
+    ports:
+      - "3124:3124"
+    environment:
+      MCP_VARIANT: abap
+      MCP_PORT: "3124"
+      MCP_HOST: 0.0.0.0
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://127.0.0.1:3124/status',r=>process.exit(r.statusCode<400?0:1)).on('error',()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
