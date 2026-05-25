@@ -29,6 +29,14 @@ export const CURRICULUM: Curriculum = {
       n: 1,
       title: "ABAP Anti-Patterns → Clean Core",
       sourceCourse: "anti-patterns-playbook.md",
+      skills: [
+        { id: "m1-s1", label: "Rewrite SELECT * as a projected, source-filtered read", conceptId: "m1-c1" },
+        { id: "m1-s2", label: "Convert an N+1 nested read into one set-based read", conceptId: "m1-c2" },
+        { id: "m1-s3", label: "SORT before DELETE ADJACENT DUPLICATES (or use distinct)", conceptId: "m1-c3" },
+        { id: "m1-s4", label: "Replace deep CHECK/EXIT nesting with fail-fast guard clauses", conceptId: "m1-c4" },
+        { id: "m1-s5", label: "Externalise magic numbers and org values to config", conceptId: "m1-c5" },
+        { id: "m1-s6", label: "Close a dynamic-SQL injection hole with host vars + allow-lists", conceptId: "m1-c6" },
+      ],
       blurb:
         "The line-level habits that ATC and Clean Core flag first — SELECT *, N+1 reads, unsorted dedup, deep nesting, magic numbers, SQL injection — and the modern ABAP that replaces each. Spot the violation, then fix it.",
       concepts: [
@@ -871,6 +879,12 @@ export const CURRICULUM: Curriculum = {
       n: 2,
       title: "Clean Core & ATC: don't touch the standard",
       sourceCourse: "clean-core-atc-cookbook.md",
+      skills: [
+        { id: "m2-s1", label: "Write through released APIs / BAPIs / RAP instead of SAP tables", conceptId: "m2-c1" },
+        { id: "m2-s2", label: "Read released I_* CDS views instead of physical SAP tables", conceptId: "m2-c2" },
+        { id: "m2-s3", label: "Isolate a non-released object behind one released wrapper", conceptId: "m2-c3" },
+        { id: "m2-s4", label: "Swap restricted sy-fields for the released context API", conceptId: "m2-c4" },
+      ],
       blurb:
         "The architecture-level findings ATC's CLOUD_READINESS / S4HANA_READINESS variants raise: writing to SAP tables, selecting from physical tables, calling non-released objects, and reading system fields — with the released replacement for each.",
       concepts: [
@@ -1393,6 +1407,11 @@ export const CURRICULUM: Curriculum = {
       n: 3,
       title: "From BDC / CALL TRANSACTION to API / RAP",
       sourceCourse: "bdc-to-api-cookbook.md",
+      skills: [
+        { id: "m3-s1", label: "Apply the API → RAP → OData → wrapper decision tree", conceptId: "m3-c1" },
+        { id: "m3-s2", label: "Replace CALL TRANSACTION with a BAPI + typed errors + explicit commit", conceptId: "m3-c2" },
+        { id: "m3-s3", label: "Convert a loop + CALL TRANSACTION mass run into a bulk API / RAP EML call", conceptId: "m3-c3" },
+      ],
       blurb:
         "Batch input replays the UI of a transaction — brittle, slow, and not available in ABAP Cloud. Call the business logic directly instead: a released BAPI/API, RAP (EML), or OData.",
       concepts: [
@@ -1807,6 +1826,11 @@ export const CURRICULUM: Curriculum = {
       n: 4,
       title: "Modernizing toward RAP / CDS",
       sourceCourse: "rap-cds-modernization.md",
+      skills: [
+        { id: "m4-s1", label: "Turn a report's direct table access into a CDS consumption view", conceptId: "m4-c1" },
+        { id: "m4-s2", label: "Consolidate module-pool / FM logic into a RAP managed behaviour", conceptId: "m4-c2" },
+        { id: "m4-s3", label: "Apply VDM layering and extend-don't-modify in CDS", conceptId: "m4-c3" },
+      ],
       blurb:
         "The Clean Core target picture: released CDS data models, RAP behaviour, OData service bindings, and Fiori — runnable on S/4HANA and the BTP ABAP environment. Move a classic report into this stack layer by layer.",
       concepts: [
@@ -2229,6 +2253,10 @@ export const CURRICULUM: Curriculum = {
       n: 5,
       title: "Converting classic apps to Fiori",
       sourceCourse: "fiori-conversion-cookbook.md",
+      skills: [
+        { id: "m5-s1", label: "Replace SM30 / SE16 maintenance with a managed RAP 'Manage X' app", conceptId: "m5-c1" },
+        { id: "m5-s2", label: "Convert an ALV / WRITE report into a Fiori List Report", conceptId: "m5-c2" },
+      ],
       blurb:
         "The Clean Core way to give a classic app a Fiori tile is not to render UI from ABAP — it's CDS → RAP → OData (service binding) → Fiori Elements, which produces a List Report / Object Page with zero UI code.",
       concepts: [
@@ -2523,6 +2551,10 @@ export const CURRICULUM: Curriculum = {
       n: 6,
       title: "Clean Core Readiness: the self-audit",
       sourceCourse: "clean-core-readiness.md",
+      skills: [
+        { id: "m6-s1", label: "Classify a statement / API into cloud-safe / confirm / on-prem", conceptId: "m6-c1" },
+        { id: "m6-s2", label: "Name the released replacement for a blocked API", conceptId: "m6-c2" },
+      ],
       blurb:
         "A per-object readiness check: which statements/APIs are cloud-safe today, which need a confirmed released replacement, and which have no cloud equivalent at all. The module check IS the self-audit — classify each item into its bucket.",
       concepts: [

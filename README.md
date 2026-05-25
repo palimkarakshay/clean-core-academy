@@ -18,8 +18,10 @@ Every lesson pairs:
 > in the shell, and its guard-clauses lesson ships an **in-app code exercise**
 > whose submissions are linted live by abaplint — the planted `exit_or_check`
 > violation is flagged until you refactor it to guard clauses. All five
-> cookbook modules are authored, and the **Clean-Core readiness self-audit**
-> (questionnaire → score → prioritized remediation) is live at `/<pack>/audit`.
+> cookbook modules are authored, the **Clean-Core readiness self-audit**
+> (questionnaire → score → prioritized remediation) is live at `/<pack>/audit`,
+> and a **per-module skills matrix** (rate your confidence per competency, jump
+> to the lesson that builds it) is live at `/<pack>/skills`.
 
 The reference repo is **read-only** for this project — the academy only reads
 its `docs/` and `src/*`; it never modifies `abap-utilities`.
@@ -62,9 +64,11 @@ content-packs/clean-core-academy/   ← the course (the only thing that's course
   ├── icons.ts  index.ts  _types.ts
 src/                                ← the shell (framework, components, progress engine) — pack-agnostic
   ├── app/[packId]/audit/           ← the readiness self-audit route
+  ├── app/[packId]/skills/          ← the per-module skills matrix route
   ├── app/api/lint-abap/            ← server route: lints exercise submissions
   ├── lib/abap/lintAbap.ts          ← @abaplint/core + the shared ruleset
-  └── components/{concept/CodeExercisePanel, audit/ReadinessAuditView}.tsx
+  ├── lib/skills-store.ts           ← per-pack skill self-ratings (localStorage)
+  └── components/{concept/CodeExercisePanel, audit/ReadinessAuditView, skills/SkillsMatrix}.tsx
 exercises/                          ← abaplint.json (shared ruleset) + clean reference solutions
 ```
 

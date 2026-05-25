@@ -216,6 +216,23 @@ export interface Section {
    * spine from the concept list at read time.
    */
   appliedExperience?: AppliedExperience[];
+  /**
+   * Optional per-module skills — the concrete competencies this module
+   * builds. Drives the skills matrix at /[packId]/skills, where the
+   * learner self-rates each. Each skill may link to the concept that
+   * teaches it. Backward-compatible — packs omit it.
+   */
+  skills?: ModuleSkill[];
+}
+
+/** One competency a module develops. */
+export interface ModuleSkill {
+  /** Stable, pack-wide-unique id (storage keying). */
+  id: string;
+  /** Verb-led competency statement ("Rewrite SELECT * as a projected read"). */
+  label: string;
+  /** Concept that teaches it (deep-link target in the matrix). */
+  conceptId?: string;
 }
 
 /**

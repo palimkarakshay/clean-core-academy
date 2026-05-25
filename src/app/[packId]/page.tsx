@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ClipboardCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
 import { SectionList } from "@/components/dashboard/SectionList";
 import { MockExamPanel } from "@/components/dashboard/MockExamPanel";
@@ -93,6 +93,31 @@ export default async function PackHomePage({
             <p className="mt-0.5 text-sm text-(--muted)">
               Questionnaire → readiness score → a remediation list sorted
               worst-first, each linked to the module that fixes it.
+            </p>
+          </div>
+          <ArrowRight
+            aria-hidden
+            className="mt-1 h-4 w-4 flex-none text-(--accent-2) transition-transform group-hover:translate-x-0.5"
+          />
+        </Link>
+      ) : null}
+
+      {pack.curriculum.sections.some((s) => s.skills && s.skills.length > 0) ? (
+        <Link
+          href={`/${pack.config.id}/skills`}
+          className="group flex items-start gap-3 rounded-lg border border-(--border) bg-(--panel-2) p-4 no-underline shadow-sm transition-colors hover:border-(--accent)"
+        >
+          <ListChecks
+            aria-hidden
+            className="mt-0.5 h-5 w-5 flex-none text-(--accent)"
+          />
+          <div className="min-w-0 flex-1">
+            <h2 className="text-base font-semibold text-(--ink)">
+              Skills matrix
+            </h2>
+            <p className="mt-0.5 text-sm text-(--muted)">
+              The competencies each module builds — rate your confidence and
+              jump to the lesson that builds each one.
             </p>
           </div>
           <ArrowRight

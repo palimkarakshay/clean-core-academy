@@ -24,6 +24,7 @@ export type {
   Curriculum,
   Section,
   Concept,
+  ModuleSkill,
   CodeExercise,
   Lesson,
   LessonDeeper,
