@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`section meta render > formatMinutes renders human-readable time for every section 1`] = `
+{
+  "m1-anti-patterns": "1 hr 15 min",
+  "m2-clean-core-atc": "1 hr",
+  "m3-bdc-to-api": "50 min",
+  "m4-rap-cds": "1 hr 10 min",
+  "m5-fiori": "50 min",
+  "m6-readiness-audit": "45 min",
+}
+`;

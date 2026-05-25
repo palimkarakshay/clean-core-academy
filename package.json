@@ -1,0 +1,51 @@
+{
+  "name": "clean-core-academy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Clean Core Academy — an interactive course that turns the ABAP-Utilities SAP-modernization cookbooks into lessons, built on the content-agnostic learning-app shell.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "lint:abap": "abaplint exercises/abaplint.json",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "smoke:swap": "bash scripts/swap-smoke.sh"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.4.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.14.0",
+    "next": "^16.2.4",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.0",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@abaplint/cli": "^2.119.23",
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@types/node": "^25.6.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "^16.2.4",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "tailwindcss": "^4.2.4",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.5"
+  }
+}
