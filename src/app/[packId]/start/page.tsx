@@ -6,6 +6,7 @@ import { ALL_PACK_IDS, getPack } from "@/content/pack-registry";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
 import { StatsPanel } from "@/components/dashboard/StatsPanel";
+import { JourneyArt } from "@/components/dashboard/JourneyArt";
 
 type Params = { packId: string };
 
@@ -66,25 +67,28 @@ export default async function StartPage({
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 lg:max-w-6xl xl:max-w-[84rem]">
-      <header className="flex flex-col gap-2">
-        <Link
-          href={`/${packId}`}
-          className="inline-flex w-fit items-center gap-1 text-xs text-(--muted) hover:text-(--ink)"
-        >
-          <ArrowLeft aria-hidden className="h-3.5 w-3.5" />
-          Back to {pack.config.name}
-        </Link>
-        <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
-          Get set up
-        </p>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-(--ink) md:text-3xl">
-          Start here
-        </h1>
-        <p className="max-w-3xl text-sm text-(--muted)">
-          The things you set once: pick the role you're learning as, check the
-          course is a fit, and see what you'll walk away able to do. Your
-          progress stays pinned on the right as you go.
-        </p>
+      <Link
+        href={`/${packId}`}
+        className="inline-flex w-fit items-center gap-1 text-xs text-(--muted) hover:text-(--ink)"
+      >
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" />
+        Back to {pack.config.name}
+      </Link>
+      <header className="flex items-center justify-between gap-4 rounded-xl border border-(--border) bg-gradient-to-br from-(--panel-2) to-(--panel) p-6 md:p-8">
+        <div className="flex flex-col gap-2">
+          <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
+            Get set up
+          </p>
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-(--ink) md:text-3xl">
+            Start here
+          </h1>
+          <p className="max-w-prose text-sm text-(--muted)">
+            The things you set once: pick the role you're learning as, check the
+            course is a fit, and see what you'll walk away able to do. Your
+            progress stays pinned on the right as you go.
+          </p>
+        </div>
+        <JourneyArt className="hidden h-16 w-28 flex-none sm:block md:h-24 md:w-40" />
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
