@@ -6,6 +6,7 @@ import { ALL_PACK_IDS, getPack } from "@/content/pack-registry";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
 import { ProgressRail } from "@/components/dashboard/ProgressRail";
+import { WhatYoullLearn } from "@/components/dashboard/WhatYoullLearn";
 import { JourneyArt } from "@/components/dashboard/JourneyArt";
 import { CourseAtAGlance } from "@/components/dashboard/CourseAtAGlance";
 import { getSectionMeta } from "@/content/curriculum-loader";
@@ -119,9 +120,17 @@ export default async function StartPage({
             <TrackFilter />
           </SetupSection>
 
+          <SetupSection
+            step="Step 2"
+            title="What you'll learn"
+            description="The concrete outcomes for your role — pick a different role above and this list re-tailors."
+          >
+            <WhatYoullLearn />
+          </SetupSection>
+
           {pack.config.prerequisites ? (
             <SetupSection
-              step="Step 2"
+              step="Step 3"
               title="Is this course right for you?"
               description="A quick self-check of what this course assumes — and when it isn't the right fit."
             >
