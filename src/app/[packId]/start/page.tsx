@@ -7,6 +7,8 @@ import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
 import { StatsPanel } from "@/components/dashboard/StatsPanel";
 import { JourneyArt } from "@/components/dashboard/JourneyArt";
+import { CourseAtAGlance } from "@/components/dashboard/CourseAtAGlance";
+import { getSectionMeta } from "@/content/curriculum-loader";
 
 type Params = { packId: string };
 
@@ -65,6 +67,11 @@ export default async function StartPage({
   const pack = getPack(packId);
   if (!pack) notFound();
 
+  const totalMinutes = pack.curriculum.sections.reduce(
+    (n, s) => n + (getSectionMeta(s.id)?.timeMinutes ?? 0),
+    0
+  );
+
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 lg:max-w-6xl xl:max-w-[84rem]">
       <Link
@@ -93,6 +100,17 @@ export default async function StartPage({
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
         <div className="flex min-w-0 flex-col gap-8">
+          <SetupSection
+            step="At a glance"
+            title="What's in this course"
+            description="The full scope, before you commit time — modules, lessons, hands-on exercises, and how long it runs."
+          >
+            <CourseAtAGlance
+              curriculum={pack.curriculum}
+              totalMinutes={totalMinutes}
+            />
+          </SetupSection>
+
           <SetupSection
             step="Step 1"
             title="Your role"
