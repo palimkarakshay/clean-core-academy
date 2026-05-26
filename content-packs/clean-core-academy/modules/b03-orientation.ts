@@ -15,7 +15,7 @@ import type { Section } from "../_types";
 
 export const b03Orientation: Section = {
   id: "b03-orientation",
-  n: 16,
+  n: 17,
   title: "Clean Core Orientation for Stakeholders",
   sourceCourse: "clean-core-curriculum (orientation synthesis)",
   audiences: ["stakeholder", "management", "end-user"],

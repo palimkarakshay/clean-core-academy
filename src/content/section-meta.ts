@@ -163,6 +163,19 @@ export const SECTION_META: Record<string, SectionMeta> = {
       "Run a performance-forensics investigation from symptom to fix.",
     ],
   },
+  "m14-delivery": {
+    academyUrl: CLEAN_CORE,
+    timeMinutes: 50,
+    track: "Delivery & PM",
+    learningObjectives: [
+      "Justify Clean Core as a managed cross-team programme, not ad-hoc cleanup.",
+      "Size a migration from measurable drivers and express duration as phases with exit criteria.",
+      "Name the team interfaces (functional, Basis, security, SAP) and run handoffs with a shared definition of done.",
+      "Prevent transport collisions and resolve priority friction with impersonal, pre-agreed rules.",
+      "Prioritise the backlog by usage × standard-impact × cost, weighted by upgrade severity.",
+      "Recognise the common programme issues and apply the known resolution for each.",
+    ],
+  },
   "b01-management": {
     academyUrl: CLEAN_CORE,
     timeMinutes: 40,

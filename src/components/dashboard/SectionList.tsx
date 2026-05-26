@@ -122,6 +122,7 @@ export function SectionList() {
                   alt=""
                   width={56}
                   height={56}
+                  unoptimized={/^https?:\/\//.test(section.iconImagePath)}
                   className="h-14 w-14 flex-none overflow-hidden rounded-md border border-(--border) bg-(--panel-2) object-cover"
                 />
               ) : null}
