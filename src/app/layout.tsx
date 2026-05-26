@@ -6,6 +6,7 @@ import { BRAND } from "@/lib/brand";
 import { THEME_STORAGE_KEY, PACK_ID } from "@/lib/storage-keys";
 import { ACTIVE_PACK } from "@/content/active-pack";
 import { initScript as displayPrefsInitScript } from "@/lib/display-prefs";
+import { withBasePath } from "@/lib/base-path";
 import "./globals.css";
 
 const display = Fraunces({
@@ -36,8 +37,8 @@ export const metadata: Metadata = {
   applicationName: BRAND.name,
   authors: siteConfig.author ? [{ name: siteConfig.author }] : undefined,
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg" }],
+    icon: [{ url: withBasePath("/icon.svg"), type: "image/svg+xml" }],
+    apple: [{ url: withBasePath("/icon.svg") }],
   },
   appleWebApp: {
     capable: true,

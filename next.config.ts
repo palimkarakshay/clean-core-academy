@@ -35,6 +35,17 @@ if (PACK_ID !== REQUESTED_PACK_ID) {
 }
 
 /**
+ * Mount path. The academy is served as a multi-zone under the Lumivara
+ * marketing site at `lumivara.ca/academy` (a Vercel rewrite proxies
+ * `/academy/*` to this deployment). `basePath` makes every page, asset
+ * and route handler live under `/academy`, so a single rewrite covers
+ * the whole app. Override with NEXT_PUBLIC_BASE_PATH="" to serve at the
+ * root again.
+ */
+const BASE_PATH =
+  process.env.NEXT_PUBLIC_BASE_PATH ?? "/academy";
+
+/**
  * Strict-ish CSP baseline.
  *
  * - `'unsafe-inline'` on script-src is required because Next.js injects
@@ -77,6 +88,10 @@ const SECURITY_HEADERS = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
+  basePath: BASE_PATH,
+  // Expose the resolved base path to the client bundle so hand-written
+  // fetch() calls and Metadata URLs can prefix it (see src/lib/base-path.ts).
+  env: { NEXT_PUBLIC_BASE_PATH: BASE_PATH },
   // @abaplint/core is a large Node library with internal dynamic
   // requires that don't survive webpack bundling — keep it external so
   // the /api/lint-abap serverless function `require()`s it at runtime.

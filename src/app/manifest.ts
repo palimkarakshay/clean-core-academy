@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ACTIVE_PACK } from "@/content/active-pack";
+import { withBasePath } from "@/lib/base-path";
 
 // PWA manifest derived from the active content pack. Replaces the
 // hand-edited `public/manifest.webmanifest` so swapping packs swaps
@@ -11,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     name: c.name,
     short_name: c.shortName ?? c.name,
     description: c.description,
-    start_url: "/",
-    scope: "/",
+    start_url: withBasePath("/"),
+    scope: withBasePath("/"),
     display: "standalone",
     orientation: "any",
     background_color: c.manifest.backgroundColor,
@@ -20,13 +21,13 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: c.manifest.categories ?? [],
     icons: [
       {
-        src: "/icon.svg",
+        src: withBasePath("/icon.svg"),
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/icon-maskable.svg",
+        src: withBasePath("/icon-maskable.svg"),
         sizes: "any",
         type: "image/svg+xml",
         purpose: "maskable",
