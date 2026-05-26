@@ -6,8 +6,11 @@
    synthesised for a NON-developer leadership audience. Plain language,
    no ABAP — the focus is the business case, the investment trade-offs
    of the 3-tier model, governance ownership, the migration roadmap,
-   and the KPIs that prove progress. Every concept ships paragraphs +
-   keyPoints + simplified.oneLiner and a 3-question conceptual quiz.
+   the KPIs that prove progress, and the leadership view of running the
+   programme (duration, cost, staffing, decision rights, conflict, and
+   the issues to expect — the management lens on the m14 delivery
+   module). Every concept ships paragraphs + keyPoints +
+   simplified.oneLiner and a 3-question conceptual quiz.
 ------------------------------------------------------------------ */
 
 import type { Section } from "../_types";
@@ -44,9 +47,19 @@ export const b01Management: Section = {
       label: "Choose KPIs that make Clean Core progress visible",
       conceptId: "b01-c5",
     },
+    {
+      id: "b01-s6",
+      label: "Size and fund the programme — a driver-based duration range and protected capacity",
+      conceptId: "b01-c6",
+    },
+    {
+      id: "b01-s7",
+      label: "Set decision rights and pre-decide the response to the common programme issues",
+      conceptId: "b01-c7",
+    },
   ],
   blurb:
-    "Clean Core for decision-makers: why it lowers the cost of change, how the 3-tier model is really an investment choice, who owns governance, the roadmap from zero to a clean bill of health, and the KPIs that prove you are getting there.",
+    "Clean Core for decision-makers: why it lowers the cost of change, how the 3-tier model is really an investment choice, who owns governance, the roadmap from zero to a clean bill of health, the KPIs that prove you are getting there, and how to size, fund, and steer the programme — duration, decision rights, conflict, and the issues to expect.",
   concepts: [
     {
       id: "b01-c1",
@@ -535,6 +548,202 @@ export const b01Management: Section = {
         ],
       },
     },
+    {
+      id: "b01-c6",
+      code: "M.6",
+      title: "How long, what it costs, and how to staff it",
+      bloom: "An",
+      lesson: {
+        status: "ready",
+        notesRef: "clean-core-curriculum (business synthesis)",
+        paragraphs: [
+          "'How long will this take and what will it cost' is the first question leadership asks, and the honest answer is a range tied to a few measurable drivers — not a fixed date. A useful anchor: a very large estate (around four million lines of custom code) moving to S/4HANA is typically framed as roughly a twelve-month programme, while a smaller or cleaner estate is much less. What moves the number is how much custom code is actually used (most organisations find a large share is dead and can simply be retired), how many modifications and old-style integrations exist, and how much is already on supported interfaces.",
+          "The cost lever leadership actually controls is reserved capacity. Clean Core competes with the feature backlog, so if no team time is ring-fenced for it, it never happens. A small, steady, protected allocation — rather than an occasional heroic push — is both cheaper and more predictable, because it lets the work run as a routine cadence and keeps the findings burndown trending down instead of sawing up and down.",
+          "Staff it as a thin, cross-functional team with named owners, not a side task bolted onto everyone's day job. The technical depth lives with the developers — the delivery module (m14) covers their side — while leadership's job is to fund the capacity, set the phases with clear exit criteria, and hold the duration as a living estimate that updates each sprint from the actual fix rate.",
+        ],
+        keyPoints: [
+          "Duration is a driver-based range, not a fixed date — anchor ~12 months for a very large (~4M-LOC) estate, less for smaller or cleaner ones.",
+          "The biggest sizing surprise is usually upside: much custom code is dead and can be retired, not migrated.",
+          "The cost lever leadership controls is reserved, protected capacity — a steady cadence beats a heroic push.",
+          "Fund a thin cross-functional team with named owners; don't run it as a side task.",
+          "Hold the duration as a living estimate that updates from the burndown each sprint.",
+        ],
+        examples: [
+          {
+            title: "Steady capacity versus a heroic push",
+            variant: "neutral",
+            body: "Ring-fencing 15% of a team every sprint clears debt predictably and keeps the burndown falling; an annual two-week 'cleanup sprint' spikes, then the line climbs again as feature work re-adds debt.",
+          },
+        ],
+        simplified: {
+          oneLiner:
+            "Give a driver-based range (≈12 months for a very large estate, less for smaller ones), expect much custom code to be dead and retirable, and fund a small protected capacity with named owners rather than a one-off push.",
+          analogy:
+            "It's funding regular building maintenance, not waiting for the roof to fall in — a small steady budget is cheaper and more predictable than an emergency rebuild.",
+        },
+      },
+      quiz: {
+        questions: [
+          {
+            n: 1,
+            question:
+              "What is the most credible answer leadership can give to 'how long and how much'?",
+            options: {
+              A: "A fixed date and budget, set once at kickoff.",
+              B: "A driver-based range, re-estimated each sprint from the actual fix rate.",
+              C: "Whatever the largest vendor quotes.",
+              D: "It cannot be estimated at all until the work is done.",
+            },
+            correct: "B",
+            explanations: {
+              A: "A single fixed figure ignores the drivers and breaks at the first surprise.",
+              B: "Correct — a range tied to drivers and updated from the burndown is defensible and stays accurate.",
+              C: "A vendor quote is not a substitute for sizing against your own estate.",
+              D: "An estimate is needed to fund and plan; refusing one is not an option.",
+            },
+            principle:
+              "State duration and cost as a driver-based range, updated from the burndown.",
+          },
+          {
+            n: 2,
+            question:
+              "What is often the biggest positive surprise when scoping a Clean Core programme?",
+            options: {
+              A: "Custom code runs faster simply by being scoped.",
+              B: "Upgrades become free of charge.",
+              C: "No developers are needed at all.",
+              D: "A large share of custom code is unused and can simply be retired.",
+            },
+            correct: "D",
+            explanations: {
+              A: "Scoping measures usage; it does not change runtime performance.",
+              B: "Licensing and upgrade effort are not made free by Clean Core.",
+              C: "Developers do the core of the work; they are very much needed.",
+              D: "Correct — most estates carry a large dead fraction that is retired, not migrated, shrinking the job.",
+            },
+            principle:
+              "Much custom code is dead and retirable — scoping usually shrinks the scope.",
+          },
+          {
+            n: 3,
+            question: "What is the main cost lever leadership directly controls?",
+            options: {
+              A: "Reserved, protected team capacity for the work.",
+              B: "The version of ABAP the compiler uses.",
+              C: "The colour scheme of the dashboards.",
+              D: "The number of ATC variants in existence.",
+            },
+            correct: "A",
+            explanations: {
+              A: "Correct — ring-fenced capacity is the decision that makes the programme happen predictably.",
+              B: "The language version is a technical setting, not a leadership cost lever.",
+              C: "Dashboard styling has no bearing on cost or progress.",
+              D: "Variant count is a technical detail, not a budget lever.",
+            },
+            principle:
+              "Protected, reserved capacity is the cost lever leadership owns.",
+          },
+        ],
+      },
+    },
+    {
+      id: "b01-c7",
+      code: "M.7",
+      title: "Running the programme: decision rights, conflict, and issues",
+      bloom: "An",
+      lesson: {
+        status: "ready",
+        notesRef: "clean-core-curriculum (business synthesis)",
+        paragraphs: [
+          "A Clean Core programme creates predictable tension between teams: feature teams feel remediation is a tax on their roadmap, architects worry that shortcuts add new debt, and the business worries about disruption. Leadership resolves this not by adjudicating each case but by setting decision rights in advance — who owns the rulebook (the check variant), who can approve an exception, and what automatically blocks a release. When the rules are agreed and impersonal, most conflicts settle themselves at the gate instead of escalating to a manager's desk.",
+          "The collaboration model that works is a light operating rhythm: a single owner accountable for the programme, a short regular steering check on the burndown and the top risks, and a clear escalation path for the rare genuine deadlocks. The aim is to make the common decisions automatic — a new high-priority finding blocks the change — and reserve leadership attention for the rare trade-offs, such as a costly rewrite worth deferring this quarter.",
+          "Expect a familiar set of issues and pre-decide the response: scope creep is answered by a phased plan with bounded capacity; exemptions piling up by giving every exception an expiry and a review; a burndown that stops falling by stopping new debt at the gate before chasing old debt; and team resistance by making progress visible and protecting the capacity so the work isn't unpaid overtime. Tracking these as a short, owned risk list — each with a named owner and a review date — is what separates a programme that finishes from one that quietly stalls.",
+        ],
+        keyPoints: [
+          "Set decision rights up front: who owns the rulebook, who approves exceptions, what auto-blocks a release.",
+          "Impersonal, pre-agreed rules settle most conflict at the gate, not on a manager's desk.",
+          "Run a light cadence: one accountable owner, a short regular steering check on burndown + top risks, a clear escalation path.",
+          "Make common decisions automatic; reserve leadership attention for rare, costly trade-offs.",
+          "Pre-decide responses to the usual issues (scope creep, exemption sprawl, flat burndown, resistance) and track them as an owned risk list.",
+        ],
+        examples: [
+          {
+            title: "Decided by the rules, not the room",
+            variant: "neutral",
+            body: "A feature team and an architect disagree on whether a shortcut ships. Because a new high-priority finding is a pre-agreed build-breaker, the gate decides — and the only thing escalated is whether to grant a time-boxed, expiring exception.",
+          },
+        ],
+        simplified: {
+          oneLiner:
+            "Set decision rights and an impersonal rulebook so conflicts settle at the gate, run a light steering cadence on the burndown and top risks, and pre-decide the response to the usual issues — tracked as an owned risk list.",
+          analogy:
+            "Govern it like a board with clear bylaws: most matters are decided by the rules automatically, and only the rare, genuinely contested item reaches the table.",
+        },
+      },
+      quiz: {
+        questions: [
+          {
+            n: 1,
+            question:
+              "How should leadership resolve recurring conflict over whether work is 'clean enough'?",
+            options: {
+              A: "Adjudicate each disputed case personally as it arises.",
+              B: "Pause all delivery until everyone reaches consensus.",
+              C: "Set decision rights and an impersonal rulebook so most conflicts settle at the gate.",
+              D: "Let whichever team is loudest decide.",
+            },
+            correct: "C",
+            explanations: {
+              A: "Deciding every case personally does not scale and politicises the standard.",
+              B: "Pausing delivery halts the business and is not a resolution.",
+              C: "Correct — pre-agreed rights and an impersonal gate settle most conflict without escalation.",
+              D: "Loudest-wins is exactly the inconsistency the gate removes.",
+            },
+            principle:
+              "Pre-agreed decision rights and an impersonal rulebook settle conflict at the gate.",
+          },
+          {
+            n: 2,
+            question: "What belongs on the leadership steering check?",
+            options: {
+              A: "Every individual code finding, reviewed one by one.",
+              B: "The findings burndown and the top programme risks.",
+              C: "The text editor each developer prefers.",
+              D: "Nothing — steering is unnecessary once the rules are set.",
+            },
+            correct: "B",
+            explanations: {
+              A: "Findings are a developer-level detail, not a steering agenda.",
+              B: "Correct — leadership steers on the trend (burndown) and the few risks that need decisions.",
+              C: "Tooling preferences are irrelevant to steering.",
+              D: "A light cadence is what keeps the programme from quietly stalling.",
+            },
+            principle:
+              "Steer on the burndown trend and the top risks, not individual findings.",
+          },
+          {
+            n: 3,
+            question:
+              "A programme's findings burndown has stopped falling. What is the leadership-level response?",
+            options: {
+              A: "Cancel the programme as unachievable.",
+              B: "Remove the burndown metric from the dashboard.",
+              C: "Double everyone's working hours indefinitely.",
+              D: "Ensure new debt is stopped at the gate before chasing the existing backlog.",
+            },
+            correct: "D",
+            explanations: {
+              A: "A flat burndown is a fixable inflow problem, not a reason to cancel.",
+              B: "Hiding the metric hides the problem; it does not solve it.",
+              C: "Overwork is unsustainable and does not address new-debt inflow.",
+              D: "Correct — close the gate on new debt first, or the backlog effort is cancelled out by fresh debt.",
+            },
+            principle:
+              "A flat burndown means stop new-debt inflow at the gate before draining the backlog.",
+          },
+        ],
+      },
+    },
   ],
   sectionTest: {
     passPct: 0.7,
@@ -631,6 +840,44 @@ export const b01Management: Section = {
           D: "Database size is irrelevant to progress.",
         },
         principle: "The findings burndown is the headline progress signal.",
+      },
+      {
+        n: 6,
+        question:
+          "What is the most credible way for leadership to communicate duration and cost?",
+        options: {
+          A: "A single fixed date and budget at kickoff.",
+          B: "A driver-based range, re-estimated each sprint from the actual fix rate.",
+          C: "The largest vendor's quote.",
+          D: "The total custom-code line count converted to months.",
+        },
+        correct: "B",
+        explanations: {
+          A: "A single fixed figure ignores the drivers and breaks at the first surprise.",
+          B: "Correct — a driver-based range tied to the burndown is defensible and stays accurate.",
+          C: "A vendor quote is no substitute for sizing against your own estate.",
+          D: "Raw line count overstates the work because much code is dead.",
+        },
+        principle: "Communicate duration and cost as a driver-based range, updated from the burndown.",
+      },
+      {
+        n: 7,
+        question:
+          "How should leadership resolve recurring conflict over whether a change is clean enough?",
+        options: {
+          A: "Adjudicate each case personally.",
+          B: "Pause all delivery until consensus is reached.",
+          C: "Let the loudest team decide.",
+          D: "Set decision rights and an impersonal rulebook so it settles at the gate.",
+        },
+        correct: "D",
+        explanations: {
+          A: "Deciding every case personally does not scale and politicises the standard.",
+          B: "Pausing delivery halts the business and is not a resolution.",
+          C: "Loudest-wins is the inconsistency the gate exists to remove.",
+          D: "Correct — pre-agreed decision rights and an impersonal gate settle most conflict without escalation.",
+        },
+        principle: "Pre-agreed decision rights and an impersonal rulebook settle conflict at the gate.",
       },
     ],
   },
