@@ -56,7 +56,7 @@ export const m01Foundations: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §1.1",
         paragraphs: [
-          "Clean Core is not 'no custom code.' It is a contract about *where* and *how* extensions sit relative to SAP-delivered objects, so that SAP can ship upgrades and feature-pack deltas without colliding with your code, and you can adopt innovation without a custom-code thaw cycle.",
+          "Clean Core is not 'no custom code.' It is a contract about *where* and *how* extensions sit relative to SAP-delivered objects, so that SAP can ship upgrades and feature-pack deltas without colliding with your code, and you can adopt innovation without a custom-code thaw cycle. It is also not a verdict on the code you have already written — the instincts that make you good at ABAP, knowing where logic belongs and what depends on what, are exactly what it rewards.",
           "SAP frames Clean Core across five dimensions: software (extend only through released APIs, public SDKs, or side-by-side on BTP), business processes (stay standard end-to-end where you can), master data (quality and ownership), integrations (released, versioned interfaces — no point-to-point dark RFCs), and operations (observable, automatable, no manual config drift).",
           "The payoff is upgrade stability and lower total cost of change. A clean core is one where an FPS or release upgrade is a routine event, not a multi-month regression project.",
         ],
