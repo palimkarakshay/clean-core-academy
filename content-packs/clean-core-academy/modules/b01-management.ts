@@ -14,7 +14,7 @@ import type { Section } from "../_types";
 
 export const b01Management: Section = {
   id: "b01-management",
-  n: 14,
+  n: 15,
   title: "Clean Core for Management & Leads",
   sourceCourse: "clean-core-curriculum (management synthesis)",
   audiences: ["management"],
