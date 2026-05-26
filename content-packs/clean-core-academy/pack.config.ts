@@ -39,7 +39,7 @@ export const packConfig: PackConfig = {
     },
     {
       label: "Progress",
-      href: "/#progress",
+      href: "/start",
       icon: "trending-up",
       mobile: true,
       match: [],
