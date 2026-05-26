@@ -349,6 +349,33 @@ export const m03Language: Section = {
           },
         ],
       },
+      exercise: {
+        id: "m03-c2-ex",
+        lang: "ABAP",
+        prompt:
+          "Modern ABAP drops the verbose CALL METHOD ... EXPORTING form for the functional call obj->meth( ... ) — abaplint's functional_writing rule flags the old form. Rewrite the call functionally, then re-check until it's clean.",
+        flaggedRules: ["functional_writing"],
+        hint: "Replace `call method me->step exporting iv_x = 1.` with `me->step( iv_x = 1 ).`",
+        successNote:
+          "The functional call is shorter, composes inline, and is the modern default — CALL METHOD now survives only for a few dynamic forms.",
+        starterCode: [
+          "class zcl_au_ex_call definition public final create public.",
+          "  public section.",
+          "    methods run.",
+          "    methods step importing !iv_x type i.",
+          "endclass.",
+          "",
+          "class zcl_au_ex_call implementation.",
+          "  method run.",
+          '    " TODO: CALL METHOD ... EXPORTING is the old call style.',
+          '    " Rewrite it as a functional call me->step( ... ).',
+          "    call method me->step exporting iv_x = 1.",
+          "  endmethod.",
+          "  method step.",
+          "  endmethod.",
+          "endclass.",
+        ].join("\n"),
+      },
     },
     {
       id: "m03-c3",
