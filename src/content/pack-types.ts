@@ -16,7 +16,7 @@
 
 import type { Curriculum } from "./curriculum-types";
 
-export type NavIcon = "home" | "layers" | "award" | "trending-up";
+export type NavIcon = "home" | "layers" | "award" | "trending-up" | "rocket";
 
 export interface NavItem {
   label: string;

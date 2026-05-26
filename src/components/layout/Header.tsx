@@ -8,6 +8,7 @@ import {
   Layers,
   Award,
   TrendingUp,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
@@ -22,6 +23,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   layers: Layers,
   award: Award,
   "trending-up": TrendingUp,
+  rocket: Rocket,
 };
 
 function isActive(item: NavItem, pathname: string | null): boolean {
