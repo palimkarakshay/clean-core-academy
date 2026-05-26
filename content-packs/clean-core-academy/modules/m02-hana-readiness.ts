@@ -57,7 +57,7 @@ export const m02HanaReadiness: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §2.1",
         paragraphs: [
-          "The conceptual shift to HANA is not 'faster' — it is five structural changes, and every well-known gotcha derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
+          "Your instinct that a SELECT inside a loop is a problem did not become wrong on HANA — it became more right, because the columnar engine rewards set-based access even harder. The conceptual shift to HANA is not 'faster' — it is five structural changes, and every well-known gotcha derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
           "Reads no longer take row locks, and HANA serves them from an MVCC snapshot — a consistent view as of the statement's start — so concurrent writers don't block your SELECT and you don't block them. Pool and cluster tables were dissolved into transparent tables (BSEG, KONV, CDPOS and friends), so reads against them now behave like any other table but with subtly different cardinality.",
           "Finally the optimizer thinks differently: it favours set-based, projected, pushed-down access and is unimpressed by row-at-a-time loops and AnyDB-era hints. Internalising these five shifts is what turns 'my code broke after the migration' into 'of course it did, and here is why.'",
         ],

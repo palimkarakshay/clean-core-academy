@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
+import { DailyInsightCard } from "@/components/dashboard/DailyInsightCard";
 import { SectionList } from "@/components/dashboard/SectionList";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { MockExamPanel } from "@/components/dashboard/MockExamPanel";
@@ -64,12 +65,14 @@ export default async function PackHomePage({
               width={1200}
               height={675}
               priority
+              unoptimized={/^https?:\/\//.test(cfg.heroImagePath)}
               className="h-auto w-full object-cover"
             />
           </div>
         ) : null}
       </header>
       <RecommendationBanner />
+      <DailyInsightCard />
 
       {pack.curriculum.readinessAudit ? (
         <Link

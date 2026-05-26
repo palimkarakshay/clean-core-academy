@@ -62,7 +62,7 @@ export const m10Gotchas: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §10.1",
         paragraphs: [
-          "The two Open SQL traps that cause production incidents are both about *absence*. A SELECT SINGLE without a fully-qualified primary key returns *an* arbitrary row — on HANA the row the optimizer happens to find first, which differs from the AnyDB era and differs run to run. And FOR ALL ENTRIES over an *empty* driver table does not return zero rows; it strips the IN-list condition entirely and returns the *whole* target table. The fix is a one-line guard: `if lines( itab ) > 0`.",
+          "If you have ever lost a night to one of these bugs, you already understand it better than any catalog can teach — this module just names what your scars taught you, so the next developer doesn't pay the same tuition. The two Open SQL traps that cause production incidents are both about *absence*. A SELECT SINGLE without a fully-qualified primary key returns *an* arbitrary row — on HANA the row the optimizer happens to find first, which differs from the AnyDB era and differs run to run. And FOR ALL ENTRIES over an *empty* driver table does not return zero rows; it strips the IN-list condition entirely and returns the *whole* target table. The fix is a one-line guard: `if lines( itab ) > 0`.",
           "FOR ALL ENTRIES has a second silent behaviour: it de-duplicates the driver before building the read, so it can never give you 1:1 cardinality. If you needed one result row per driver row you have already lost rows before the database is touched — you must use a JOIN instead. These behaviours predate HANA but bite harder now because result-set sizes and row order changed under columnar storage.",
           "The rest of the family is about cost you cannot see in the syntax. INTO CORRESPONDING FIELDS OF TABLE is slower than a named field list and obscures the real types (a field that silently doesn't map is a defect, not an error). ORDER BY PRIMARY KEY is not free on HANA — there is no implicit sort, so only ask for ordering you actually consume. And SELECT DISTINCT carries a real de-duplication cost that, for input that is already mostly unique, can be dearer than reading into a SORTED table.",
         ],
@@ -286,6 +286,34 @@ export const m10Gotchas: Section = {
               "SORT is unstable by default — add STABLE to preserve order among equal keys.",
           },
         ],
+      },
+      exercise: {
+        id: "m10-c2-ex",
+        lang: "ABAP",
+        prompt:
+          "A copy-paste slip left two branches with the same condition, so the second branch is dead code that never runs — abaplint's identical_conditions rule flags it. Fix the duplicated condition so each branch is reachable, then re-check until it's clean.",
+        flaggedRules: ["identical_conditions"],
+        hint: "The second ELSEIF repeats `iv_score >= 90`; it was meant to be a lower threshold such as `iv_score >= 80`.",
+        successNote:
+          "Identical branch conditions are a classic silent gotcha — the code compiles and the dead branch quietly never fires. The linter catches what a glance misses.",
+        starterCode: [
+          "class zcl_au_ex_dup definition public final create public.",
+          "  public section.",
+          "    class-methods grade",
+          "      importing !iv_score type i",
+          "      returning value(rv_grade) type string.",
+          "endclass.",
+          "",
+          "class zcl_au_ex_dup implementation.",
+          "  method grade.",
+          "    if iv_score >= 90.",
+          "      rv_grade = 'A'.",
+          "    elseif iv_score >= 90.",
+          "      rv_grade = 'B'.",
+          "    endif.",
+          "  endmethod.",
+          "endclass.",
+        ].join("\n"),
       },
     },
     {
