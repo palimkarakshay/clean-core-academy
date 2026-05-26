@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Play, RotateCcw, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 import type { CodeExercise } from "@/content/curriculum-types";
-import { withBasePath } from "@/lib/base-path";
 
 interface AbapLintIssue {
   rule: string;
@@ -33,7 +32,7 @@ export function CodeExercisePanel({ exercise }: { exercise: CodeExercise }) {
   async function check() {
     setState({ phase: "checking" });
     try {
-      const res = await fetch(withBasePath("/api/lint-abap"), {
+      const res = await fetch("/api/lint-abap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),

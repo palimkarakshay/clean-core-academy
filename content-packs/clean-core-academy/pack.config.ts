@@ -16,7 +16,7 @@ export const packConfig: PackConfig = {
   tagline: "Modernize ABAP toward SAP Clean Core.",
   description:
     "Turn the ABAP-Utilities SAP-modernization cookbooks into hands-on modules: ABAP anti-patterns, Clean Core & ATC, BDC→API, RAP/CDS, and Fiori conversion. Every lesson pairs concept notes with before/after ABAP and a spot-the-Clean-Core-violation quiz.",
-  url: "https://lumivara.ca/academy",
+  url: "https://clean-core-academy.vercel.app",
   repoUrl: "https://github.com/palimkarakshay/clean-core-academy",
   author: "palimkarakshay",
   nav: [
