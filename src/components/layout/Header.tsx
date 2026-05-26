@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -8,11 +7,13 @@ import {
   Layers,
   Award,
   TrendingUp,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
 import type { NavIcon, NavItem } from "@/lib/site-config";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "./BrandLogo";
 import { ThemeToggle } from "@/components/primitives/ThemeToggle";
 import { DisplayPrefsMenu } from "@/components/primitives/DisplayPrefsMenu";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   layers: Layers,
   award: Award,
   "trending-up": TrendingUp,
+  rocket: Rocket,
 };
 
 function isActive(item: NavItem, pathname: string | null): boolean {
@@ -71,22 +73,22 @@ export function Header() {
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-4">
         <Link
           href={homeHref}
-          aria-label={`${BRAND.name} home`}
-          className="flex min-h-11 items-center gap-2 no-underline"
+          aria-label={`${BRAND.name} — ${BRAND.product} home`}
+          className="flex min-h-11 items-center gap-2.5 no-underline"
         >
-          <Image
-            aria-hidden
-            src="/images/brand/final/curio-mark.jpg"
-            alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8 flex-none rounded-md object-cover"
-          />
+          <BrandLogo className="h-8 w-8 flex-none" />
           <span className="flex flex-col justify-center gap-0.5">
-            <span className="font-[family-name:var(--font-display)] text-base font-semibold text-(--ink)">
-              {BRAND.name}
+            <span className="flex items-center gap-2">
+              <span className="font-[family-name:var(--font-display)] text-base font-semibold tracking-tight text-(--ink)">
+                {BRAND.name}
+              </span>
+              <span className="rounded-full border border-(--accent-2)/40 bg-(--accent-2)/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-(--accent-2)">
+                {BRAND.product}
+              </span>
             </span>
-            <span className="text-xs text-(--muted)">{BRAND.tagline}</span>
+            <span className="hidden text-xs text-(--muted) sm:block">
+              {BRAND.tagline}
+            </span>
           </span>
         </Link>
         <nav

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, Award, TrendingUp } from "lucide-react";
+import { Home, Layers, Award, TrendingUp, Rocket } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
 import type { NavIcon, NavItem } from "@/lib/site-config";
@@ -13,6 +13,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   layers: Layers,
   award: Award,
   "trending-up": TrendingUp,
+  rocket: Rocket,
 };
 
 function isActive(item: NavItem, pathname: string | null): boolean {

@@ -24,6 +24,13 @@ export const packConfig: PackConfig = {
   nav: [
     { label: "Home", href: "/", icon: "home", mobile: true, match: ["/"] },
     {
+      label: "Start here",
+      href: "/start",
+      icon: "rocket",
+      mobile: true,
+      match: ["/start"],
+    },
+    {
       label: "Modules",
       href: "/#sections",
       icon: "layers",
@@ -32,7 +39,7 @@ export const packConfig: PackConfig = {
     },
     {
       label: "Progress",
-      href: "/#progress",
+      href: "/start",
       icon: "trending-up",
       mobile: true,
       match: [],
