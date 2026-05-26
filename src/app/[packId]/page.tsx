@@ -10,6 +10,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
+import { OverallProgressBar } from "@/components/dashboard/OverallProgressBar";
+import { RecapStrip } from "@/components/dashboard/RecapStrip";
 import { DailyInsightCard } from "@/components/dashboard/DailyInsightCard";
 import { SectionList } from "@/components/dashboard/SectionList";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
@@ -110,6 +112,8 @@ export default async function PackHomePage({
         ) : null}
       </header>
 
+      <OverallProgressBar />
+      <RecapStrip />
       <RecommendationBanner />
 
       <section id="sections" aria-label="All modules" className="scroll-mt-24">
