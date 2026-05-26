@@ -83,6 +83,12 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@abaplint/core"],
   images: {
     formats: ["image/avif", "image/webp"],
+    // Module thumbnails + the landing hero are generated on demand by
+    // Pollinations AI (see content-packs/clean-core-academy/module-images.ts).
+    // The CSP img-src already allows https: sources.
+    remotePatterns: [
+      { protocol: "https", hostname: "image.pollinations.ai" },
+    ],
   },
   // Subresource Integrity was previously enabled via experimental.sri.
   // On Vercel the integrity attribute on the initial <script> chunks did

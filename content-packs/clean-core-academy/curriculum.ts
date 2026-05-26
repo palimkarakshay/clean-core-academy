@@ -38,10 +38,11 @@ import { b01Management } from "./modules/b01-management";
 import { b02KeyUsers } from "./modules/b02-key-users";
 import { b03Orientation } from "./modules/b03-orientation";
 import { practiceExam } from "./modules/exams";
+import { withModuleImages } from "./module-images";
 
 export const CURRICULUM: Curriculum = {
   schemaVersion: 1,
-  sections: [
+  sections: withModuleImages([
     m01Foundations,
     m02HanaReadiness,
     m03Language,
@@ -59,7 +60,7 @@ export const CURRICULUM: Curriculum = {
     b01Management,
     b02KeyUsers,
     b03Orientation,
-  ],
+  ]),
   mockExams: [practiceExam],
   readinessAudit: {
     title: "Clean Core readiness self-audit",

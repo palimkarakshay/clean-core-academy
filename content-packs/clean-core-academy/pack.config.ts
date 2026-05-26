@@ -8,6 +8,7 @@
 
 import type { PackConfig } from "./_types";
 import { ICON_SVG, ICON_MASKABLE_SVG } from "./icons";
+import { pollinationsUrl, HERO_PROMPT, HERO_SEED } from "./module-images";
 
 export const packConfig: PackConfig = {
   id: "clean-core-academy",
@@ -19,6 +20,7 @@ export const packConfig: PackConfig = {
   url: "https://clean-core-academy.vercel.app",
   repoUrl: "https://github.com/palimkarakshay/clean-core-academy",
   author: "palimkarakshay",
+  heroImagePath: pollinationsUrl(HERO_PROMPT, HERO_SEED, 1280, 720),
   nav: [
     { label: "Home", href: "/", icon: "home", mobile: true, match: ["/"] },
     {

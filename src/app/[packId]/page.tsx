@@ -65,6 +65,7 @@ export default async function PackHomePage({
               width={1200}
               height={675}
               priority
+              unoptimized={/^https?:\/\//.test(cfg.heroImagePath)}
               className="h-auto w-full object-cover"
             />
           </div>
