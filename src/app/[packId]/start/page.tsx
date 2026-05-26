@@ -8,6 +8,7 @@ import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
 import { ProgressRail } from "@/components/dashboard/ProgressRail";
 import { WhatYoullLearn } from "@/components/dashboard/WhatYoullLearn";
 import { BuildLaunchpad } from "@/components/dashboard/BuildLaunchpad";
+import { StartSeenMarker } from "@/components/dashboard/StartSeenMarker";
 import { JourneyArt } from "@/components/dashboard/JourneyArt";
 import { CourseAtAGlance } from "@/components/dashboard/CourseAtAGlance";
 import { getSectionMeta } from "@/content/curriculum-loader";
@@ -76,6 +77,7 @@ export default async function StartPage({
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 lg:max-w-6xl xl:max-w-[84rem]">
+      <StartSeenMarker packId={packId} />
       <Link
         href={`/${packId}`}
         className="inline-flex w-fit items-center gap-1 text-xs text-(--muted) hover:text-(--ink)"
