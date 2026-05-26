@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { ALL_PACK_IDS, getPack } from "@/content/pack-registry";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
-import { StatsPanel } from "@/components/dashboard/StatsPanel";
+import { ProgressRail } from "@/components/dashboard/ProgressRail";
 import { JourneyArt } from "@/components/dashboard/JourneyArt";
 import { CourseAtAGlance } from "@/components/dashboard/CourseAtAGlance";
 import { getSectionMeta } from "@/content/curriculum-loader";
@@ -135,9 +135,9 @@ export default async function StartPage({
 
         <aside
           aria-label="Your progress"
-          className="flex flex-col gap-4 lg:sticky lg:top-6"
+          className="lg:sticky lg:top-6"
         >
-          <StatsPanel />
+          <ProgressRail />
         </aside>
       </div>
     </div>
