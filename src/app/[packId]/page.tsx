@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
+import { DailyInsightCard } from "@/components/dashboard/DailyInsightCard";
 import { SectionList } from "@/components/dashboard/SectionList";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { MockExamPanel } from "@/components/dashboard/MockExamPanel";
@@ -70,6 +71,7 @@ export default async function PackHomePage({
         ) : null}
       </header>
       <RecommendationBanner />
+      <DailyInsightCard />
 
       {pack.curriculum.readinessAudit ? (
         <Link
