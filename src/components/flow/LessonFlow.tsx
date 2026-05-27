@@ -165,7 +165,11 @@ export function LessonFlow({
           const showDivider = i === 0 || shown[i - 1].phase !== block.phase;
           const meta = PHASE_META[block.phase];
           return (
-            <div key={block.id} id={`block-${block.id}`} className="scroll-mt-24">
+            <div
+              key={block.id}
+              id={`block-${block.id}`}
+              className="animate-block-in scroll-mt-24"
+            >
               {showDivider ? (
                 <div className="mb-4 mt-2 flex items-baseline gap-3">
                   <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-(--accent-2)">
