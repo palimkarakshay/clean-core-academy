@@ -14,7 +14,7 @@
    The contract here is the public surface every pack must export.
 ------------------------------------------------------------------ */
 
-import type { Curriculum } from "./curriculum-types";
+import type { Audience, Curriculum } from "./curriculum-types";
 
 export type NavIcon = "home" | "layers" | "award" | "trending-up";
 
@@ -213,6 +213,29 @@ export interface PackPrerequisites {
   /** Optional links to authoritative sources (official exam page, registration). */
   externalLinks?: { label: string; href: string; }[];
   /** Optional disclaimer / "this is not a fit if…" copy. */
+  notForYouIf?: string[];
+  /**
+   * Optional per-role variants. When the learner has picked a track on
+   * the course home (persisted in the track-filter store), the matching
+   * override here is shallow-merged over the base fields above so the
+   * pre-flight check speaks to that role. Any field a role omits falls
+   * back to the base. Resolved via `resolvePrerequisites()`.
+   */
+  byRole?: Partial<Record<Audience, RolePrerequisiteOverride>>;
+}
+
+/**
+ * Role-specific overrides for the pre-flight check. Each field replaces
+ * (not appends to) the corresponding base field when present, so a role
+ * can tailor the intro and swap in role-appropriate requirements while
+ * inheriting everything it doesn't mention.
+ */
+export interface RolePrerequisiteOverride {
+  /** Short role label woven into the card subhead (e.g. "for New developers"). */
+  roleLabel?: string;
+  intro?: string;
+  requirements?: PackPrerequisiteItem[];
+  assumptions?: PackPrerequisiteItem[];
   notForYouIf?: string[];
 }
 

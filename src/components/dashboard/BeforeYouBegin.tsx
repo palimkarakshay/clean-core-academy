@@ -20,6 +20,8 @@ import {
   subscribeBeforeYouBegin,
   toggleBeforeYouBeginItem,
 } from "@/lib/before-you-begin";
+import { useTrack } from "@/lib/track-filter";
+import { resolvePrerequisites } from "@/lib/prerequisites";
 import type { PackPrerequisites } from "@/content/pack-types";
 
 /**
@@ -50,6 +52,9 @@ export function BeforeYouBegin({
   );
   const { items: checked, open, dismissed } = state;
 
+  const track = useTrack();
+  const resolved = resolvePrerequisites(prerequisites, track);
+
   const toggleItem = useCallback(
     (key: string) => toggleBeforeYouBeginItem(packId, key),
     [packId]
@@ -70,8 +75,8 @@ export function BeforeYouBegin({
     setBeforeYouBeginOpen(packId, true);
   }, [packId]);
 
-  const total = prerequisites.requirements.length;
-  const done = prerequisites.requirements.filter(
+  const total = resolved.requirements.length;
+  const done = resolved.requirements.filter(
     (r) => checked[`req:${r.label}`]
   ).length;
   const allDone = done === total;
@@ -132,9 +137,17 @@ export function BeforeYouBegin({
         </span>
         <div className="min-w-0 flex-1">
           <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-(--ink)">
-            {prerequisites.heading}
+            {resolved.heading}
           </h2>
           <p className="mt-0.5 text-xs text-(--muted)">
+            {resolved.roleLabel ? (
+              <>
+                <span className="font-medium text-(--accent-2)">
+                  Tailored for {resolved.roleLabel}
+                </span>{" "}
+                ·{" "}
+              </>
+            ) : null}
             Self-check {done}/{total} ·{" "}
             {allDone
               ? "Ready to start"
@@ -152,14 +165,14 @@ export function BeforeYouBegin({
 
       {open ? (
         <div id="before-you-begin-body" className="flex flex-col gap-4">
-          <p className="text-sm text-(--ink)">{prerequisites.intro}</p>
+          <p className="text-sm text-(--ink)">{resolved.intro}</p>
 
           <section aria-label="Prerequisites">
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
               Prerequisites — check before starting
             </h3>
             <ul className="flex flex-col gap-2">
-              {prerequisites.requirements.map((r) => {
+              {resolved.requirements.map((r) => {
                 const key = `req:${r.label}`;
                 const isChecked = Boolean(checked[key]);
                 return (
@@ -209,13 +222,13 @@ export function BeforeYouBegin({
             </ul>
           </section>
 
-          {prerequisites.assumptions && prerequisites.assumptions.length > 0 ? (
+          {resolved.assumptions && resolved.assumptions.length > 0 ? (
             <section aria-label="What this journey assumes">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
                 What this journey assumes
               </h3>
               <ul className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                {prerequisites.assumptions.map((a) => (
+                {resolved.assumptions.map((a) => (
                   <li
                     key={a.label}
                     className="rounded-md border border-(--border) bg-(--panel-2) p-3 text-sm"
@@ -234,8 +247,8 @@ export function BeforeYouBegin({
             </section>
           ) : null}
 
-          {prerequisites.notForYouIf &&
-          prerequisites.notForYouIf.length > 0 ? (
+          {resolved.notForYouIf &&
+          resolved.notForYouIf.length > 0 ? (
             <section
               aria-label="When this journey isn't a fit"
               className="rounded-r-md border-l-4 border-(--warn) bg-(--warn)/8 p-3"
@@ -245,21 +258,21 @@ export function BeforeYouBegin({
                 This may not be the right journey if…
               </h3>
               <ul className="ml-4 list-disc space-y-1 text-sm text-(--ink)">
-                {prerequisites.notForYouIf.map((line) => (
+                {resolved.notForYouIf.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
             </section>
           ) : null}
 
-          {prerequisites.externalLinks &&
-          prerequisites.externalLinks.length > 0 ? (
+          {resolved.externalLinks &&
+          resolved.externalLinks.length > 0 ? (
             <section
               aria-label="Official sources"
               className="flex flex-wrap gap-2 border-t border-dashed border-(--border) pt-3 text-xs"
             >
               <span className="text-(--muted)">Official sources:</span>
-              {prerequisites.externalLinks.map((link) => (
+              {resolved.externalLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
