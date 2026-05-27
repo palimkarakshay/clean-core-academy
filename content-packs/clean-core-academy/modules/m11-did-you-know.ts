@@ -1,15 +1,15 @@
 /* ------------------------------------------------------------------
-   Module 11 — Did You Know? Curiosities & Hidden Features.
+   Module 11 — Advanced Techniques & Lesser-Known APIs.
 
    Source brief: §11 of the Clean Core & HANA Readiness curriculum.
-   Audience: every tier including admins — the small, high-leverage
-   facts that rarely get written down: language sugar, ADT tooling,
-   released helper classes you'd otherwise hand-roll, operations
-   touchpoints, the subtler Clean Core release mechanics, and the
-   number types that quietly decide correctness. Each concept ships
-   paragraphs + keyPoints + simplified.oneLiner and a 3-question quiz
-   with per-option explanations; code-relevant concepts add examples
-   (lowercase, real ABAP / CDS).
+   Audience: every tier including admins — the high-leverage techniques
+   that rarely get written down: modern language features, ADT tooling,
+   released helper classes you'd otherwise implement by hand, operations
+   touchpoints, the subtler Clean Core release mechanics, and the numeric
+   types that quietly decide correctness. Each concept ships paragraphs +
+   keyPoints + simplified.oneLiner and a 3-question quiz with per-option
+   explanations; code-relevant concepts add examples (lowercase, real
+   ABAP / CDS).
 ------------------------------------------------------------------ */
 
 import type { Section } from "../_types";
@@ -17,7 +17,7 @@ import type { Section } from "../_types";
 export const m11DidYouKnow: Section = {
   id: "m11-did-you-know",
   n: 11,
-  title: "Did You Know? Curiosities & Hidden Features",
+  title: "Advanced Techniques & Lesser-Known APIs",
   sourceCourse: "clean-core-curriculum §11",
   audiences: ["new", "intermediate", "expert", "admin"],
   skills: [
@@ -53,12 +53,12 @@ export const m11DidYouKnow: Section = {
     },
   ],
   blurb:
-    "The high-leverage facts that rarely get written down — language sugar, ADT tooling shortcuts, released helper classes you'd otherwise hand-roll, the operations touchpoints, the subtler Clean Core release mechanics, and the number types that quietly decide correctness.",
+    "High-leverage techniques that rarely get written down — modern language features, ADT tooling shortcuts, released helper classes you'd otherwise implement by hand, the operations touchpoints, the subtler Clean Core release mechanics, and the numeric types that quietly decide correctness.",
   concepts: [
     {
       id: "m11-c1",
       code: "11.1",
-      title: "Language curiosities",
+      title: "Lesser-known language features",
       bloom: "U",
       lesson: {
         status: "ready",
@@ -172,7 +172,7 @@ export const m11DidYouKnow: Section = {
     {
       id: "m11-c2",
       code: "11.2",
-      title: "Tooling curiosities",
+      title: "ADT productivity features",
       bloom: "U",
       lesson: {
         status: "ready",
@@ -268,7 +268,7 @@ export const m11DidYouKnow: Section = {
     {
       id: "m11-c3",
       code: "11.3",
-      title: "Hidden released APIs",
+      title: "Lesser-known released APIs",
       bloom: "U",
       lesson: {
         status: "ready",
@@ -370,7 +370,7 @@ export const m11DidYouKnow: Section = {
     {
       id: "m11-c4",
       code: "11.4",
-      title: "Operations curiosities",
+      title: "Operations touchpoints",
       bloom: "U",
       lesson: {
         status: "ready",
@@ -465,7 +465,7 @@ export const m11DidYouKnow: Section = {
     {
       id: "m11-c5",
       code: "11.5",
-      title: "Less-famous Clean Core mechanics",
+      title: "Subtle Clean Core mechanics",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -563,7 +563,7 @@ export const m11DidYouKnow: Section = {
     {
       id: "m11-c6",
       code: "11.6",
-      title: "Number-type gotchas",
+      title: "Numeric-type pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",

@@ -46,7 +46,7 @@ export const m08AtcMigration: Section = {
     },
   ],
   blurb:
-    "The ATC variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today's debt, the full Custom Code Migration loop, and the Simplification Items that bite hardest in an upgrade.",
+    "The ATC variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today's debt, the full Custom Code Migration loop, and the Simplification Items with the greatest upgrade impact.",
   concepts: [
     {
       id: "m08-c1",
@@ -456,7 +456,7 @@ export const m08AtcMigration: Section = {
     {
       id: "m08-c5",
       code: "8.5",
-      title: "Simplification Items that bite",
+      title: "High-impact Simplification Items",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -500,7 +500,7 @@ export const m08AtcMigration: Section = {
         ],
         simplified: {
           oneLiner:
-            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) bite hardest — bridge old reads with the released I_* interface views (e.g. I_OperationalAcctgDocItem).",
+            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) have the greatest impact — bridge old reads with the released I_* interface views (e.g. I_OperationalAcctgDocItem).",
           analogy:
             "The old address still gets some mail, but the household has moved — forward your reads through the released interface view to reach the real, current data.",
         },

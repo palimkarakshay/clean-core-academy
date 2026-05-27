@@ -499,7 +499,7 @@ export const m04AbapCloud: Section = {
         keyPoints: [
           "Only released enhancement spots are visible in a cloud package; unreleased spots cannot be picked.",
           "You can implement a released BAdI normally — its supertype interface being released is what matters.",
-          "Gotcha: a released BAdI may expose UNRELEASED (C2) filter values.",
+          "Caution: a released BAdI may expose UNRELEASED (C2) filter values.",
           "Referencing a C2 filter constant is a violation ATC flags, even though the BAdI is released.",
           "Fix: define your own constant for the filter value and document its binding to the SAP value.",
         ],
@@ -542,7 +542,7 @@ export const m04AbapCloud: Section = {
         },
         deeper: {
           paragraphs: [
-            "This mirrors the §1.4 gotcha that a C1 API can surface a C2 type: release state does not propagate transitively. A released spot guarantees the spot and its interface are stable, not every value, type, or constant reachable through it. The discipline is always 'check what you actually reference,' not 'trust the headline release state of the container.'",
+            "This mirrors the §1.4 pitfall that a C1 API can surface a C2 type: release state does not propagate transitively. A released spot guarantees the spot and its interface are stable, not every value, type, or constant reachable through it. The discipline is always 'check what you actually reference,' not 'trust the headline release state of the container.'",
           ],
           keyPoints: [
             "Release state is not transitive — a released BAdI does not bless its C2 filter values.",
