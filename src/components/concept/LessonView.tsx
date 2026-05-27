@@ -5,7 +5,7 @@ import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useProgress } from "@/hooks/useProgress";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { LessonBody, SimplifiedBody, DeeperBody } from "./LessonBody";
-import { LessonTOC } from "./LessonTOC";
+import { LessonTOC, lessonTocItems } from "./LessonTOC";
 import { AskClaudePanel } from "./AskClaudePanel";
 import { ReadAloudButton } from "./ReadAloudButton";
 import { MasteryBadge } from "@/components/primitives/MasteryBadge";
@@ -170,14 +170,14 @@ export function LessonView({
   // fall back to conceptual silently.
   const effectiveDepth: LessonDepth = available[depth] ? depth : "conceptual";
 
-  // The TOC rail only renders on the conceptual depth (its anchors
-  // point at IDs that exist only in LessonBody). On Easy/Deeper, the
-  // rail's grid column would still be reserved by the fixed
-  // `grid-cols-[200px_minmax(0,1fr)]` and the article — being the
-  // only child — would auto-place into the 200px column, producing
-  // the "small mobile version on desktop" bug. Switch to a single-
-  // column flow on those depths so the article gets the full width.
-  const showTocColumn = effectiveDepth === "conceptual";
+  // The TOC rail renders for every depth — each body (conceptual, easy,
+  // deeper) emits anchors matching `lessonTocItems`, so switching depth
+  // keeps the left panel in place instead of collapsing the layout. We
+  // reserve the grid column only when there are anchors for the current
+  // depth; otherwise the article (sole child) would auto-place into the
+  // 200px column and render squished. Easy/Deeper always return at least
+  // an "Overview" anchor, so the panel persists there.
+  const showTocColumn = lessonTocItems(lesson, effectiveDepth).length > 0;
 
   return (
     <>
