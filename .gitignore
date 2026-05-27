@@ -5,6 +5,7 @@ dist
 coverage
 .vercel
 .turbo
+.scorm-park
 
 # logs
 npm-debug.log*

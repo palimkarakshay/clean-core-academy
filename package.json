@@ -10,6 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "build:scorm": "node scripts/build-scorm.mjs",
     "lint": "eslint .",
     "lint:abap": "abaplint exercises/abaplint.json",
     "type-check": "tsc --noEmit",

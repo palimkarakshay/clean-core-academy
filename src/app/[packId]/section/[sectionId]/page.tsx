@@ -63,7 +63,9 @@ export default async function SectionPage({
 
   const meta = getSectionMeta(sectionId);
   const copy = copyFor(pack);
-  const blocks = deriveSectionFlow(section);
+  const blocks = deriveSectionFlow(section, {
+    scorm: process.env.NEXT_PUBLIC_SCORM === "1",
+  });
 
   const goalsPanel = (
     <GoalsPanel section={section} meta={meta} formatMinutes={formatMinutes} />

@@ -75,14 +75,36 @@ const SECURITY_HEADERS = [
   },
 ];
 
+/**
+ * SCORM packaging build. `SCORM_BUILD=1 NEXT_PUBLIC_SCORM=1 next build`
+ * produces a static `out/` bundle for `scripts/build-scorm.mjs` to wrap
+ * in an imsmanifest.xml and zip. Static export changes a few things:
+ *   - `output: "export"` emits plain HTML/JS with no server.
+ *   - images must be unoptimized (no image-optimization server).
+ *   - `trailingSlash` emits directory-style index.html files, which
+ *     most LMS players serve cleanly.
+ *   - `headers()` is ignored by export anyway, but we also drop the
+ *     frame-blocking headers so nothing leaks a meta-CSP that would
+ *     stop the SCO rendering inside the LMS iframe.
+ * Asset URLs stay absolute (`/_next/...`); the package must be served
+ * so that the iframe base maps to the package root — verify in an LMS
+ * (e.g. SCORM Cloud) before distributing.
+ * The normal Vercel/web build is unaffected (SCORM_BUILD unset).
+ */
+const SCORM_BUILD = process.env.SCORM_BUILD === "1";
+
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
   // @abaplint/core is a large Node library with internal dynamic
   // requires that don't survive webpack bundling — keep it external so
   // the /api/lint-abap serverless function `require()`s it at runtime.
   serverExternalPackages: ["@abaplint/core"],
+  ...(SCORM_BUILD
+    ? { output: "export" as const, trailingSlash: true }
+    : {}),
   images: {
     formats: ["image/avif", "image/webp"],
+    ...(SCORM_BUILD ? { unoptimized: true } : {}),
   },
   // Subresource Integrity was previously enabled via experimental.sri.
   // On Vercel the integrity attribute on the initial <script> chunks did
@@ -94,6 +116,9 @@ const nextConfig: NextConfig = {
   // tracked alternative in SECURITY.md). Re-enable only after a
   // matching-bytes verification step in CI.
   async headers() {
+    // Export emits no server to send headers; and an LMS frames the SCO,
+    // which the DENY/frame-ancestors headers would block. Skip them.
+    if (SCORM_BUILD) return [];
     return [
       {
         source: "/(.*)",
