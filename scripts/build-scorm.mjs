@@ -115,6 +115,28 @@ function main() {
     throw new Error("static export did not produce out/");
   }
 
+  // Prune routes the SCORM SCO doesn't use. Every prerendered page
+  // embeds the full curriculum, so the standalone concept/quiz/mock/
+  // games pages balloon the bundle to ~500MB. The linear flow renders
+  // lessons inline and only needs the section pages (+ their /test),
+  // so drop the rest. The home + section pages hide their links to
+  // these routes under NEXT_PUBLIC_SCORM, so nothing dead-links.
+  const packOut = path.join(outDir, PACK_ID);
+  const prune = ["concept", "mock", "skills", "audit"];
+  for (const dir of prune) {
+    fs.rmSync(path.join(packOut, dir), { recursive: true, force: true });
+  }
+  const sectionsDir = path.join(packOut, "section");
+  if (fs.existsSync(sectionsDir)) {
+    for (const s of fs.readdirSync(sectionsDir)) {
+      fs.rmSync(path.join(sectionsDir, s, "games"), {
+        recursive: true,
+        force: true,
+      });
+    }
+  }
+  log(`pruned non-flow routes: ${prune.join(", ")}, section games`);
+
   // trailingSlash:true emits <pack>/index.html as the pack home.
   const launch = `${PACK_ID}/index.html`;
   if (!fs.existsSync(path.join(outDir, launch))) {

@@ -151,15 +151,17 @@ export default async function SectionPage({
         goalsPanel={goalsPanel}
       />
 
-      <details className="mt-8 rounded-lg border border-dashed border-(--border) bg-(--panel-2)/50">
-        <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-(--ink)">
-          <Gamepad2 aria-hidden className="h-4 w-4 text-(--accent)" />
-          Optional: practice with games
-        </summary>
-        <div className="border-t border-(--border) px-4 pb-4 pt-3">
-          <GamesPanel packId={packId} sectionId={sectionId} />
-        </div>
-      </details>
+      {process.env.NEXT_PUBLIC_SCORM === "1" ? null : (
+        <details className="mt-8 rounded-lg border border-dashed border-(--border) bg-(--panel-2)/50">
+          <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-(--ink)">
+            <Gamepad2 aria-hidden className="h-4 w-4 text-(--accent)" />
+            Optional: practice with games
+          </summary>
+          <div className="border-t border-(--border) px-4 pb-4 pt-3">
+            <GamesPanel packId={packId} sectionId={sectionId} />
+          </div>
+        </details>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
         <Link href={`/${packId}`} className="text-(--muted) hover:text-(--ink)">

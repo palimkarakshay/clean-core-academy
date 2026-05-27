@@ -95,7 +95,7 @@ export default async function PackHomePage({
 
       <RecommendationBanner />
 
-      {pack.curriculum.readinessAudit ? (
+      {process.env.NEXT_PUBLIC_SCORM !== "1" && pack.curriculum.readinessAudit ? (
         <Link
           href={`/${pack.config.id}/audit`}
           className="group flex items-start gap-3 rounded-lg border border-(--border) bg-(--panel-2) p-4 no-underline shadow-sm transition-colors hover:border-(--accent)"
@@ -120,7 +120,8 @@ export default async function PackHomePage({
         </Link>
       ) : null}
 
-      {pack.curriculum.sections.some((s) => s.skills && s.skills.length > 0) ? (
+      {process.env.NEXT_PUBLIC_SCORM !== "1" &&
+      pack.curriculum.sections.some((s) => s.skills && s.skills.length > 0) ? (
         <Link
           href={`/${pack.config.id}/skills`}
           className="group flex items-start gap-3 rounded-lg border border-(--border) bg-(--panel-2) p-4 no-underline shadow-sm transition-colors hover:border-(--accent)"
