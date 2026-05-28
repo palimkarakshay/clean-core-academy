@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type {
   FillInQuestion,
   MCQQuestion,
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { QuizResult } from "./QuizResult";
 import {
+  isAnswered,
   isFillIn,
   isMCQ,
   isTrueFalse,
@@ -50,6 +51,9 @@ export interface QuizRunnerProps {
   resumeFrom?: CurrentAttempt | null;
   onCheckpoint?: (attempt: CurrentAttempt | null) => void;
   onComplete: (attempt: QuizAttempt) => void;
+  /** Optional content rendered above the result on submit (e.g. a mock-exam
+   *  verdict band). Receives the scored attempt. */
+  resultHeader?: (attempt: QuizAttempt) => ReactNode;
   exitHref: string;
   exitLabel?: string;
   prevHref?: string;
@@ -261,6 +265,7 @@ export function QuizRunner({
   resumeFrom,
   onCheckpoint,
   onComplete,
+  resultHeader,
   exitHref,
   exitLabel = "Exit",
   prevHref,
@@ -280,8 +285,8 @@ export function QuizRunner({
   const progress = useMemo(
     () =>
       Math.round(
-        (Object.keys(state.answers).filter(
-          (k) => state.answers[Number(k)] != null
+        (Object.keys(state.answers).filter((k) =>
+          isAnswered(state.answers[Number(k)])
         ).length /
           total) *
           100
@@ -336,6 +341,7 @@ export function QuizRunner({
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
       const cur = questions[state.cursor];
+      if (!cur) return;
       const upper = e.key.length === 1 ? e.key.toUpperCase() : e.key;
 
       if (isMCQ(cur)) {
@@ -395,19 +401,48 @@ export function QuizRunner({
 
   if (submitted && attempt) {
     return (
-      <QuizResult
-        title={title}
-        questions={questions}
-        attempt={attempt}
-        passPct={passPct}
-        exitHref={exitHref}
-        exitLabel={exitLabel}
-        prevHref={prevHref}
-        prevLabel={prevLabel}
-        nextHref={nextHref}
-        nextLabel={nextLabel}
-        learnedSummary={learnedSummary}
-      />
+      <>
+        {resultHeader?.(attempt)}
+        <QuizResult
+          title={title}
+          questions={questions}
+          attempt={attempt}
+          passPct={passPct}
+          exitHref={exitHref}
+          exitLabel={exitLabel}
+          prevHref={prevHref}
+          prevLabel={prevLabel}
+          nextHref={nextHref}
+          nextLabel={nextLabel}
+          learnedSummary={learnedSummary}
+        />
+      </>
+    );
+  }
+
+  // Defensive: a quiz/section-test/mock with no questions would otherwise
+  // crash at `current.n` below (current is undefined). Render a calm
+  // empty-state instead of throwing.
+  if (total === 0) {
+    return (
+      <article>
+        <header className="mb-3">
+          <h1 className="font-[family-name:var(--font-display)] text-2xl md:text-3xl font-semibold text-(--ink)">
+            {title}
+          </h1>
+        </header>
+        <p className="text-sm text-(--muted)">
+          No questions are available here yet.
+        </p>
+        <div className="mt-6 border-t border-dashed border-(--border) pt-4">
+          <a
+            href={exitHref}
+            className="text-xs text-(--muted) hover:text-(--ink)"
+          >
+            {exitLabel}
+          </a>
+        </div>
+      </article>
     );
   }
 
@@ -523,7 +558,7 @@ export function QuizRunner({
               variant="default"
               size="sm"
               onClick={submit}
-              disabled={Object.keys(state.answers).length === 0}
+              disabled={!Object.values(state.answers).some(isAnswered)}
             >
               Submit
             </Button>

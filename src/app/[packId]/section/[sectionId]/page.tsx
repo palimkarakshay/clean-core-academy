@@ -54,6 +54,9 @@ export async function generateMetadata({
   return {
     title: `Module ${section.n}: ${section.title}`,
     description: section.blurb,
+    // Canonicalize the ?tab= variants to the bare section URL so search
+    // engines don't see one section as several duplicate-content pages.
+    alternates: { canonical: `/${packId}/section/${sectionId}` },
   };
 }
 

@@ -45,10 +45,15 @@ if (PACK_ID !== REQUESTED_PACK_ID) {
  * - `frame-ancestors 'none'` blocks clickjacking.
  * - `object-src 'none'` blocks Flash / Java / pdf-plugin abuse.
  * - `upgrade-insecure-requests` forces http subresources to https.
+ * - `'unsafe-eval'` is dev-only (Next's Fast Refresh evaluates strings);
+ *   a production build never needs it, so it is dropped there to remove
+ *   that XSS pivot.
  */
+const isDev = process.env.NODE_ENV !== "production";
+
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' data:",

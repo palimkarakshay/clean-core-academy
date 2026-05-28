@@ -130,7 +130,7 @@ export const packConfig: PackConfig = {
     assumptions: [
       {
         label: "ATC with the Clean Core variants",
-        detail: "CLOUD_READINESS + S4HANA_READINESS are the authoritative checks; abaplint catches the style layer.",
+        detail: "ABAP_CLOUD_DEVELOPMENT_DEFAULT + S4HANA_READINESS_2023 are the authoritative checks; abaplint catches the style layer.",
       },
     ],
     externalLinks: [

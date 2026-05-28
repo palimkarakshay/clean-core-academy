@@ -42,8 +42,20 @@ export function loadProgressFor(
     if (!raw) return newProgress(firstSectionId);
     const obj = JSON.parse(raw) as Progress;
     if (!obj || obj.schemaVersion !== 1) return newProgress(firstSectionId);
-    if (!obj.mock) obj.mock = {};
-    if (obj.location && !("mockId" in (obj.location as object))) {
+    // Defensive: a corrupt or partial persisted blob may be missing buckets.
+    // Normalize them so later ensureSection/ensureConcept/location reads can't
+    // throw inside a React event handler (where there is no try/catch).
+    if (!obj.concept || typeof obj.concept !== "object") obj.concept = {};
+    if (!obj.section || typeof obj.section !== "object") obj.section = {};
+    if (!obj.mock || typeof obj.mock !== "object") obj.mock = {};
+    if (!obj.location || typeof obj.location !== "object") {
+      obj.location = {
+        view: "dashboard",
+        sectionId: null,
+        conceptId: null,
+        mockId: null,
+      };
+    } else if (!("mockId" in (obj.location as object))) {
       obj.location.mockId = null;
     }
     // Self-heal: an older persisted shape may pre-date the pack-aware

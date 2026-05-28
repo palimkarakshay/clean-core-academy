@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useProgress } from "@/hooks/useProgress";
 import { QuizRunner } from "./QuizRunner";
-import { MockResult } from "./MockResult";
+import { MockResult, MockVerdictBanner } from "./MockResult";
 import { useCopy, usePackId } from "@/content/pack-hooks";
 import type { MockExam } from "@/content/curriculum-types";
 import type { CurrentAttempt, QuizAttempt } from "@/lib/progress-types";
@@ -41,6 +41,9 @@ export function MockExamPage({ mock }: { mock: MockExam }) {
       resumeFrom={resume}
       onCheckpoint={onCheckpoint}
       onComplete={onComplete}
+      resultHeader={(attempt) => (
+        <MockVerdictBanner mock={mock} attempt={attempt} />
+      )}
       exitHref={`/${packId}`}
       exitLabel="Exit to dashboard"
     />

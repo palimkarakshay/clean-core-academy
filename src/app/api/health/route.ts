@@ -19,7 +19,7 @@ export function GET() {
     {
       ok: true,
       version: packageJson.version,
-      packId: process.env.NEXT_PUBLIC_CONTENT_PACK_ID ?? "cca-f-prep",
+      packId: process.env.NEXT_PUBLIC_CONTENT_PACK_ID ?? "clean-core-academy",
       time: new Date().toISOString(),
     },
     {

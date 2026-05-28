@@ -65,7 +65,7 @@ export const CURRICULUM: Curriculum = {
   readinessAudit: {
     title: "Clean Core readiness self-audit",
     intro:
-      "Answer honestly about your custom ABAP. Each risky practice is weighted by how hard it blocks Clean Core; the result is a readiness score plus a remediation list sorted worst-first, each linked to the module that fixes it. This is a triage — the authoritative check is ATC with the CLOUD_READINESS variant on your target system.",
+      "Answer honestly about your custom ABAP. Each risky practice is weighted by how hard it blocks Clean Core; the result is a readiness score plus a remediation list sorted worst-first, each linked to the module that fixes it. This is a triage — the authoritative check is ATC with the ABAP_CLOUD_DEVELOPMENT_DEFAULT variant on your target system.",
     bands: [
       {
         min: 0,
@@ -93,7 +93,7 @@ export const CURRICULUM: Curriculum = {
         max: 100,
         verdict: "Clean Core ready",
         message:
-          "Strong posture. Confirm with ATC CLOUD_READINESS / S4HANA_READINESS on your target system and keep the gate green.",
+          "Strong posture. Confirm with ATC ABAP_CLOUD_DEVELOPMENT_DEFAULT / S4HANA_READINESS_2023 on your target system and keep the gate green.",
       },
     ],
     questions: [
@@ -217,7 +217,7 @@ export const CURRICULUM: Curriculum = {
         id: "a-atc",
         dimension: "Tooling",
         question:
-          "Do you run ATC with the CLOUD_READINESS / S4HANA_READINESS variants regularly?",
+          "Do you run ATC with the ABAP_CLOUD_DEVELOPMENT_DEFAULT / S4HANA_READINESS_2023 variants regularly?",
         weight: 4,
         riskAnswer: "no",
         remediation:

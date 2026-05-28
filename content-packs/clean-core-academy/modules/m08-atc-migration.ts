@@ -180,7 +180,7 @@ export const m08AtcMigration: Section = {
           {
             title: "Why the Simplification DB sits centrally",
             variant: "neutral",
-            body: "Rather than installing and patching the Simplification catalog on every box, the central ATC system holds the current release's DB and runs S4HANA_READINESS remotely against each source system over RFC.",
+            body: "Rather than installing and patching the Simplification catalog on every box, the central ATC system holds the current release's DB and runs S4HANA_READINESS_2023 remotely against each source system over RFC.",
           },
         ],
         simplified: {

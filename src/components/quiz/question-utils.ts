@@ -58,6 +58,19 @@ export function isCorrect(
 }
 
 /**
+ * Whether a stored answer should count as "answered" for the progress bar
+ * and the Submit gate. Null/undefined never counts; a fill-in string that is
+ * empty or whitespace-only does not count either (typing then clearing the
+ * field leaves "" behind, which would otherwise inflate progress and enable
+ * Submit on an effectively-blank quiz). Letters and booleans always count.
+ */
+export function isAnswered(answer: AnswerValue | null | undefined): boolean {
+  if (answer == null) return false;
+  if (typeof answer === "string") return answer.trim().length > 0;
+  return true;
+}
+
+/**
  * Compute the score for a quiz attempt across all question kinds.
  */
 export function scoreAttempt(
