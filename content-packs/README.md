@@ -1,8 +1,17 @@
 # `web/content-packs/` — swappable content packs
 
-The Next.js app shell under `web/src/` is content-agnostic. All
+The Next.js app shell under `src/` is content-agnostic. All
 exam-/course-/topic-specific material lives in **content packs** under
 this directory. Switching the active pack is a one-line change.
+
+> **This repo ships a single pack: `clean-core-academy`.** This file is the
+> shell's general authoring/swap guide, inherited from the multi-pack template
+> this repo was carved from. The swap *mechanism* it documents is accurate, but
+> the demo packs it references (`cca-f-prep`, `learn-french`, `sample-pack`,
+> `sewing-beginners`) and the `web/` directory prefix used in some examples
+> below **do not exist here** — this project lives at the repo root, not under
+> `web/`. See [`../CLAUDE.md`](../CLAUDE.md) and the README's "Inherited from
+> the shell" section.
 
 ## What's a pack?
 
@@ -18,14 +27,11 @@ export interface ContentPack {
 }
 ```
 
-Packs in this repo:
+Pack in this repo:
 
-| Pack id            | Folder                  | What it contains                                                                  |
-| ------------------ | ----------------------- | --------------------------------------------------------------------------------- |
-| `cca-f-prep`       | `cca-f-prep/`           | Original — Anthropic CCA-F exam prep (9 sections, 41 concepts, 1 diagnostic mock) |
-| `learn-french`     | `learn-french/`         | Practical beginner French for English speakers (5 modules, 15 concepts, 2 real-life scenarios) — France + Quebec aware |
-| `sample-pack`      | `sample-pack/`          | Tiny demo (2 sections, 3 concepts, 1 mock) — proves the swap mechanism            |
-| `sewing-beginners` | `sewing-beginners/`     | Non-exam topic pack (sewing 101) — proves `pack.copy` terminology overrides       |
+| Pack id              | Folder                  | What it contains                                                                       |
+| -------------------- | ----------------------- | -------------------------------------------------------------------------------------- |
+| `clean-core-academy` | `clean-core-academy/`   | SAP Clean Core & HANA readiness for ABAP developers — 13 dev/cross-cutting modules (m01–m13) + 3 business-track modules (b01–b03), practice exam, and a readiness self-audit |
 
 ## How to swap
 
