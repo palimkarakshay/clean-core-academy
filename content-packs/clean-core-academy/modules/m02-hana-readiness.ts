@@ -46,7 +46,7 @@ export const m02HanaReadiness: Section = {
     },
   ],
   blurb:
-    "What actually changes underneath your code when you move to HANA, the classic and not-so-classic gotchas that silently return wrong results, and the SCMON to ATC to baseline loop that scopes and tames the migration.",
+    "Move to S/4HANA without the silent surprises. Switching to HANA — SAP's in-memory database — quietly changes how existing code behaves: this covers what actually changes underneath your code, the gotchas that return wrong results without an error, and the SCMON to ATC to baseline loop that scopes and tames the migration so risks surface before go-live, not after.",
   concepts: [
     {
       id: "m02-c1",

@@ -41,7 +41,7 @@ export const m04AbapCloud: Section = {
     },
   ],
   blurb:
-    "Building Tier-2 transactional apps the Clean Core way: the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
+    "Build new apps that survive upgrades by design, using SAP's modern approach instead of the old patterns. Covers Tier-2 transactional apps the Clean Core way with RAP (SAP's modern transactional programming model): the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
   concepts: [
     {
       id: "m04-c1",

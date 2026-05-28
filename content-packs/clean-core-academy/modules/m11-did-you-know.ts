@@ -53,7 +53,7 @@ export const m11DidYouKnow: Section = {
     },
   ],
   blurb:
-    "The high-leverage facts that rarely get written down — language sugar, ADT tooling shortcuts, released helper classes you'd otherwise hand-roll, the operations touchpoints, the subtler Clean Core release mechanics, and the number types that quietly decide correctness.",
+    "Small, high-leverage facts that save real time and prevent quiet correctness bugs — the things experienced developers wish they'd known sooner. Language shortcuts, ADT (SAP's modern editor) tooling tricks, released helper classes you'd otherwise hand-roll, the operations touchpoints, the subtler Clean Core release mechanics, and the number types that quietly decide whether money adds up.",
   concepts: [
     {
       id: "m11-c1",

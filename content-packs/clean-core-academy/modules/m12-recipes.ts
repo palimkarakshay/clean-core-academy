@@ -54,7 +54,7 @@ export const m12Recipes: Section = {
     },
   ],
   blurb:
-    "Six step-by-step recipes the senior ABAP developer runs by hand: release an object as a C1 API, run remote ATC and baseline it, migrate FORM/PERFORM to classes, write a CDS unit test, gate a CI/CD pipeline on ATC, and write a MANDT-safe AMDP. Rationale in the prose, ordered steps in the key points.",
+    "Six common modernization jobs, broken into ordered, repeatable steps a developer can follow start to finish. Each recipe is a procedure a senior ABAP developer runs by hand: release an object as a stable interface, run a code-quality scan and baseline it, convert old procedural code into classes, add an automated test for a data model, gate a delivery pipeline on quality checks, and write a multi-tenant-safe database procedure. The rationale is in the prose; the ordered steps are in the key points.",
   concepts: [
     {
       id: "m12-c1",

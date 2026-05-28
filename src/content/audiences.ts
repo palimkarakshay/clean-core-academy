@@ -46,7 +46,7 @@ export const AUDIENCES: AudienceInfo[] = [
     label: "Intermediate developers",
     shortLabel: "Intermediate",
     description:
-      "Writing extensions day-to-day — modern ABAP, RAP, CDS, released APIs, and the performance patterns that win on HANA.",
+      "Writing extensions day-to-day — modern ABAP, RAP and CDS (SAP's modern programming and data-modeling layers), released APIs (the official, upgrade-safe interfaces SAP supports), and the performance patterns that win on HANA (SAP's in-memory database).",
     family: "developer",
     icon: "code",
   },
@@ -55,7 +55,7 @@ export const AUDIENCES: AudienceInfo[] = [
     label: "Expert developers & architects",
     shortLabel: "Expert",
     description:
-      "Owning the strategy — release contracts, decoupling, ATC governance, and end-to-end migration design.",
+      "Owning the strategy — release contracts, decoupling, governance through ATC (SAP's automated code-quality checker), and end-to-end migration design.",
     family: "developer",
     icon: "compass",
   },
@@ -73,7 +73,7 @@ export const AUDIENCES: AudienceInfo[] = [
     label: "Management & leads",
     shortLabel: "Management",
     description:
-      "The business case, governance, and roadmap — what Clean Core buys you and how to steer the migration.",
+      "Cheaper, lower-risk upgrades — the business case, governance, and roadmap for Clean Core (keeping SAP standard untouched and extending beside it) and how to steer the migration.",
     family: "business",
     icon: "briefcase",
   },

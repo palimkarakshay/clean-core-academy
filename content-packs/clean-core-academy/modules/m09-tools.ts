@@ -51,7 +51,7 @@ export const m09Tools: Section = {
     },
   ],
   blurb:
-    "The underused parts of the toolchain: ABAP Cleaner and abaplint, abapGit beyond the basics, the SCMON/UPL/SUSG trio, the Decoupling Cockpit, the test-double frameworks, and the ADT goodies and hidden t-codes seniors actually use.",
+    "The free, underused tools that make the team faster and the cleanup cheaper — most teams already have them and don't realise it. Covers ABAP Cleaner and abaplint (automatic code tidy-up and checking), abapGit beyond the basics, the SCMON/UPL/SUSG trio that shows what code is actually used, the Decoupling Cockpit, the test-double frameworks, and the ADT (SAP's modern Eclipse-based editor) goodies and hidden t-codes seniors actually use.",
   concepts: [
     {
       id: "m09-c1",

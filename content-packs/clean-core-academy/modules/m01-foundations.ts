@@ -45,7 +45,7 @@ export const m01Foundations: Section = {
     },
   ],
   blurb:
-    "What Clean Core actually means, the 3-tier extensibility model, Restricted ABAP, the C0–C3 release contracts, and the software-component boundary. The mental model the rest of the academy builds on.",
+    "The shared vocabulary the whole course rests on: what Clean Core (keeping SAP's standard untouched and building beside it, so upgrades stay easy) actually means and why it lowers upgrade cost and risk. Covers the 3-tier extensibility model, Restricted ABAP, the C0–C3 release contracts, and the software-component boundary — the mental model the rest of the academy builds on.",
   concepts: [
     {
       id: "m01-c1",

@@ -47,7 +47,7 @@ export const m06CdsAmdp: Section = {
     },
   ],
   blurb:
-    "Where Clean Core meets HANA: the pushdown ladder, CDS patterns that compress code, CDS table functions over AMDP, AMDP write paths, and CDS access control via DCL. Push logic down to the database in the most declarative form that can express it.",
+    "Get reports and heavy calculations to run far faster by letting the database do the work. This is where Clean Core meets HANA performance using CDS (SAP's modern data-modeling layer) and AMDP (database procedures written in ABAP): the pushdown ladder, CDS patterns that compress code, CDS table functions over AMDP, AMDP write paths, and CDS access control via DCL. Push logic down to the database in the most declarative form that can express it.",
   concepts: [
     {
       id: "m06-c1",

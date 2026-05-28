@@ -51,7 +51,7 @@ export const m10Gotchas: Section = {
     },
   ],
   blurb:
-    "The silent traps — code that compiles clean, passes a casual review, and then bites at runtime or after the next FPS. Open SQL, internal tables, RAP, CDS, AMDP / ABAP Cloud, and transport topology gotchas, each with the mechanism behind it.",
+    "The silent traps that pass review and then cause wrong results or production incidents later — the kind of defect that erodes trust in a system. A catalogue of code that compiles clean and then bites at runtime or after the next support pack, across Open SQL, internal tables, RAP, CDS, AMDP / ABAP Cloud, and transport topology — each with the mechanism behind it so you can spot it before it ships.",
   concepts: [
     {
       id: "m10-c1",

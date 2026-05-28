@@ -41,7 +41,7 @@ export const m05ReleasedApis: Section = {
     },
   ],
   blurb:
-    "Finding and consuming the released contracts that replace legacy APIs: where the released-objects catalog lives, the high-yield legacy-to-released replacement map, the XCO helper library, and the rule that the interface CDS view — not the table — is the contract.",
+    "Swap fragile legacy connections for the official interfaces SAP promises to keep stable — so upgrades stop breaking your code. Covers released APIs (the official, upgrade-safe interfaces SAP supports) that replace legacy ones: where the released-objects catalog lives, the high-yield legacy-to-released replacement map, the XCO helper library, and the rule that the interface CDS view (SAP's modern data-modeling layer) — not the table — is the contract.",
   concepts: [
     {
       id: "m05-c1",

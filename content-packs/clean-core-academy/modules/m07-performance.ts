@@ -46,7 +46,7 @@ export const m07Performance: Section = {
     },
   ],
   blurb:
-    "The five rules that fix 80% of slow SQL, the diagnostics toolkit, the declarative-projected-joined pattern that wins, hints and buffering, and the performance gotchas rarely written down. How to make ABAP fast on a columnar, set-oriented database.",
+    "Find and fix the slow programs that frustrate users and tie up the system — most of it comes down to a handful of habits. Covers the five rules that fix 80% of slow database queries, the diagnostics toolkit, the declarative-projected-joined pattern that wins, hints and buffering, and the performance gotchas rarely written down. How to make ABAP fast on HANA's columnar, set-oriented database.",
   concepts: [
     {
       id: "m07-c1",

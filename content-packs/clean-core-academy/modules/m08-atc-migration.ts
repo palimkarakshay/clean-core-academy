@@ -46,7 +46,7 @@ export const m08AtcMigration: Section = {
     },
   ],
   blurb:
-    "The ATC variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today's debt, the full Custom Code Migration loop, and the Simplification Items that bite hardest in an upgrade.",
+    "Measure where your custom code stands and clean it up in a controlled, repeatable way — turning a vague risk into a tracked plan. Built around ATC (SAP's automated code-quality checker): the variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today's debt, the full Custom Code Migration loop, and the Simplification Items that bite hardest in an upgrade.",
   concepts: [
     {
       id: "m08-c1",

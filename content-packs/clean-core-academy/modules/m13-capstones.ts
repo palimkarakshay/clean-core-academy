@@ -38,7 +38,7 @@ export const m13Capstones: Section = {
     },
   ],
   blurb:
-    "Three architect-level capstones that integrate the whole course: planning a 12-month Clean Core roadmap for a 4M-LOC codebase, building a released-API-first RAP extension from scratch, and walking a HANA performance regression from SAT to a defensible fix. The quizzes test sequencing, tool choice, and decision-making.",
+    "Put it all together on three realistic, end-to-end scenarios — the kind of judgement calls a lead or architect makes on a real programme. The capstones cover planning a 12-month Clean Core roadmap for a 4M-LOC codebase, building a released-API-first RAP (SAP's modern programming model) extension from scratch, and tracing a HANA performance regression to a defensible fix. The quizzes test sequencing, tool choice, and decision-making.",
   concepts: [
     {
       id: "m13-c1",

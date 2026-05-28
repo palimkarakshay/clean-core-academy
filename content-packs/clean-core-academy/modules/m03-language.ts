@@ -46,7 +46,7 @@ export const m03Language: Section = {
     },
   ],
   blurb:
-    "The obsolete constructs to hunt and their modern replacements, inline declarations with modern Open SQL, the constructor operators worth memorizing, string templates, and the class-based exception hierarchy that Clean ABAP defaults to.",
+    "Bring aging ABAP up to today's standard so it is cheaper to maintain and ready for the cloud. Covers the obsolete constructs to hunt and their modern replacements, inline declarations with modern Open SQL, the constructor operators worth memorizing, string templates, and the class-based exception hierarchy that Clean ABAP (SAP's official style guide) defaults to.",
   concepts: [
     {
       id: "m03-c1",

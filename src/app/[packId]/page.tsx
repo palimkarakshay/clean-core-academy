@@ -143,7 +143,7 @@ export default async function PackHomePage({
             href={`/${pack.config.id}/audit`}
             icon={ClipboardCheck}
             title={pack.curriculum.readinessAudit.title}
-            desc="Readiness score + a worst-first remediation list."
+            desc="A few questions about your code return a readiness score and a worst-first fix-it list."
           />
         ) : null}
         {hasSkills ? (

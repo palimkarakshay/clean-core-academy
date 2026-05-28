@@ -56,7 +56,7 @@ export const m14Delivery: Section = {
     },
   ],
   blurb:
-    "The delivery layer over modules 8 and 13: why Clean Core needs deliberate project management, how long it takes and what drives that, how to collaborate across teams, how to resolve transport and priority conflicts, how to prioritise the backlog, and the issues every programme hits — with the move that resolves each.",
+    "How to actually run a Clean Core programme to completion — the people, planning, and conflict side that decides whether the technical work lands. Sitting over modules 8 and 13, it covers why this needs deliberate project management, how long it takes and what drives that, how to collaborate across teams, how to resolve transport and priority conflicts, how to prioritise the backlog, and the issues every programme hits — with the move that resolves each.",
   concepts: [
     {
       id: "m14-c1",
