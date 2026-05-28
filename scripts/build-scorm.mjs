@@ -159,27 +159,18 @@ function main() {
     throw new Error("static export did not produce out/");
   }
 
-  // Prune routes the SCORM SCO doesn't use. Every prerendered page
-  // embeds the full curriculum, so the standalone concept/quiz/mock/
-  // games pages balloon the bundle to ~500MB. The linear flow renders
-  // lessons inline and only needs the section pages (+ their /test),
-  // so drop the rest. The home + section pages hide their links to
-  // these routes under NEXT_PUBLIC_SCORM, so nothing dead-links.
+  // The package launches the single-page player (clean-core-academy/
+  // scorm), which renders the whole course in one document via client
+  // state — so no other route is reachable or needed. Prune every other
+  // pack route (they also embed the full curriculum and would bloat the
+  // zip). Shared assets under out/_next and out/images are kept.
   const packOut = path.join(outDir, PACK_ID);
-  const prune = ["concept", "mock", "skills", "audit"];
-  for (const dir of prune) {
-    fs.rmSync(path.join(packOut, dir), { recursive: true, force: true });
-  }
-  const sectionsDir = path.join(packOut, "section");
-  if (fs.existsSync(sectionsDir)) {
-    for (const s of fs.readdirSync(sectionsDir)) {
-      fs.rmSync(path.join(sectionsDir, s, "games"), {
-        recursive: true,
-        force: true,
-      });
+  for (const entry of fs.readdirSync(packOut)) {
+    if (entry !== "scorm") {
+      fs.rmSync(path.join(packOut, entry), { recursive: true, force: true });
     }
   }
-  log(`pruned non-flow routes: ${prune.join(", ")}, section games`);
+  log("pruned to the single-page player (clean-core-academy/scorm)");
 
   // Make the package path-portable. Static export emits absolute asset
   // URLs (assetPrefix "." → "./_next/…") plus absolute public assets
@@ -193,8 +184,8 @@ function main() {
   patchHtml(outDir);
   log("patched HTML: relative asset URLs + runtime <base> pin");
 
-  // trailingSlash:true emits <pack>/index.html as the pack home.
-  const launch = `${PACK_ID}/index.html`;
+  // trailingSlash:true emits the player at <pack>/scorm/index.html.
+  const launch = `${PACK_ID}/scorm/index.html`;
   if (!fs.existsSync(path.join(outDir, launch))) {
     throw new Error(`expected launch file out/${launch} not found`);
   }

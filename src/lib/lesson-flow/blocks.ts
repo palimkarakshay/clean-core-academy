@@ -80,12 +80,14 @@ export interface CodeExerciseBlock extends BlockBase {
   exercise: CodeExercise;
 }
 
-/** Gate + launch card for the end-of-module test. */
+/** Gate + launch card for the end-of-module test. Carries the questions
+ *  so the single-page (SCORM) player can run the test in place. */
 export interface SectionTestBlock extends BlockBase {
   kind: "section-test";
   sectionId: string;
   questionCount: number;
   passPct: number;
+  questions: Question[];
 }
 
 /** Real-world application tasks that close the loop. */

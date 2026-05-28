@@ -89,6 +89,7 @@ export function deriveSectionFlow(
       sectionId: section.id,
       questionCount: section.sectionTest.questions.length,
       passPct: section.sectionTest.passPct ?? DEFAULT_PASS_PCT,
+      questions: section.sectionTest.questions,
     });
   }
 

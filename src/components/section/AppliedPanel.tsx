@@ -52,9 +52,12 @@ export function AppliedPanel({
 
       <ol className="flex flex-col gap-3">
         {items.map((item, i) => {
-          const conceptHref = item.conceptId
-            ? `/${packId}/concept/${section.id}/${item.conceptId}`
-            : null;
+          // In the single-page SCORM package the concept route is pruned,
+          // so omit the deep link there (it would hard-navigate and 404).
+          const conceptHref =
+            item.conceptId && process.env.NEXT_PUBLIC_SCORM !== "1"
+              ? `/${packId}/concept/${section.id}/${item.conceptId}`
+              : null;
           return (
             <li key={item.id}>
               <Card>

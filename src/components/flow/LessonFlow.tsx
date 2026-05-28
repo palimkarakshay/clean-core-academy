@@ -22,8 +22,12 @@ interface LessonFlowProps {
   section: Section;
   blocks: LessonBlock[];
   testLabel: string;
-  /** Server-rendered "what you'll learn" panel, shown collapsed up top. */
-  goalsPanel: ReactNode;
+  /** Server-rendered "what you'll learn" panel, shown collapsed up top.
+   *  Optional — omitted in the single-page (SCORM) player. */
+  goalsPanel?: ReactNode;
+  /** Run the module test in place rather than linking to its route
+   *  (used by the single-page player so it needs no route navigation). */
+  inlineTest?: boolean;
 }
 
 function continueLabel(next: LessonBlock | undefined): string {
@@ -59,6 +63,7 @@ export function LessonFlow({
   blocks,
   testLabel,
   goalsPanel,
+  inlineTest = false,
 }: LessonFlowProps) {
   const { sectionComplete } = useProgress();
   const [revealed, setRevealed] = useState(1);
@@ -102,7 +107,12 @@ export function LessonFlow({
         );
       case "section-test":
         return (
-          <SectionTestCard block={block} packId={packId} testLabel={testLabel} />
+          <SectionTestCard
+            block={block}
+            packId={packId}
+            testLabel={testLabel}
+            inline={inlineTest}
+          />
         );
       case "applied":
         return (
@@ -131,28 +141,30 @@ export function LessonFlow({
       </header>
 
       {/* Collapsible "what you'll learn" */}
-      <div className="mb-2 rounded-lg border border-(--border) bg-(--panel-2)">
-        <button
-          type="button"
-          onClick={() => setGoalsOpen((o) => !o)}
-          aria-expanded={goalsOpen}
-          className="flex w-full items-center justify-between gap-2 rounded-lg px-4 py-3 text-left text-sm font-medium text-(--ink) hover:bg-(--panel) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-        >
-          <span>What you&rsquo;ll learn &amp; how long it takes</span>
-          <ChevronDown
-            aria-hidden
-            className={cn(
-              "h-4 w-4 flex-none text-(--muted) transition-transform",
-              goalsOpen && "rotate-180"
-            )}
-          />
-        </button>
-        {goalsOpen ? (
-          <div className="border-t border-(--border) px-4 pb-4 pt-3">
-            {goalsPanel}
-          </div>
-        ) : null}
-      </div>
+      {goalsPanel ? (
+        <div className="mb-2 rounded-lg border border-(--border) bg-(--panel-2)">
+          <button
+            type="button"
+            onClick={() => setGoalsOpen((o) => !o)}
+            aria-expanded={goalsOpen}
+            className="flex w-full items-center justify-between gap-2 rounded-lg px-4 py-3 text-left text-sm font-medium text-(--ink) hover:bg-(--panel) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+          >
+            <span>What you&rsquo;ll learn &amp; how long it takes</span>
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                "h-4 w-4 flex-none text-(--muted) transition-transform",
+                goalsOpen && "rotate-180"
+              )}
+            />
+          </button>
+          {goalsOpen ? (
+            <div className="border-t border-(--border) px-4 pb-4 pt-3">
+              {goalsPanel}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <ProgressRail
         blocks={blocks}
