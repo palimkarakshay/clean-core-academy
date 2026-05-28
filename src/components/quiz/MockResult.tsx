@@ -4,10 +4,7 @@ import type { MockExam } from "@/content/curriculum-types";
 import type { QuizAttempt } from "@/lib/progress-types";
 import { QuizResult } from "./QuizResult";
 import { useCopy, usePackId } from "@/content/pack-hooks";
-
-function bandFor(mock: MockExam, score: number) {
-  return mock.scoreBands.find((b) => score >= b.min && score <= b.max) ?? null;
-}
+import { bandForScore } from "./mock-band";
 
 export function MockResult({
   mock,
@@ -16,7 +13,7 @@ export function MockResult({
   mock: MockExam;
   attempt: QuizAttempt;
 }) {
-  const band = bandFor(mock, attempt.score);
+  const band = bandForScore(mock, attempt.score, attempt.total);
   const packId = usePackId();
   const copy = useCopy();
   return (
