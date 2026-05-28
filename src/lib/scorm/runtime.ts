@@ -125,14 +125,49 @@ export function scormGetSuspendData(): string {
   return get("cmi.suspend_data", "cmi.suspend_data");
 }
 
+/**
+ * LMS-assigned learner identity. The LMS owns enrolment; the package can
+ * only read who it was launched for. Empty strings off-LMS.
+ */
+export function scormGetLearner(): { id: string; name: string } {
+  return {
+    id: get("cmi.core.student_id", "cmi.learner_id"),
+    name: get("cmi.core.student_name", "cmi.learner_name"),
+  };
+}
+
+export function scormSetBookmark(value: string): void {
+  // 1.2 caps lesson_location at 255 chars.
+  set("cmi.core.lesson_location", "cmi.location", value.slice(0, 255));
+}
+
+// Tell the LMS to preserve suspend_data and hand back entry="resume" on
+// the next launch — the contract that makes bookmarking/resume work.
+// Without it many LMSs treat exit as normal and discard the state.
+function setExitSuspend(): void {
+  set("cmi.core.exit", "cmi.exit", "suspend");
+}
+
 export function scormCommit(): void {
   if (!found) return;
   if (found.version === "2004") found.api.Commit("");
   else found.api.LMSCommit("");
 }
 
+/**
+ * Flag the attempt as suspended and flush, without ending the session.
+ * Used on page hide (which may be a bfcache pause, not a real unload).
+ */
+export function scormSuspend(): void {
+  if (!found || !initialized) return;
+  setExitSuspend();
+  scormCommit();
+}
+
 export function scormTerminate(): void {
   if (!found || !initialized) return;
+  // Suspend on the way out so the next launch resumes where we left off.
+  setExitSuspend();
   scormCommit();
   if (found.version === "2004") found.api.Terminate("");
   else found.api.LMSFinish("");

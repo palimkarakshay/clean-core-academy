@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, ChevronLeft } from "lucide-react";
 import { usePack } from "@/content/pack-context";
 import { useProgress } from "@/hooks/useProgress";
+import { useLearnerName } from "@/lib/scorm/identity";
 import { LessonFlow } from "@/components/flow/LessonFlow";
 import { cn } from "@/lib/utils";
 import type { LessonBlock } from "@/lib/lesson-flow/blocks";
@@ -32,8 +33,21 @@ export function ScormPlayer({
   testLabel: string;
 }) {
   const pack = usePack();
-  const { sectionStatus } = useProgress();
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const { sectionStatus, progress, setLocation } = useProgress();
+  const learner = useLearnerName();
+
+  // The open module is driven by stored location, not local state, so the
+  // SCORM bridge persists it into suspend_data and a resumed attempt
+  // reopens the same module.
+  const activeId =
+    progress.location?.view === "module" ? progress.location.sectionId : null;
+  const setActive = (id: string | null) =>
+    setLocation({
+      view: id ? "module" : "dashboard",
+      sectionId: id,
+      conceptId: null,
+      mockId: null,
+    });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -51,7 +65,7 @@ export function ScormPlayer({
       <div>
         <button
           type="button"
-          onClick={() => setActiveId(null)}
+          onClick={() => setActive(null)}
           className="mb-4 inline-flex items-center gap-1.5 rounded-md border border-(--border) bg-(--panel) px-3 py-1.5 text-sm text-(--ink) hover:border-(--accent) hover:text-(--accent-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
         >
           <ChevronLeft aria-hidden className="h-4 w-4" />
@@ -70,7 +84,7 @@ export function ScormPlayer({
           {prev ? (
             <button
               type="button"
-              onClick={() => setActiveId(prev.section.id)}
+              onClick={() => setActive(prev.section.id)}
               className="inline-flex items-center gap-1.5 rounded-md border border-(--border) bg-(--panel) px-3 py-2 text-sm text-(--ink) hover:border-(--accent) hover:text-(--accent-2)"
             >
               <ArrowLeft aria-hidden className="h-4 w-4" />
@@ -82,7 +96,7 @@ export function ScormPlayer({
           {next ? (
             <button
               type="button"
-              onClick={() => setActiveId(next.section.id)}
+              onClick={() => setActive(next.section.id)}
               className="inline-flex items-center gap-1.5 rounded-md bg-(--accent) px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
             >
               Next: Module {next.section.n} — {next.section.title}
@@ -91,7 +105,7 @@ export function ScormPlayer({
           ) : (
             <button
               type="button"
-              onClick={() => setActiveId(null)}
+              onClick={() => setActive(null)}
               className="inline-flex items-center gap-1.5 rounded-md border border-(--accent)/40 bg-(--accent)/8 px-4 py-2 text-sm font-semibold text-(--accent-2) hover:border-(--accent)"
             >
               Back to all modules
@@ -112,6 +126,9 @@ export function ScormPlayer({
           {pack.config.name}
         </h1>
         <p className="text-sm text-(--muted)">{pack.config.tagline}</p>
+        {learner ? (
+          <p className="text-xs text-(--muted)">Signed in as {learner}</p>
+        ) : null}
       </header>
 
       <ol className="flex flex-col gap-2">
@@ -121,7 +138,7 @@ export function ScormPlayer({
             <li key={section.id}>
               <button
                 type="button"
-                onClick={() => setActiveId(section.id)}
+                onClick={() => setActive(section.id)}
                 className="group flex w-full items-center gap-4 rounded-xl border border-(--border) bg-(--panel) p-4 text-left shadow-sm transition-colors hover:border-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
               >
                 <span
