@@ -36,7 +36,7 @@ export const practiceExam: MockExam = {
       max: 100,
       verdict: "Clean Core ready",
       message:
-        "Strong across the board. Confirm on a real system with ATC CLOUD_READINESS / S4HANA_READINESS.",
+        "Strong across the board. Confirm on a real system with ATC ABAP_CLOUD_DEVELOPMENT_DEFAULT / S4HANA_READINESS_2023.",
     },
   ],
   questions: [

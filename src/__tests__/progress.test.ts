@@ -1,12 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   countsAsMastered,
   ensureConcept,
   ensureSection,
   isSectionPassed,
   isUnderwhelm,
+  loadProgressFor,
   masteryFromScore,
   newProgress,
+  saveProgressFor,
   unlockNextSection,
 } from "@/lib/progress";
 import { CURRICULUM } from "@/content/curriculum";
@@ -149,5 +151,68 @@ describe("section pass + unlock", () => {
     const last = CURRICULUM.sections[CURRICULUM.sections.length - 1];
     const p = newProgress();
     expect(() => unlockNextSection(p, last.id)).not.toThrow();
+  });
+});
+
+describe("loadProgressFor / saveProgressFor (persistence)", () => {
+  const KEY = "test:progress";
+
+  function makeLocalStorage(seed: Record<string, string> = {}): Storage {
+    const store = new Map(Object.entries(seed));
+    return {
+      getItem: (k: string) => (store.has(k) ? store.get(k)! : null),
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+      clear: () => store.clear(),
+      key: (i: number) => [...store.keys()][i] ?? null,
+      get length() {
+        return store.size;
+      },
+    } as Storage;
+  }
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("round-trips a saved progress shape through localStorage", () => {
+    vi.stubGlobal("window", { localStorage: makeLocalStorage() });
+    const first = CURRICULUM.sections[0].id;
+    const p = newProgress(first);
+    ensureConcept(p, "c-1").lessonRead = true;
+    saveProgressFor(KEY, p);
+
+    const loaded = loadProgressFor(KEY, first);
+    expect(loaded.concept["c-1"]?.lessonRead).toBe(true);
+    expect(loaded.section[first]?.unlocked).toBe(true);
+  });
+
+  it("falls back to a fresh shape on corrupt JSON (no throw, no data crash)", () => {
+    vi.stubGlobal("window", {
+      localStorage: makeLocalStorage({ [KEY]: "{not valid json" }),
+    });
+    const first = CURRICULUM.sections[0].id;
+    expect(() => loadProgressFor(KEY, first)).not.toThrow();
+    const loaded = loadProgressFor(KEY, first);
+    expect(loaded.schemaVersion).toBe(1);
+    expect(loaded.section[first]?.unlocked).toBe(true);
+  });
+
+  it("normalizes a partial blob so ensureConcept/ensureSection can't throw later", () => {
+    // The dangerous case: a stored blob with schemaVersion:1 but null buckets
+    // used to survive load and then crash ensureConcept inside a React handler.
+    const partial = JSON.stringify({
+      schemaVersion: 1,
+      concept: null,
+      section: null,
+    });
+    vi.stubGlobal("window", {
+      localStorage: makeLocalStorage({ [KEY]: partial }),
+    });
+    const loaded = loadProgressFor(KEY, CURRICULUM.sections[0].id);
+    expect(() => ensureConcept(loaded, "c-x")).not.toThrow();
+    expect(() => ensureSection(loaded, "s-x")).not.toThrow();
+    expect(typeof loaded.concept).toBe("object");
+    expect(loaded.location?.view).toBe("dashboard");
   });
 });

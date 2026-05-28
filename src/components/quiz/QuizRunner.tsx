@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type {
   FillInQuestion,
   MCQQuestion,
@@ -51,6 +51,9 @@ export interface QuizRunnerProps {
   resumeFrom?: CurrentAttempt | null;
   onCheckpoint?: (attempt: CurrentAttempt | null) => void;
   onComplete: (attempt: QuizAttempt) => void;
+  /** Optional content rendered above the result on submit (e.g. a mock-exam
+   *  verdict band). Receives the scored attempt. */
+  resultHeader?: (attempt: QuizAttempt) => ReactNode;
   exitHref: string;
   exitLabel?: string;
   prevHref?: string;
@@ -262,6 +265,7 @@ export function QuizRunner({
   resumeFrom,
   onCheckpoint,
   onComplete,
+  resultHeader,
   exitHref,
   exitLabel = "Exit",
   prevHref,
@@ -397,19 +401,22 @@ export function QuizRunner({
 
   if (submitted && attempt) {
     return (
-      <QuizResult
-        title={title}
-        questions={questions}
-        attempt={attempt}
-        passPct={passPct}
-        exitHref={exitHref}
-        exitLabel={exitLabel}
-        prevHref={prevHref}
-        prevLabel={prevLabel}
-        nextHref={nextHref}
-        nextLabel={nextLabel}
-        learnedSummary={learnedSummary}
-      />
+      <>
+        {resultHeader?.(attempt)}
+        <QuizResult
+          title={title}
+          questions={questions}
+          attempt={attempt}
+          passPct={passPct}
+          exitHref={exitHref}
+          exitLabel={exitLabel}
+          prevHref={prevHref}
+          prevLabel={prevLabel}
+          nextHref={nextHref}
+          nextLabel={nextLabel}
+          learnedSummary={learnedSummary}
+        />
+      </>
     );
   }
 

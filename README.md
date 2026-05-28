@@ -111,7 +111,7 @@ Verification loop:
 
 ```sh
 npm run type-check     # tsc --noEmit
-npm test               # vitest — 295 unit/contract tests (incl. the abaplint + audit checks)
+npm test               # vitest — 200+ unit/contract tests (incl. the abaplint + audit checks)
 npm run lint           # eslint
 npm run build          # next build (prerenders every module/concept/quiz/audit route)
 npm run lint:abap      # abaplint over the ABAP reference solutions (see below)
@@ -126,7 +126,7 @@ Code exercises are linted with the **same rules the reference repo uses**:
 [`abap-utilities/abaplint.json`](https://github.com/palimkarakshay/abap-utilities/blob/main/abaplint.json),
 and it is the single source of truth for **both** the CLI and the in-app check.
 
-**In-app (the learner flow).** The guard-clauses lesson (`m1-c4`) ships a code
+**In-app (the learner flow).** The guard-clauses lesson (`m03-c1`) ships a code
 exercise: the starter trips `exit_or_check` (a `CHECK` deep in a method). The
 learner edits it in the lesson, clicks **Check with abaplint**, and the
 submission is POSTed to `/api/lint-abap`, where `@abaplint/core` runs the
@@ -154,7 +154,7 @@ starter is flagged and a guard-clause fix lints clean.
 
 **Scope.** abaplint is the **style + parser** gate (keyword case, indentation,
 `7bit_ascii`, `exit_or_check`, …). The **semantic** Clean Core findings
-(released-API usage, `CLOUD_READINESS`) are an **ATC** concern — abaplint can't
+(released-API usage, `ABAP_CLOUD_DEVELOPMENT_DEFAULT`) are an **ATC** concern — abaplint can't
 resolve SAP's released-API classification offline, as module 6 explains.
 
 ---
