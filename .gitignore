@@ -6,6 +6,7 @@ coverage
 .vercel
 .turbo
 .scorm-park
+.scorm-embed-build
 
 # logs
 npm-debug.log*

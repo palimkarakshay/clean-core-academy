@@ -11,6 +11,7 @@
     "build": "next build",
     "start": "next start",
     "build:scorm": "node scripts/build-scorm.mjs",
+    "build:scorm:embed": "node scripts/build-scorm-embed.mjs",
     "lint": "eslint .",
     "lint:abap": "abaplint exercises/abaplint.json",
     "type-check": "tsc --noEmit",

@@ -93,6 +93,50 @@ function manifest(launchHref) {
 `;
 }
 
+function walkHtml(dir, acc) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) walkHtml(full, acc);
+    else if (entry.isFile() && entry.name.endsWith(".html")) acc.push(full);
+  }
+  return acc;
+}
+
+function basePinScript(upPrefix) {
+  // Freeze an absolute base at the package root so relative URLs resolve
+  // there even after History pushState changes the address bar.
+  const up = JSON.stringify(upPrefix);
+  return (
+    `<script>(function(){try{var u=new URL(${up},location.href).href;` +
+    `var b=document.createElement('base');b.setAttribute('href',u);` +
+    `var h=document.head||document.getElementsByTagName('head')[0];` +
+    `h.insertBefore(b,h.firstChild);}catch(e){}})();</script>`
+  );
+}
+
+function patchHtml(outDir) {
+  for (const file of walkHtml(outDir, [])) {
+    let html = fs.readFileSync(file, "utf8");
+
+    // (a) Absolute public-asset URLs → relative (so the <base> applies).
+    html = html
+      .replace(/(["'])\/images\//g, "$1images/")
+      .replace(/(["'])\/(icon\.svg|icon-maskable\.svg)/g, "$1$2");
+
+    // (b) Inject the base pin as the first thing inside <head>. Depth is
+    // measured from the export root so the computed base is correct
+    // whichever file the LMS happens to launch or reload.
+    const relDir = path.dirname(path.relative(outDir, file));
+    const depth = relDir === "." ? 0 : relDir.split(path.sep).length;
+    const up = depth === 0 ? "./" : "../".repeat(depth);
+    if (/<head[^>]*>/.test(html)) {
+      html = html.replace(/<head[^>]*>/, (m) => m + basePinScript(up));
+    }
+
+    fs.writeFileSync(file, html);
+  }
+}
+
 function main() {
   parkFiles();
   try {
@@ -136,6 +180,18 @@ function main() {
     }
   }
   log(`pruned non-flow routes: ${prune.join(", ")}, section games`);
+
+  // Make the package path-portable. Static export emits absolute asset
+  // URLs (assetPrefix "." → "./_next/…") plus absolute public assets
+  // ("/images/…"). Inside an LMS iframe served from a deep path those
+  // resolve to the LMS domain root and 404 (the "broken/unstyled page").
+  // Fix: (a) rewrite absolute public-asset URLs to relative, and (b)
+  // inject a tiny script that pins an absolute <base> to the package
+  // root computed from the launch document's own URL — so every relative
+  // asset/RSC fetch resolves there and keeps working after client-side
+  // navigation changes the address bar.
+  patchHtml(outDir);
+  log("patched HTML: relative asset URLs + runtime <base> pin");
 
   // trailingSlash:true emits <pack>/index.html as the pack home.
   const launch = `${PACK_ID}/index.html`;

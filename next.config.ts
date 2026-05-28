@@ -53,7 +53,10 @@ const CSP = [
   "img-src 'self' data: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://claude.ai https://*.claude.ai",
-  "frame-ancestors 'none'",
+  // The course is meant to be embedded in an LMS (SCORM iframe wrapper),
+  // so any https ancestor may frame it. It's a read-only learning site
+  // with no sensitive actions, so the clickjacking surface is minimal.
+  "frame-ancestors https:",
   "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
@@ -63,7 +66,8 @@ const CSP = [
 const SECURITY_HEADERS = [
   { key: "Content-Security-Policy", value: CSP },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "DENY" },
+  // No X-Frame-Options (would force DENY in older browsers); CSP
+  // frame-ancestors governs framing so the LMS can embed the course.
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
     key: "Permissions-Policy",
@@ -100,7 +104,7 @@ const nextConfig: NextConfig = {
   // the /api/lint-abap serverless function `require()`s it at runtime.
   serverExternalPackages: ["@abaplint/core"],
   ...(SCORM_BUILD
-    ? { output: "export" as const, trailingSlash: true }
+    ? { output: "export" as const, trailingSlash: true, assetPrefix: "." }
     : {}),
   images: {
     formats: ["image/avif", "image/webp"],
