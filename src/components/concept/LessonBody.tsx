@@ -163,7 +163,7 @@ export function SimplifiedBody({
   simplified: NonNullable<Lesson["simplified"]>;
 }) {
   return (
-    <div className="text-(--ink)">
+    <div id="lesson-easy-top" className="scroll-mt-24 text-(--ink)">
       {simplified.oneLiner ? (
         <p className="my-2 rounded-r-md border-l-4 border-(--accent) bg-(--panel-2) p-3 text-base leading-relaxed">
           {simplified.oneLiner}
@@ -179,8 +179,9 @@ export function SimplifiedBody({
       ))}
       {simplified.keyPoints && simplified.keyPoints.length > 0 ? (
         <section
+          id="easy-takeaways"
           aria-label="Easy key points"
-          className="mt-6 rounded-lg border border-(--border) bg-(--panel-2) p-4"
+          className="mt-6 scroll-mt-24 rounded-lg border border-(--border) bg-(--panel-2) p-4"
         >
           <h2 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
             <Lightbulb className="h-3.5 w-3.5" aria-hidden />
@@ -205,7 +206,7 @@ export function DeeperBody({
   deeper: NonNullable<Lesson["deeper"]>;
 }) {
   return (
-    <div className="text-(--ink)">
+    <div id="lesson-deeper-top" className="scroll-mt-24 text-(--ink)">
       {deeper.oneLiner ? (
         <p className="my-2 rounded-r-md border-l-4 border-(--accent-2) bg-(--panel-2) p-3 text-base leading-relaxed">
           {deeper.oneLiner}
@@ -220,8 +221,9 @@ export function DeeperBody({
 
       {deeper.keyPoints && deeper.keyPoints.length > 0 ? (
         <section
+          id="deeper-key-points"
           aria-label="Deeper key points"
-          className="mt-6 rounded-lg border border-(--border) bg-(--panel-2) p-4"
+          className="mt-6 scroll-mt-24 rounded-lg border border-(--border) bg-(--panel-2) p-4"
         >
           <h2 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
             <Lightbulb className="h-3.5 w-3.5" aria-hidden />
@@ -238,7 +240,7 @@ export function DeeperBody({
       ) : null}
 
       {deeper.examples && deeper.examples.length > 0 ? (
-        <section aria-label="Advanced examples" className="mt-6">
+        <section id="deeper-examples" aria-label="Advanced examples" className="mt-6 scroll-mt-24">
           <h2 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
             <Terminal className="h-3.5 w-3.5" aria-hidden />
             Advanced examples
@@ -251,8 +253,9 @@ export function DeeperBody({
 
       {deeper.pitfalls && deeper.pitfalls.length > 0 ? (
         <section
+          id="deeper-pitfalls"
           aria-label="Edge-case pitfalls"
-          className="mt-6 rounded-r-md border-l-4 border-(--bad) bg-(--bad)/8 p-3"
+          className="mt-6 scroll-mt-24 rounded-r-md border-l-4 border-(--bad) bg-(--bad)/8 p-3"
         >
           <h2 className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-(--bad)">
             <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
@@ -270,8 +273,9 @@ export function DeeperBody({
 
       {deeper.furtherReading && deeper.furtherReading.length > 0 ? (
         <section
+          id="deeper-reading"
           aria-label="Further reading"
-          className="mt-6 rounded-md border border-dashed border-(--border) p-3"
+          className="mt-6 scroll-mt-24 rounded-md border border-dashed border-(--border) p-3"
         >
           <h2 className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)">
             <BookOpen className="h-3.5 w-3.5" aria-hidden />

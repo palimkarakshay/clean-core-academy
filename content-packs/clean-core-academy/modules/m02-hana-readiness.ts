@@ -7,7 +7,7 @@
    "faster" — columnar storage, no implicit sort, MVCC snapshot reads.
    Every concept ships paragraphs + keyPoints + simplified.oneLiner and
    a 3-question quiz with per-option explanations. Code-bearing
-   concepts (the gotchas) add before/after ABAP examples.
+   concepts (the pitfalls) add before/after ABAP examples.
 ------------------------------------------------------------------ */
 
 import type { Section } from "../_types";
@@ -26,7 +26,7 @@ export const m02HanaReadiness: Section = {
     },
     {
       id: "m02-s2",
-      label: "Spot and fix the classic HANA gotchas (empty-driver FAE, missing ORDER BY, partial-key SELECT SINGLE)",
+      label: "Identify and fix the common HANA pitfalls (empty-driver FAE, missing ORDER BY, partial-key SELECT SINGLE)",
       conceptId: "m02-c2",
     },
     {
@@ -46,7 +46,7 @@ export const m02HanaReadiness: Section = {
     },
   ],
   blurb:
-    "Move to S/4HANA without the silent surprises. Switching to HANA — SAP's in-memory database — quietly changes how existing code behaves: this covers what actually changes underneath your code, the gotchas that return wrong results without an error, and the SCMON to ATC to baseline loop that scopes and tames the migration so risks surface before go-live, not after.",
+    "Move to S/4HANA without the silent surprises. Switching to HANA — SAP’s in-memory database — quietly changes how existing code behaves: this covers what actually changes underneath your code, the common and less-obvious pitfalls that return incorrect results without an error, and the SCMON to ATC to baseline loop that scopes and manages the migration so risks surface before go-live, not after.",
   concepts: [
     {
       id: "m02-c1",
@@ -57,7 +57,7 @@ export const m02HanaReadiness: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §2.1",
         paragraphs: [
-          "Your instinct that a SELECT inside a loop is a problem did not become wrong on HANA — it became more right, because the columnar engine rewards set-based access even harder. The conceptual shift to HANA is not 'faster' — it is five structural changes, and every well-known gotcha derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
+          "Your instinct that a SELECT inside a loop is a problem did not become wrong on HANA — it became more right, because the columnar engine rewards set-based access even harder. The conceptual shift to HANA is not 'faster' — it is five structural changes, and every well-known pitfall derives from one of them. Tables are columnar by default, so the row order you used to get implicitly is gone; a result set arrives in whatever order the column-store engine finds cheapest unless you ask for an order.",
           "Reads no longer take row locks, and HANA serves them from an MVCC snapshot — a consistent view as of the statement's start — so concurrent writers don't block your SELECT and you don't block them. Pool and cluster tables were dissolved into transparent tables (BSEG, KONV, CDPOS and friends), so reads against them now behave like any other table but with subtly different cardinality.",
           "Finally the optimizer thinks differently: it favours set-based, projected, pushed-down access and is unimpressed by row-at-a-time loops and AnyDB-era hints. Internalising these five shifts is what turns 'my code broke after the migration' into 'of course it did, and here is why.'",
         ],
@@ -159,14 +159,14 @@ export const m02HanaReadiness: Section = {
     {
       id: "m02-c2",
       code: "2.2",
-      title: "The classic HANA gotchas",
+      title: "Common HANA pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §2.2",
         paragraphs: [
           "The classics all stem from the §2.1 shifts. ORDER BY is no longer free — if you assumed sorted output you now read 'random' rows; and SELECT SINGLE without a fully-qualified key returns an arbitrary matching row, which on HANA is often a different one than before. The fix for both is to be explicit: request the order you depend on, and never SELECT SINGLE on a partial key when you mean 'a specific row.'",
-          "FOR ALL ENTRIES carries two traps that bite harder under HANA because result-set sizes differ: it silently de-duplicates the driver table, and — critically — an empty driver table returns ALL rows of the target, not none. Always guard with IF lines( itab ) > 0 before the FAE, or you will table-scan production.",
+          "FOR ALL ENTRIES carries two pitfalls that are more damaging under HANA because result-set sizes differ: it silently de-duplicates the driver table, and — critically — an empty driver table returns ALL rows of the target, not none. Always guard with IF lines( itab ) > 0 before the FAE, or you will table-scan production.",
           "The remaining classics are quieter: implicit type conversion in a WHERE clause (comparing a CHAR18 MATNR to a short literal forces padding and can drop the index), COUNT(*) on a wide column-store table is a column scan rather than a free metadata read, and LIKE behaviour depends on HANA collation so CDS pattern filters should use the escape mechanism.",
         ],
         keyPoints: [
@@ -306,7 +306,7 @@ export const m02HanaReadiness: Section = {
     {
       id: "m02-c3",
       code: "2.3",
-      title: "Deep cuts: the not-so-classic gotchas",
+      title: "Less-obvious pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -371,7 +371,7 @@ export const m02HanaReadiness: Section = {
         ],
         simplified: {
           oneLiner:
-            "The deep cuts corrupt results silently: BINARY SEARCH and DELETE ADJACENT DUPLICATES both assume a prior SORT, and UP TO 1 ROWS needs an explicit ORDER BY.",
+            "These less-obvious pitfalls corrupt results silently: BINARY SEARCH and DELETE ADJACENT DUPLICATES both assume a prior SORT, and UP TO 1 ROWS needs an explicit ORDER BY.",
           analogy:
             "BINARY SEARCH on an unsorted table is like using a dictionary's binary lookup on pages that were shuffled — you confidently land on the wrong page.",
         },
@@ -454,7 +454,7 @@ export const m02HanaReadiness: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §2.4",
         paragraphs: [
-          "Knowing the gotchas is not a plan; the plan is a four-step loop that scopes effort to code that actually runs. First, run SCMON (object usage) and UPL (procedure-level usage) on the productive system for a representative period of one to three months, so you fix live code and decommission the dead rather than rewriting everything.",
+          "Knowing the pitfalls is not a plan; the plan is a four-step loop that scopes effort to code that actually runs. First, run SCMON (object usage) and UPL (procedure-level usage) on the productive system for a representative period of one to three months, so you fix live code and decommission the dead rather than rewriting everything.",
           "Second, run the Custom Code Migration app (Fiori) or SYCM in the back end to produce a prioritized quality report against the Simplification Database — a findings list per object, ranked by impact. Third, bring those findings under an ATC baseline: the baseline freezes today's debt so the team is only alerted about new debt, then chips away at the frozen set deliberately.",
           "Fourth, re-run after every FPS, because the Clean-Core and readiness checks gain rules each release — a pipeline that is green today can turn red after the next feature pack. The loop, not any single scan, is what keeps custom code converging on upgrade-safety.",
         ],
