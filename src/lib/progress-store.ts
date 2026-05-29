@@ -34,6 +34,13 @@ export interface ProgressStore {
   getServerSnapshot(): Progress;
   subscribe(cb: () => void): () => void;
   mutate(mutator: (draft: Progress) => void): void;
+  /**
+   * Replace the whole snapshot wholesale and persist it. Used by the
+   * SCORM bridge to restore progress from the LMS's suspend_data on a
+   * resumed attempt; unlike mutate() it does not start from the current
+   * value, so it can rehydrate even an empty localStorage.
+   */
+  hydrate(next: Progress): void;
 }
 
 function createStore(packId: string): ProgressStore {
@@ -82,6 +89,11 @@ function createStore(packId: string): ProgressStore {
       const prev = ensure();
       const next = structuredClone(prev);
       mutator(next);
+      current = next;
+      saveProgressFor(storageKey, next);
+      notify();
+    },
+    hydrate: (next) => {
       current = next;
       saveProgressFor(storageKey, next);
       notify();

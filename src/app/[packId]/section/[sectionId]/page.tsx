@@ -25,6 +25,9 @@ import { AppliedPanel } from "@/components/section/AppliedPanel";
 import { Container } from "@/components/ui/Container";
 import { LastVisitTracker } from "@/components/layout/LastVisitTracker";
 import { copyFor } from "@/lib/pack-helpers";
+import { SectionViewSwitch } from "@/components/section/SectionViewSwitch";
+import { LessonFlow } from "@/components/flow/LessonFlow";
+import { deriveSectionFlow } from "@/lib/lesson-flow/derive-flow";
 
 type Params = { packId: string; sectionId: string };
 type SearchParams = { tab?: string };
@@ -112,6 +115,11 @@ export default async function SectionPage({
 
   const appliedPanel = <AppliedPanel section={section} packId={packId} />;
 
+  // Derive the RISE linear flow once, server-side (pure transform). Both
+  // structures render the same content from the same progress store, so
+  // the learner can flip between them with no reload and no progress loss.
+  const blocks = deriveSectionFlow(section);
+
   const { prev: prevSection, next: nextSection } = getAdjacentSectionsFrom(
     pack.curriculum,
     sectionId
@@ -183,16 +191,29 @@ export default async function SectionPage({
           </Link>
         </div>
       </nav>
-      <SectionTabs
-        activeTab={activeTab}
-        panels={{
-          goals: goalsPanel,
-          concepts: conceptsPanel,
-          flashcards: flashcardsPanel,
-          quiz: quizPanel,
-          apply: appliedPanel,
-          games: gamesPanel,
-        }}
+      <SectionViewSwitch
+        tabsView={
+          <SectionTabs
+            activeTab={activeTab}
+            panels={{
+              goals: goalsPanel,
+              concepts: conceptsPanel,
+              flashcards: flashcardsPanel,
+              quiz: quizPanel,
+              apply: appliedPanel,
+              games: gamesPanel,
+            }}
+          />
+        }
+        flowView={
+          <LessonFlow
+            packId={packId}
+            section={section}
+            blocks={blocks}
+            testLabel={copy.sectionTestSingular}
+            goalsPanel={goalsPanel}
+          />
+        }
       />
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
         <Link

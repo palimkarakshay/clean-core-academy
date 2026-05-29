@@ -17,6 +17,7 @@ import { usePackId } from "@/content/pack-hooks";
 import type {
   CurrentAttempt,
   Mastery,
+  Progress,
   QuizAttempt,
 } from "@/lib/progress-types";
 
@@ -118,6 +119,18 @@ export function useProgress() {
     [progressStore]
   );
 
+  // Persist where the learner is. Drives the SCORM player's open-module
+  // bookmark: it's saved into suspend_data so a resumed attempt reopens
+  // the same module. Inert on the normal web (no bridge reads it).
+  const setLocation = useCallback(
+    (loc: Partial<Progress["location"]>) => {
+      progressStore.mutate((p) => {
+        p.location = { ...p.location, ...loc };
+      });
+    },
+    [progressStore]
+  );
+
   const conceptMastery = useCallback(
     (conceptId: string): Mastery =>
       progress.concept[conceptId]?.mastery ?? 0,
@@ -208,6 +221,7 @@ export function useProgress() {
     setConceptCurrentAttempt,
     setSectionCurrentAttempt,
     setMockCurrentAttempt,
+    setLocation,
     conceptMastery,
     sectionUnlocked,
     sectionComplete,

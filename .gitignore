@@ -31,3 +31,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SCORM build scratch dirs (scripts clean these up; ignore stragglers)
+.scorm-park
+.scorm-embed-build
