@@ -216,6 +216,25 @@ samp {
   animation: pass-pulse 600ms ease-out;
 }
 
+/* Block reveal — newly revealed lesson-flow blocks ease in so stepping
+   through a module feels smooth rather than a hard jump. Runs once per
+   block when it first mounts (blocks are keyed by id). Neutralized
+   under reduced-motion by the global rule below. */
+@keyframes block-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-block-in {
+  animation: block-in 360ms ease-out;
+}
+
 /* Flashcard click-to-flip primitive. The outer .flip-card sets a
    fixed aspect for the panel; .flip-card-inner is the flipping
    element. Reduced-motion users get an instant swap (the global

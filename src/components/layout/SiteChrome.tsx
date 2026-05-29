@@ -3,6 +3,10 @@ import { Footer } from "./Footer";
 import { BottomNav } from "./BottomNav";
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
+  // The self-contained SCORM package is a single-page player with no
+  // route navigation, so the footer and bottom-nav (pure site links)
+  // are omitted there — they'd hard-navigate to pruned routes.
+  const scorm = process.env.NEXT_PUBLIC_SCORM === "1";
   return (
     <div className="flex min-h-dvh flex-col">
       <Header />
@@ -12,8 +16,8 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       >
         {children}
       </main>
-      <Footer />
-      <BottomNav />
+      {!scorm ? <Footer /> : null}
+      {!scorm ? <BottomNav /> : null}
     </div>
   );
 }

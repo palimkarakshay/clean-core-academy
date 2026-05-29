@@ -138,5 +138,139 @@ export const packConfig: PackConfig = {
       "You're looking for a beginner ABAP syntax course — this assumes you already write ABAP.",
       "You want SAP functional/config training — this is a developer modernization course.",
     ],
+    byRole: {
+      new: {
+        roleLabel: "New developers",
+        intro:
+          "New to ABAP or to SAP? Start here. You'll pick up the Clean Core vocabulary and the upgrade-safe habits before they become hard to unlearn — no modernization experience needed.",
+        requirements: [
+          {
+            label: "Basic ABAP — you can read a method",
+            detail: "Variables, internal tables, a simple SELECT. We build from there.",
+          },
+          {
+            label: "ADT (ABAP Development Tools) installed",
+            detail: "The Eclipse-based editor — this is where the Clean Core tooling lives.",
+          },
+          {
+            label: "A sandbox to experiment in",
+            detail: "An ABAP trial or BTP ABAP environment is plenty — no production access.",
+          },
+        ],
+        notForYouIf: [
+          "You've never written code before — try an intro ABAP course first.",
+        ],
+      },
+      intermediate: {
+        roleLabel: "Intermediate developers",
+        intro:
+          "You write extensions day-to-day. This track sharpens that into Clean-Core-compliant ABAP — released APIs, RAP and CDS, and the patterns that win on HANA.",
+        requirements: [
+          {
+            label: "Comfortable writing ABAP classes and OpenSQL",
+            detail: "You ship extensions today — we focus on making them upgrade-safe.",
+          },
+          {
+            label: "Access to ADT",
+            detail: "SE80 won't surface the Clean Core checks; ADT will.",
+          },
+          {
+            label: "An S/4HANA or BTP ABAP environment",
+            detail: "On-prem S/4HANA, an ABAP trial, or BTP ABAP (Steampunk).",
+          },
+        ],
+      },
+      expert: {
+        roleLabel: "Expert developers & architects",
+        intro:
+          "You own the strategy. This track concentrates on release contracts, decoupling, ATC governance, and designing an end-to-end migration that survives upgrades.",
+        requirements: [
+          {
+            label: "Deep ABAP plus architecture experience",
+            detail: "You make the build-vs-extend calls and set team standards.",
+          },
+          {
+            label: "ATC access with the Clean Core variants",
+            detail: "You'll run and interpret CLOUD_READINESS / S4HANA_READINESS results.",
+          },
+          {
+            label: "A real landscape to assess",
+            detail: "Existing custom code you can profile makes the strategy lessons concrete.",
+          },
+        ],
+      },
+      admin: {
+        roleLabel: "Admin & Basis developers",
+        intro:
+          "Landscape-facing work. You'll stand up ATC topology, custom-code analysis, transports, and the operational tooling that keeps the core clean over time.",
+        requirements: [
+          {
+            label: "Basis / admin access to your systems",
+            detail: "You manage landscapes, transports, and the central check setup.",
+          },
+          {
+            label: "ATC and custom-code migration tooling",
+            detail: "Central ATC, the custom-code migration app, and transport tools.",
+          },
+          {
+            label: "Familiarity with transport management",
+            detail: "You move objects between systems and own the pipeline.",
+          },
+        ],
+      },
+      management: {
+        roleLabel: "Management & leads",
+        intro:
+          "No coding required. You'll get the business case, the governance model, and the roadmap — what Clean Core buys you and how to steer the migration.",
+        requirements: [
+          {
+            label: "A high-level picture of your SAP landscape",
+            detail: "Roughly what runs where, and how much custom code you carry.",
+          },
+          {
+            label: "Access to your team's roadmap or backlog",
+            detail: "So the governance ideas land against real planned work.",
+          },
+        ],
+        assumptions: [],
+        notForYouIf: [
+          "You want a hands-on coding course — pick a developer track for that.",
+        ],
+      },
+      "end-user": {
+        roleLabel: "Key & end users",
+        intro:
+          "Extend SAP from the app itself. You'll learn what you can safely change with the in-app tools — custom fields and logic — and exactly when to hand off to a developer. No ABAP needed.",
+        requirements: [
+          {
+            label: "Key-user access to your Fiori apps",
+            detail: "The in-app extensibility tools must be visible to you.",
+          },
+          {
+            label: "In-app extensibility enabled in your system",
+            detail: "Your admin has switched on key-user extensibility.",
+          },
+        ],
+        assumptions: [],
+        notForYouIf: [
+          "You need to build full applications — that's the developer tracks.",
+        ],
+      },
+      stakeholder: {
+        roleLabel: "Other stakeholders",
+        intro:
+          "A plain-language orientation. You'll learn what Clean Core is, why upgrades get easier, and the words everyone keeps using — no technical background required.",
+        requirements: [
+          {
+            label: "An interest in why SAP modernization matters",
+            detail: "That's genuinely the only prerequisite for this track.",
+          },
+        ],
+        assumptions: [],
+        notForYouIf: [
+          "You need hands-on technical depth — start with a developer track instead.",
+        ],
+      },
+    },
   },
 };

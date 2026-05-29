@@ -5,29 +5,22 @@ import { getPack, ALL_PACK_IDS } from "@/content/pack-registry";
 import {
   formatMinutes,
   getAdjacentSectionsFrom,
-  getSectionFlashcards,
   getSectionFrom,
   getSectionMeta,
 } from "@/content/curriculum-loader";
-import { ArrowLeft, ArrowRight, ChevronUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronUp, Gamepad2 } from "lucide-react";
 import { Breadcrumbs } from "@/components/primitives/Breadcrumbs";
 import { NumberedJumper } from "@/components/primitives/NumberedJumper";
 import { journeyTrail } from "@/lib/nav-trail";
-import { SectionConceptList } from "@/components/section/SectionConceptList";
-import { SectionConceptMap } from "@/components/section/SectionConceptMap";
-import { SectionTabs } from "@/components/section/SectionTabs";
-import { resolveTab } from "@/components/section/section-tabs-shared";
 import { GoalsPanel } from "@/components/section/GoalsPanel";
-import { QuizLauncherPanel } from "@/components/section/QuizLauncherPanel";
-import { FlashcardsPanel } from "@/components/section/FlashcardsPanel";
 import { GamesPanel } from "@/components/section/GamesPanel";
-import { AppliedPanel } from "@/components/section/AppliedPanel";
+import { LessonFlow } from "@/components/flow/LessonFlow";
+import { deriveSectionFlow } from "@/lib/lesson-flow/derive-flow";
 import { Container } from "@/components/ui/Container";
 import { LastVisitTracker } from "@/components/layout/LastVisitTracker";
 import { copyFor } from "@/lib/pack-helpers";
 
 type Params = { packId: string; sectionId: string };
-type SearchParams = { tab?: string };
 
 export function generateStaticParams(): Params[] {
   const out: Params[] = [];
@@ -59,55 +52,24 @@ export async function generateMetadata({
 
 export default async function SectionPage({
   params,
-  searchParams,
 }: {
   params: Promise<Params>;
-  searchParams: Promise<SearchParams>;
 }) {
   const { packId, sectionId } = await params;
-  const sp = await searchParams;
   const pack = getPack(packId);
   if (!pack) notFound();
   const section = getSectionFrom(pack.curriculum, sectionId);
   if (!section) notFound();
 
-  const activeTab = resolveTab(sp.tab);
   const meta = getSectionMeta(sectionId);
-  const flashcards = getSectionFlashcards(section);
   const copy = copyFor(pack);
+  const blocks = deriveSectionFlow(section, {
+    scorm: process.env.NEXT_PUBLIC_SCORM === "1",
+  });
 
   const goalsPanel = (
     <GoalsPanel section={section} meta={meta} formatMinutes={formatMinutes} />
   );
-
-  const conceptsPanel = (
-    <section aria-labelledby="concepts-heading" className="flex flex-col gap-4">
-      <SectionConceptMap section={section} packId={packId} />
-      <div>
-        <h2
-          id="concepts-heading"
-          className="mb-2 text-xs font-semibold uppercase tracking-wide text-(--accent-2)"
-        >
-          Lessons
-        </h2>
-        <SectionConceptList section={section} packId={packId} />
-      </div>
-    </section>
-  );
-
-  const flashcardsPanel = <FlashcardsPanel cards={flashcards} />;
-
-  const quizPanel = (
-    <QuizLauncherPanel
-      section={section}
-      packId={packId}
-      sectionTestLabel={copy.sectionTestSingular}
-    />
-  );
-
-  const gamesPanel = <GamesPanel packId={packId} sectionId={sectionId} />;
-
-  const appliedPanel = <AppliedPanel section={section} packId={packId} />;
 
   const { prev: prevSection, next: nextSection } = getAdjacentSectionsFrom(
     pack.curriculum,
@@ -180,25 +142,34 @@ export default async function SectionPage({
           </Link>
         </div>
       </nav>
-      <SectionTabs
-        activeTab={activeTab}
-        panels={{
-          goals: goalsPanel,
-          concepts: conceptsPanel,
-          flashcards: flashcardsPanel,
-          quiz: quizPanel,
-          apply: appliedPanel,
-          games: gamesPanel,
-        }}
+
+      <LessonFlow
+        packId={packId}
+        section={section}
+        blocks={blocks}
+        testLabel={copy.sectionTestSingular}
+        goalsPanel={goalsPanel}
       />
+
+      {process.env.NEXT_PUBLIC_SCORM === "1" ? null : (
+        <details className="mt-8 rounded-lg border border-dashed border-(--border) bg-(--panel-2)/50">
+          <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-(--ink)">
+            <Gamepad2 aria-hidden className="h-4 w-4 text-(--accent)" />
+            Optional: practice with games
+          </summary>
+          <div className="border-t border-(--border) px-4 pb-4 pt-3">
+            <GamesPanel packId={packId} sectionId={sectionId} />
+          </div>
+        </details>
+      )}
+
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
-        <Link
-          href={`/${packId}`}
-          className="text-(--muted) hover:text-(--ink)"
-        >
+        <Link href={`/${packId}`} className="text-(--muted) hover:text-(--ink)">
           ← Back to {pack.config.name} course
         </Link>
-        <span aria-hidden className="text-(--muted)">·</span>
+        <span aria-hidden className="text-(--muted)">
+          ·
+        </span>
         <Link href="/" className="text-(--muted) hover:text-(--ink)">
           All courses
         </Link>

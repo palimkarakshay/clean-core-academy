@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ClipboardCheck, ListChecks } from "lucide-react";
+import { ArrowRight, ClipboardCheck, ListChecks, Sparkles } from "lucide-react";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
 import { SectionList } from "@/components/dashboard/SectionList";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
@@ -69,9 +69,33 @@ export default async function PackHomePage({
           </div>
         ) : null}
       </header>
+
+      <Link
+        href={`/${pack.config.id}/start`}
+        className="group flex items-center gap-4 rounded-xl border border-(--accent)/40 bg-(--accent)/8 p-5 no-underline shadow-sm transition-colors hover:border-(--accent)"
+      >
+        <span
+          aria-hidden
+          className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-(--accent) text-white"
+        >
+          <Sparkles className="h-5 w-5" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base font-semibold text-(--ink)">Start here</h2>
+          <p className="mt-0.5 text-sm text-(--muted)">
+            New to the course? Answer two quick questions and we&rsquo;ll point
+            you to the right first module.
+          </p>
+        </div>
+        <ArrowRight
+          aria-hidden
+          className="h-5 w-5 flex-none text-(--accent) transition-transform group-hover:translate-x-1"
+        />
+      </Link>
+
       <RecommendationBanner />
 
-      {pack.curriculum.readinessAudit ? (
+      {process.env.NEXT_PUBLIC_SCORM !== "1" && pack.curriculum.readinessAudit ? (
         <Link
           href={`/${pack.config.id}/audit`}
           className="group flex items-start gap-3 rounded-lg border border-(--border) bg-(--panel-2) p-4 no-underline shadow-sm transition-colors hover:border-(--accent)"
@@ -96,7 +120,8 @@ export default async function PackHomePage({
         </Link>
       ) : null}
 
-      {pack.curriculum.sections.some((s) => s.skills && s.skills.length > 0) ? (
+      {process.env.NEXT_PUBLIC_SCORM !== "1" &&
+      pack.curriculum.sections.some((s) => s.skills && s.skills.length > 0) ? (
         <Link
           href={`/${pack.config.id}/skills`}
           className="group flex items-start gap-3 rounded-lg border border-(--border) bg-(--panel-2) p-4 no-underline shadow-sm transition-colors hover:border-(--accent)"

@@ -61,34 +61,61 @@ export function Header() {
   // in sync with the route.
   const pack = firstSegment ? getPack(firstSegment) : null;
   const packId = pack ? firstSegment : null;
-  const visibleNav = pack
+  // The SCORM single-page package has no route navigation, so the
+  // primary nav is hidden and the brand isn't a link there.
+  const scorm = process.env.NEXT_PUBLIC_SCORM === "1";
+  const visibleNav = pack && !scorm
     ? pack.config.nav.filter((n) => n.href !== "/")
     : [];
   const homeHref = packId ? `/${packId}` : "/";
 
+  const brand = (
+    <>
+      {scorm ? (
+        // Relative src + the package's runtime <base> resolve to the
+        // package root; next/image would emit an absolute /images path.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          aria-hidden
+          src="images/brand/final/curio-mark.jpg"
+          alt=""
+          width={32}
+          height={32}
+          className="h-8 w-8 flex-none rounded-md object-cover"
+        />
+      ) : (
+        <Image
+          aria-hidden
+          src="/images/brand/final/curio-mark.jpg"
+          alt=""
+          width={32}
+          height={32}
+          className="h-8 w-8 flex-none rounded-md object-cover"
+        />
+      )}
+      <span className="flex flex-col justify-center gap-0.5">
+        <span className="font-[family-name:var(--font-display)] text-base font-semibold text-(--ink)">
+          {BRAND.name}
+        </span>
+        <span className="text-xs text-(--muted)">{BRAND.tagline}</span>
+      </span>
+    </>
+  );
+
   return (
     <header className="border-b border-(--border) mb-6">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-4">
-        <Link
-          href={homeHref}
-          aria-label={`${BRAND.name} home`}
-          className="flex min-h-11 items-center gap-2 no-underline"
-        >
-          <Image
-            aria-hidden
-            src="/images/brand/final/curio-mark.jpg"
-            alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8 flex-none rounded-md object-cover"
-          />
-          <span className="flex flex-col justify-center gap-0.5">
-            <span className="font-[family-name:var(--font-display)] text-base font-semibold text-(--ink)">
-              {BRAND.name}
-            </span>
-            <span className="text-xs text-(--muted)">{BRAND.tagline}</span>
-          </span>
-        </Link>
+        {scorm ? (
+          <div className="flex min-h-11 items-center gap-2">{brand}</div>
+        ) : (
+          <Link
+            href={homeHref}
+            aria-label={`${BRAND.name} home`}
+            className="flex min-h-11 items-center gap-2 no-underline"
+          >
+            {brand}
+          </Link>
+        )}
         <nav
           aria-label="Primary"
           className="flex items-center gap-2 sm:gap-3 text-sm"
