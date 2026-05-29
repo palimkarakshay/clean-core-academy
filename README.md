@@ -111,7 +111,7 @@ Verification loop:
 
 ```sh
 npm run type-check     # tsc --noEmit
-npm test               # vitest — 200+ unit/contract tests (incl. the abaplint + audit checks)
+npm test               # vitest — unit/contract suite under src/__tests__ (incl. the abaplint + audit checks)
 npm run lint           # eslint
 npm run build          # next build (prerenders every module/concept/quiz/audit route)
 npm run lint:abap      # abaplint over the ABAP reference solutions (see below)

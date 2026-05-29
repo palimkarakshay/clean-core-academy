@@ -1,7 +1,9 @@
 # Contributing
 
 Short conventions that have to hold across the codebase. Lint /
-type-check / tests enforce most of them; the rest live here.
+type-check / tests enforce most of them; the rest live here. See
+[`CLAUDE.md`](./CLAUDE.md) for the full architecture map and the
+inherited-shell drift notes.
 
 ## Run the checks
 
@@ -9,60 +11,71 @@ type-check / tests enforce most of them; the rest live here.
 npm install
 npm run lint           # eslint
 npm run type-check     # tsc --noEmit
-npm test               # vitest (unit + contract)
-npm run lint:abap      # abaplint over the ABAP reference solutions
-npm run build          # production build verification
-npm run test:e2e       # playwright (chromium desktop / tablet / mobile)
+npm test               # vitest (29 test files under src/__tests__)
+npm run build          # next build — production build verification
+npm run lint:abap      # abaplint over exercises/ (for ABAP content changes)
+npm run test:e2e       # playwright — advisory (see note)
 ```
 
-Keep `lint`, `type-check`, `test`, and `build` green on every change.
-There is **no CI workflow in this repo yet**, so the local gates are
-the gate — run them before you push. The Playwright e2e specs still
-target the shell's original demo pack (see the README "Inherited from
-the shell" note) and aren't wired into a pipeline; treat them as
-advisory until they're re-pointed at `clean-core-academy`.
+Every PR needs lint + type-check + unit + build green; these run in
+CI on every push and PR (`.github/workflows/ci.yml`). The Playwright
+`e2e/` specs still target the shell's original demo brand and have
+not been re-pointed at this pack — treat their result as advisory
+until a change touches a flow covered by `e2e/*.spec.ts`.
 
 ## Storage discipline
 
 The app stores state in `localStorage` today, but every store routes
 through `src/lib/storage/driver.ts`. **Do not call
 `localStorage.getItem` / `setItem` directly in new code.** Use
-`createLocalDriver` (or a future server-backed driver) so a storage
-migration stays a one-file swap rather than a codebase-wide rewrite.
+`createLocalDriver` (or a future server-backed driver) so swapping the
+persistence layer stays a one-file change rather than a codebase-wide
+rewrite.
+
 The discipline test at `src/__tests__/storage-key-discipline.test.ts`
-enforces that storage-key literals only appear in their owning module.
+enforces that storage-key literals only appear in their owning module,
+and keys are namespaced per `pack.id` so packs don't collide in one
+browser.
 
 ## AI / LLM boundary
 
 **All LLM calls go through `src/lib/ai/router.ts`.** Do not import
-`@anthropic-ai/sdk`, `openai`, or any provider SDK elsewhere in `src/`.
-The router is the single seam; it is a stub today and returns a
-`not-configured` result when no `OPENROUTER_API_KEY` is set, so the
-app stays honest with AI disabled.
+`@anthropic-ai/sdk`, `openai`, or any provider SDK elsewhere in
+`src/`. The router is the single seam that holds vendor neutrality
+(OpenRouter as the API surface) and the `not-configured` fallback that
+keeps the app honest when no API key is set. It is **scaffolded — not
+yet wired**; `OPENROUTER_API_KEY` is unset by default.
 
 Prompt templates live in `prompts/*.md`, imported as strings. Do not
 inline system prompts in TypeScript.
+
+Note: the **Ask Claude** panel (`src/components/concept/AskClaudePanel.tsx`)
+is a separate, client-side hand-off that opens `claude.ai` in the
+browser — it does not go through the router.
 
 ## Content quality
 
 - New MCQ quizzes must not skew the correct letter past 60% on a single
   letter — the build-time test in
-  `src/__tests__/quiz-letter-distribution.test.ts` enforces this for
-  the pack content.
+  `src/__tests__/quiz-letter-distribution.test.ts` enforces this.
 - Distractors must be plausible — each one represents a specific
   misconception, not a random wrong fact.
 - Every concept's quiz rationale must name the underlying principle,
   not just say "the text says so".
+- **Every ABAP API claim must cite a SAP Docs MCP result, never
+  training-cutoff recall** — see [`docs/AUTHORING.md`](./docs/AUTHORING.md).
+  Learner-facing snippets must pass `npm run lint:abap`; "before"
+  snippets should fail one *named* rule.
 
 ## Commit / PR style
 
 - Small commits, each green on lint + type-check + unit.
-- Don't force-push a feature branch after a PR is open without a
+- Don't `--force` push to a feature branch after a PR is open without a
   written reason — the review trail breaks.
 
 ## Privacy / terms
 
 `/privacy` and `/terms` are placeholder pages today. If you change
 anything user-data-related, update both pages and flag the change in
-the PR description so the operator can decide whether to involve a
-lawyer before merging.
+the PR description so the operator can decide whether legal review is
+needed before merging.
