@@ -38,14 +38,23 @@ function findInWindow(start: Window | null): Found | null {
   let win: Window | null = start;
   let depth = 0;
   while (win && depth < MAX_FRAME_DEPTH) {
-    const w = win as unknown as {
-      API?: LMSApi12;
-      API_1484_11?: LMSApi2004;
-    };
-    if (w.API_1484_11) return { version: "2004", api: w.API_1484_11 };
-    if (w.API) return { version: "1.2", api: w.API };
-    if (win.parent === win) break;
-    win = win.parent;
+    // Reading API/API_1484_11/parent on a cross-origin ancestor throws a
+    // SecurityError. Guard each frame probe so an inaccessible ancestor
+    // doesn't blow up discovery — we simply stop climbing that chain and
+    // fall back to the safe off-LMS no-op.
+    try {
+      const w = win as unknown as {
+        API?: LMSApi12;
+        API_1484_11?: LMSApi2004;
+      };
+      if (w.API_1484_11) return { version: "2004", api: w.API_1484_11 };
+      if (w.API) return { version: "1.2", api: w.API };
+      if (win.parent === win) break;
+      win = win.parent;
+    } catch {
+      // Cross-origin boundary — can't read this frame or climb past it.
+      break;
+    }
     depth++;
   }
   return null;
@@ -53,10 +62,14 @@ function findInWindow(start: Window | null): Found | null {
 
 function discover(): Found | null {
   if (typeof window === "undefined") return null;
-  return (
-    findInWindow(window) ??
-    (window.opener ? findInWindow(window.opener as Window) : null)
-  );
+  const inSelf = findInWindow(window);
+  if (inSelf) return inSelf;
+  try {
+    return window.opener ? findInWindow(window.opener as Window) : null;
+  } catch {
+    // Accessing window.opener can itself throw across origins.
+    return null;
+  }
 }
 
 let found: Found | null = null;

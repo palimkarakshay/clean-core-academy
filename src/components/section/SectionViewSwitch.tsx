@@ -12,15 +12,23 @@ interface SectionViewSwitchProps {
 }
 
 /**
- * Renders BOTH module structures and reveals the one the learner has
- * chosen, toggling visibility with `hidden` rather than unmounting — the
- * same render-all-then-hide approach SectionTabs uses for its panels, so
- * transient UI state (a flipped flashcard, an in-progress check) survives
- * a flip. Both subtrees are server-rendered and hydrate once; switching
- * is a pure visibility change with no navigation and no progress loss.
+ * Renders the module structure the learner has chosen — the Current tabbed
+ * screen or the RISE guided flow — and ONLY that one.
  *
- * SSR + first paint show the default ("tabs"); a persisted "rise"
- * preference swaps in on the first post-mount commit (see view-mode.ts).
+ * We render the active view conditionally (not both-then-`hidden`) on
+ * purpose: the RISE flow's blocks have mount side effects (the first
+ * LessonChunk marks its lesson read on reveal), so mounting a hidden flow
+ * would silently advance a learner's progress — and partially satisfy the
+ * section-test gate — just by visiting a section in tabbed mode. Rendering
+ * only the active view keeps each structure's progress writes scoped to
+ * when it is actually in use.
+ *
+ * Progress lives in a shared store keyed by concept/section id, so the
+ * remount on switch loses no progress — only transient in-view UI state
+ * (e.g. a half-scrolled flow), which is the expected cost of changing
+ * layout. SSR + first paint render the default ("tabs"); a persisted
+ * "rise" preference swaps in on the first post-mount commit (view-mode.ts),
+ * so the first client render matches the server (no hydration mismatch).
  */
 export function SectionViewSwitch({
   tabsView,
@@ -32,8 +40,7 @@ export function SectionViewSwitch({
       <div className="mb-4 flex items-center justify-end">
         <ViewModeToggle />
       </div>
-      <div hidden={mode !== "tabs"}>{tabsView}</div>
-      <div hidden={mode !== "rise"}>{flowView}</div>
+      {mode === "rise" ? flowView : tabsView}
     </div>
   );
 }
