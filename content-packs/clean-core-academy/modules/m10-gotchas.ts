@@ -1,10 +1,10 @@
 /* ------------------------------------------------------------------
-   Module 10 — The Gotchas Catalog.
+   Module 10 — Common Pitfalls & Defect Patterns.
 
    Source brief: §10 of the Clean Core & HANA Readiness curriculum.
-   Audience: every developer tier — these are the silent traps that
-   compile clean, pass a casual review, and bite at runtime (or after
-   the next FPS). Each concept collects a family of mini-gotchas;
+   Audience: every developer tier — these are the silent defects that
+   compile clean, pass a casual review, and surface at runtime (or after
+   the next FPS). Each concept collects a family of related pitfalls;
    the lesson explains the WHY and mechanism for a senior ABAP reader,
    and the 3-question quiz drills the 2–3 sharpest of them. Code-bearing
    concepts add before/after ABAP examples (lowercase, real syntax).
@@ -15,7 +15,7 @@ import type { Section } from "../_types";
 export const m10Gotchas: Section = {
   id: "m10-gotchas",
   n: 10,
-  title: "The Gotchas Catalog",
+  title: "Common Pitfalls & Defect Patterns",
   sourceCourse: "clean-core-curriculum §10",
   audiences: ["new", "intermediate", "expert"],
   skills: [
@@ -51,19 +51,19 @@ export const m10Gotchas: Section = {
     },
   ],
   blurb:
-    "The silent traps that pass review and then cause wrong results or production incidents later — the kind of defect that erodes trust in a system. A catalogue of code that compiles clean and then bites at runtime or after the next support pack, across Open SQL, internal tables, RAP, CDS, AMDP / ABAP Cloud, and transport topology — each with the mechanism behind it so you can spot it before it ships.",
+    "The silent defects that pass review and then cause wrong results or production incidents later — the kind of defect that erodes trust in a system. A catalogue of Open SQL, internal-table, RAP, CDS, AMDP / ABAP Cloud, and transport-topology pitfalls every team should recognise, each with the mechanism behind it so you can spot it before it ships.",
   concepts: [
     {
       id: "m10-c1",
       code: "10.1",
-      title: "Open SQL gotchas",
+      title: "Open SQL pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §10.1",
         paragraphs: [
-          "If you have ever lost a night to one of these bugs, you already understand it better than any catalog can teach — this module just names what your scars taught you, so the next developer doesn't pay the same tuition. The two Open SQL traps that cause production incidents are both about *absence*. A SELECT SINGLE without a fully-qualified primary key returns *an* arbitrary row — on HANA the row the optimizer happens to find first, which differs from the AnyDB era and differs run to run. And FOR ALL ENTRIES over an *empty* driver table does not return zero rows; it strips the IN-list condition entirely and returns the *whole* target table. The fix is a one-line guard: `if lines( itab ) > 0`.",
-          "FOR ALL ENTRIES has a second silent behaviour: it de-duplicates the driver before building the read, so it can never give you 1:1 cardinality. If you needed one result row per driver row you have already lost rows before the database is touched — you must use a JOIN instead. These behaviours predate HANA but bite harder now because result-set sizes and row order changed under columnar storage.",
+          "If you have debugged one of these in production, you already understand it better than most references can teach — this catalog names the pattern and its remedy precisely, so the next developer doesn't pay the same tuition. The two Open SQL pitfalls that cause production incidents are both about *absence*. A SELECT SINGLE without a fully-qualified primary key returns *an* arbitrary row — on HANA the row the optimizer happens to find first, which differs from the AnyDB era and differs run to run. And FOR ALL ENTRIES over an *empty* driver table does not return zero rows; it strips the IN-list condition entirely and returns the *whole* target table. The fix is a one-line guard: `if lines( itab ) > 0`.",
+          "FOR ALL ENTRIES has a second silent behaviour: it de-duplicates the driver before building the read, so it can never give you 1:1 cardinality. If you needed one result row per driver row you have already lost rows before the database is touched — you must use a JOIN instead. These behaviours predate HANA but are more damaging now because result-set sizes and row order changed under columnar storage.",
           "The rest of the family is about cost you cannot see in the syntax. INTO CORRESPONDING FIELDS OF TABLE is slower than a named field list and obscures the real types (a field that silently doesn't map is a defect, not an error). ORDER BY PRIMARY KEY is not free on HANA — there is no implicit sort, so only ask for ordering you actually consume. And SELECT DISTINCT carries a real de-duplication cost that, for input that is already mostly unique, can be dearer than reading into a SORTED table.",
         ],
         keyPoints: [
@@ -176,7 +176,7 @@ export const m10Gotchas: Section = {
     {
       id: "m10-c2",
       code: "10.2",
-      title: "Internal-table gotchas",
+      title: "Internal-table pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -184,7 +184,7 @@ export const m10Gotchas: Section = {
         paragraphs: [
           "The sharpest internal-table trap is silent and never dumps: READ TABLE ... BINARY SEARCH on a table that is *not* sorted ascending by the search key gives an *undefined* result — usually 'not found' on a row that is present. There is no runtime error, so the bug surfaces as missing data far from its cause. BINARY SEARCH is a promise you make to the runtime about the table's order; if you cannot keep it, use a SORTED or HASHED table whose order the kernel maintains for you.",
           "The access-mode choice is about copies. LOOP AT itab INTO ls copies each row into the work area; LOOP AT itab ASSIGNING FIELD-SYMBOL(<fs>) binds the field symbol to the row in place with no copy, which is faster and lets you mutate the row directly. Because <fs> *is* the row, a MODIFY itab INDEX sy-tabix FROM <fs> inside that loop is pure redundancy — the assignment to <fs> already changed the table.",
-          "The remaining gotchas are about cost and stability. DELETE itab WHERE is an O(n) scan even on a SORTED table when the WHERE does not align with the sort key. INSERT INTO TABLE on a HASHED table is O(1) on average but the bucket array grows by reallocation — declare INITIAL SIZE when the row count is roughly known. And SORT is *unstable* by default: rows equal on the sort key may be reordered. If a prior order must be preserved among equal keys, you must write SORT itab STABLE BY f.",
+          "The remaining pitfalls are about cost and stability. DELETE itab WHERE is an O(n) scan even on a SORTED table when the WHERE does not align with the sort key. INSERT INTO TABLE on a HASHED table is O(1) on average but the bucket array grows by reallocation — declare INITIAL SIZE when the row count is roughly known. And SORT is *unstable* by default: rows equal on the sort key may be reordered. If a prior order must be preserved among equal keys, you must write SORT itab STABLE BY f.",
         ],
         keyPoints: [
           "BINARY SEARCH on an unsorted table = undefined result, NO dump — only use it on ascending-sorted data.",
@@ -295,7 +295,7 @@ export const m10Gotchas: Section = {
         flaggedRules: ["identical_conditions"],
         hint: "The second ELSEIF repeats `iv_score >= 90`; it was meant to be a lower threshold such as `iv_score >= 80`.",
         successNote:
-          "Identical branch conditions are a classic silent gotcha — the code compiles and the dead branch quietly never fires. The linter catches what a glance misses.",
+          "Identical branch conditions are a classic silent defect — the code compiles and the dead branch quietly never fires. The linter catches what a glance misses.",
         starterCode: [
           "class zcl_au_ex_dup definition public final create public.",
           "  public section.",
@@ -319,13 +319,13 @@ export const m10Gotchas: Section = {
     {
       id: "m10-c3",
       code: "10.3",
-      title: "RAP gotchas",
+      title: "RAP pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §10.3",
         paragraphs: [
-          "The RAP trap that quietly destroys data integrity is a mis-wired ETag. Optimistic locking compares the ETag the client read against the current value on save; if they differ, the save is rejected. But if you bind the ETag to a field that never changes, the comparison always passes and concurrent edits silently overwrite each other — locking is effectively disabled with no error anywhere. The correct pattern is an ETag master on a LocalLastChangedAt field that a determination updates on every save, so the token genuinely moves.",
+          "The RAP pitfall that quietly corrupts data integrity is a mis-wired ETag. Optimistic locking compares the ETag the client read against the current value on save; if they differ, the save is rejected. But if you bind the ETag to a field that never changes, the comparison always passes and concurrent edits silently overwrite each other — locking is effectively disabled with no error anywhere. The correct pattern is an ETag master on a LocalLastChangedAt field that a determination updates on every save, so the token genuinely moves.",
           "Two more traps come from the LOCAL MODE keyword. READ/MODIFY ENTITIES ... IN LOCAL MODE deliberately skips DCL authorization — which is correct *inside* the behaviour pool where you have already passed the entry-point check, but a defect if you hand that result to a UI or external consumer without re-checking. And MODIFY ENTITIES ... UPDATE FIELDS ( ... ) updates *only* the fields you list: forget one in the parenthesised list and that field is silently left unchanged, with no error. The FIELDS list is an allow-list, not a hint.",
           "The last is ordering with late numbering. ADJUST_NUMBERS assigns the real key once per save, *after* the determination phase. So a DETERMINE ON SAVE that runs before numbering cannot read the final key — it sees the temporary one. If downstream logic depends on the assigned number, it must run in or after the numbering step, not before it.",
         ],
@@ -436,7 +436,7 @@ export const m10Gotchas: Section = {
     {
       id: "m10-c4",
       code: "10.4",
-      title: "CDS gotchas",
+      title: "CDS pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -552,7 +552,7 @@ export const m10Gotchas: Section = {
     {
       id: "m10-c5",
       code: "10.5",
-      title: "AMDP & ABAP Cloud gotchas",
+      title: "AMDP & ABAP Cloud pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -560,7 +560,7 @@ export const m10Gotchas: Section = {
         paragraphs: [
           "Two AMDP traps cause runtime failures rather than wrong answers. The USING clause must list *every* DB object the SQLScript body references; the dependency analyzer uses it to build the procedure's read/write set. Miss one and activation still succeeds — then the first execution fails because the runtime cannot resolve the unlisted object. And the parameters you pass in are *SQLScript* types, not ABAP types: an ABAP packed amount or a long decimal can lose precision crossing the boundary, so reason about the SQLScript type, not the ABAP declaration.",
           "OPTIONS READ-ONLY is a scale-out concern. On a read-only AMDP it tells HANA the procedure performs no DML, which lets the platform route it to a reader node in a scale-out landscape. Omit it on a genuinely read-only procedure and you forfeit that routing — the work is pinned to the writer, degrading throughput under load even though the result is correct.",
-          "On the ABAP Cloud side, the gotcha is *time*. The ABAP_CLOUD_DEVELOPMENT_DEFAULT ATC variant gains checks with each release: a pipeline that is green today can turn red after an FPS, not because your code changed but because the rules tightened — so re-run ATC after every upgrade. And for emitting messages, IF_T100_MESSAGE is the released text approach; the classic MESSAGE i001(zx) form is permitted in Standard ABAP but forbidden in Cloud development.",
+          "On the ABAP Cloud side, the pitfall is *time*. The ABAP_CLOUD_DEVELOPMENT_DEFAULT ATC variant gains checks with each release: a pipeline that is green today can turn red after an FPS, not because your code changed but because the rules tightened — so re-run ATC after every upgrade. And for emitting messages, IF_T100_MESSAGE is the released text approach; the classic MESSAGE i001(zx) form is permitted in Standard ABAP but forbidden in Cloud development.",
         ],
         keyPoints: [
           "USING must list ALL referenced DB objects — a missing entry activates fine but fails at first execution.",
@@ -668,13 +668,13 @@ export const m10Gotchas: Section = {
     {
       id: "m10-c6",
       code: "10.6",
-      title: "Transport & topology gotchas",
+      title: "Transport & topology pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §10.6",
         paragraphs: [
-          "Transport gotchas share one shape: a model is split across several objects, and moving only the obvious one leaves the target system half-wired. A CDS view's DCL role is a *separate* transportable object — transport the view without the role (or in a different request that arrives later) and the target view either fails its #CHECK at runtime or grants nothing, because the access logic never travelled with it. Keep the view and its DCL in the same transport.",
+          "Transport pitfalls share one shape: a model is split across several objects, and moving only the obvious one leaves the target system half-wired. A CDS view's DCL role is a *separate* transportable object — transport the view without the role (or in a different request that arrives later) and the target view either fails its #CHECK at runtime or grants nothing, because the access logic never travelled with it. Keep the view and its DCL in the same transport.",
           "The behaviour-pool case is the same trap from the runtime side. The behaviour definition (BDEF) and its implementing pool are distinct objects; ship a pool change without the matching BDEF and the target system reports 'outdated' warnings because the runtime behaviour no longer matches the definition it was generated against. The pair must move together to stay consistent.",
           "OData V4 service bindings hide a structural dependency. A draft-enabled binding carries a *draft node* backed by its own draft persistence tables. Export the binding without those draft tables and the service half-works: the active part responds, but anything touching the draft — edit-draft, resume, discard — fails on the target because the persistence behind the draft node is missing.",
         ],

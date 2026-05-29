@@ -44,7 +44,8 @@ serves intermediate + admin). Modules with no tag appear in every track.
 (the DB mindset) · ABAP Language Modernization · ABAP Cloud & RAP · Released APIs
 & Extensibility Contracts · CDS, AMDP & Code Pushdown · Performance & SQL on HANA
 · ATC, Custom-Code Migration & Simplification · Lesser-Known Tools & Utilities ·
-The Gotchas Catalog · Did You Know? · How-To Recipes · Capstone Scenarios.
+Common Pitfalls & Defect Patterns · Advanced Techniques & Lesser-Known APIs ·
+How-To Recipes · Capstone Scenarios.
 
 **Business tracks (b01–b03)** — Clean Core for Management & Leads · Clean Core for
 Key & End Users · Clean Core Orientation for Stakeholders.
