@@ -27,6 +27,9 @@ function collectAttemptTimestamps(progress: Progress): number[] {
   const out: number[] = [];
   for (const c of Object.values(progress.concept)) {
     for (const a of c.quizAttempts) out.push(a.completedAt);
+    // Reading a lesson counts as studying, so a read-only day keeps the
+    // streak alive. Older records predate lessonReadAt and add nothing.
+    if (typeof c.lessonReadAt === "number") out.push(c.lessonReadAt);
   }
   for (const s of Object.values(progress.section)) {
     for (const a of s.testAttempts) out.push(a.completedAt);

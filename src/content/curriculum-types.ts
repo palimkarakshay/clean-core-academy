@@ -245,6 +245,14 @@ export interface Section {
    */
   iconImagePath?: string;
   /**
+   * Optional themed Lucide icon *name* for the module tile (e.g.
+   * "shield-check"). Resolved to a component by the shell
+   * (components/primitives/ModuleIcon.tsx). Packs map this via
+   * `withModuleIcons`; it replaced the runtime-fetched AI thumbnails so
+   * tiles render instantly with no external dependency.
+   */
+  icon?: string;
+  /**
    * Optional applied-experience prompts. Each section should give the
    * learner one or more *real-world tasks* to do with the section's
    * material — write a snippet, hold a conversation, sort scenarios,

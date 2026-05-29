@@ -38,11 +38,11 @@ import { b01Management } from "./modules/b01-management";
 import { b02KeyUsers } from "./modules/b02-key-users";
 import { b03Orientation } from "./modules/b03-orientation";
 import { practiceExam } from "./modules/exams";
-import { withModuleImages } from "./module-images";
+import { withModuleIcons } from "./module-images";
 
 export const CURRICULUM: Curriculum = {
   schemaVersion: 1,
-  sections: withModuleImages([
+  sections: withModuleIcons([
     m01Foundations,
     m02HanaReadiness,
     m03Language,
@@ -93,7 +93,7 @@ export const CURRICULUM: Curriculum = {
         max: 100,
         verdict: "Clean Core ready",
         message:
-          "Strong posture. Confirm with ATC ABAP_CLOUD_DEVELOPMENT_DEFAULT / S4HANA_READINESS_2023 on your target system and keep the gate green.",
+          "Strong posture. Confirm with ATC ABAP_CLOUD_DEVELOPMENT_DEFAULT (or ABAP_CLEAN_CORE_DEVELOPMENT for level-based grading) plus the target-release S4HANA_READINESS_<year> on your target system, and keep the gate green.",
       },
     ],
     questions: [
@@ -118,7 +118,7 @@ export const CURRICULUM: Curriculum = {
         weight: 5,
         riskAnswer: "yes",
         remediation:
-          "Replace modifications with released BAdIs / extension points or the 3-tier extensibility model; request an extension point from SAP if none exists.",
+          "Replace modifications with released BAdIs / extension points (key-user or developer extensibility); request an extension point from SAP if none exists.",
         moduleId: "m01-foundations",
       },
       {
@@ -217,7 +217,7 @@ export const CURRICULUM: Curriculum = {
         id: "a-atc",
         dimension: "Tooling",
         question:
-          "Do you run ATC with the ABAP_CLOUD_DEVELOPMENT_DEFAULT / S4HANA_READINESS_2023 variants regularly?",
+          "Do you run ATC with the Clean Core variants regularly (ABAP_CLOUD_DEVELOPMENT_DEFAULT or ABAP_CLEAN_CORE_DEVELOPMENT, plus the target-release S4HANA_READINESS_<year>)?",
         weight: 4,
         riskAnswer: "no",
         remediation:

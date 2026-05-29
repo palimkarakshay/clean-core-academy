@@ -53,12 +53,7 @@ export function WhatYoullLearn() {
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {modules.map((m) => (
           <Card key={m.id} flat className="flex flex-col gap-2 p-4">
-            <div className="flex items-baseline gap-2">
-              <span className="font-mono text-[11px] text-(--muted)">
-                {String(m.n).padStart(2, "0")}
-              </span>
-              <h3 className="text-sm font-semibold text-(--ink)">{m.title}</h3>
-            </div>
+            <h3 className="text-sm font-semibold text-(--ink)">{m.title}</h3>
             <ul className="flex flex-col gap-1.5">
               {m.objectives.map((o) => (
                 <li key={o} className="flex gap-2 text-xs text-(--muted)">

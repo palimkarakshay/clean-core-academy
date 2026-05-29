@@ -70,7 +70,7 @@ export const GAMES_CATALOG: readonly MiniGameMeta[] = [
     id: "domain-rush",
     title: "Domain Rush",
     blurb:
-      "Concepts appear one by one — classify each into the right CCA-F domain. 5 levels, mastery-graded.",
+      "Concepts appear one by one — classify each into the right Clean Core area. 5 levels, mastery-graded.",
     status: "soon",
     category: "Domains",
     icon: "target",
@@ -79,7 +79,7 @@ export const GAMES_CATALOG: readonly MiniGameMeta[] = [
     id: "complete-the-code",
     title: "Complete the Code",
     blurb:
-      "Real Claude API snippets with missing parameters. Pick the correct value to reinforce exact syntax.",
+      "Real ABAP snippets with missing pieces. Pick the correct value to reinforce exact Clean Core syntax.",
     status: "soon",
     category: "Syntax",
     icon: "code",
@@ -88,7 +88,7 @@ export const GAMES_CATALOG: readonly MiniGameMeta[] = [
     id: "interactive-scenarios",
     title: "Interactive Scenarios",
     blurb:
-      "Make decisions in real-world scenarios — which model, which pattern, how to handle errors. Mirrors the exam shape.",
+      "Make decisions in real-world scenarios — which extension tier, which released API, how to refactor safely. Mirrors real Clean Core calls.",
     status: "soon",
     category: "Architecture",
     icon: "git-branch",

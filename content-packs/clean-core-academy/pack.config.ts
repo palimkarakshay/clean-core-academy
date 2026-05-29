@@ -8,7 +8,6 @@
 
 import type { PackConfig } from "./_types";
 import { ICON_SVG, ICON_MASKABLE_SVG } from "./icons";
-import { pollinationsUrl, HERO_PROMPT, HERO_SEED } from "./module-images";
 
 export const packConfig: PackConfig = {
   id: "clean-core-academy",
@@ -20,7 +19,6 @@ export const packConfig: PackConfig = {
   url: "https://clean-core-academy.vercel.app",
   repoUrl: "https://github.com/palimkarakshay/clean-core-academy",
   author: "palimkarakshay",
-  heroImagePath: pollinationsUrl(HERO_PROMPT, HERO_SEED, 1280, 720),
   nav: [
     { label: "Home", href: "/", icon: "home", mobile: true, match: ["/"] },
     {
@@ -39,10 +37,10 @@ export const packConfig: PackConfig = {
     },
     {
       label: "Progress",
-      href: "/start",
+      href: "/progress",
       icon: "trending-up",
       mobile: true,
-      match: [],
+      match: ["/progress"],
     },
   ],
   askAI: {
@@ -130,7 +128,7 @@ export const packConfig: PackConfig = {
     assumptions: [
       {
         label: "ATC with the Clean Core variants",
-        detail: "ABAP_CLOUD_DEVELOPMENT_DEFAULT + S4HANA_READINESS_2023 are the authoritative checks; abaplint catches the style layer.",
+        detail: "ABAP_CLOUD_DEVELOPMENT_DEFAULT (with ABAP_CLEAN_CORE_DEVELOPMENT, new in 2025, grading against clean-core Levels A–D) plus the target-release S4HANA_READINESS_<year> are the authoritative checks (the course pins examples to S/4HANA 2023, so S4HANA_READINESS_2023 there); abaplint catches the style layer.",
       },
     ],
     externalLinks: [

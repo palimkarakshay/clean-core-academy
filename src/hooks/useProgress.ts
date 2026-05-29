@@ -43,6 +43,7 @@ export function useProgress() {
       progressStore.mutate((p) => {
         const c = ensureConcept(p, conceptId);
         c.lessonRead = true;
+        c.lessonReadAt = Date.now();
         if (c.mastery < 1) c.mastery = 1;
       });
     },

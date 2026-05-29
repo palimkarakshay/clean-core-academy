@@ -25,7 +25,13 @@ Every lesson pairs:
 > skills matrix** (`/<pack>/skills`) are all live.
 
 Every lesson pairs concept notes, before/after ABAP, and quizzes; code shown is
-written against S/4HANA 2023 (ABAP Platform 758).
+written against S/4HANA 2023 (ABAP Platform 758). Note that **S/4HANA 2025
+(ABAP Platform 2025 / SAP_BASIS 816, GA 2025-10-08)** is now the latest release —
+the readiness ATC variant should track your *target* release
+(`S4HANA_READINESS_2025` when converting to 2025). The private/on-prem releases
+use year naming (2023, 2025); **S/4HANA Cloud Public Edition** uses a biannual
+`YYMM` cadence (currently **2508** = Aug 2025; next is 2602 = Feb 2026) — a
+different scheme, not a different product generation.
 
 ---
 

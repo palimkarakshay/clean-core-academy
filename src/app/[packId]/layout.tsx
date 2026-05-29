@@ -4,6 +4,7 @@ import { PackProvider } from "@/content/pack-context";
 import { siteConfigFor } from "@/lib/pack-helpers";
 import { PACK_THEME_STYLE_ID, packThemeCSS } from "./pack-theme-style";
 import { ScormBridge } from "@/components/scorm/ScormBridge";
+import { PackProgressBar } from "@/components/layout/PackProgressBar";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -57,7 +58,11 @@ export default async function PackLayout({
           dangerouslySetInnerHTML={{ __html: themeStyle }}
         />
       ) : null}
-      {process.env.NEXT_PUBLIC_SCORM === "1" ? <ScormBridge /> : null}
+      {process.env.NEXT_PUBLIC_SCORM === "1" ? (
+        <ScormBridge />
+      ) : (
+        <PackProgressBar />
+      )}
       {children}
     </PackProvider>
   );

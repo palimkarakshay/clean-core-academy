@@ -22,15 +22,30 @@
 import { CURRICULUM } from "@/content/curriculum";
 import type { Section } from "@/content/curriculum-types";
 import { copy as defaultCopy } from "@/lib/site-config";
-import {
-  countsAsMastered,
-  ensureConcept,
-  ensureSection,
-  isSectionPassed,
-  isUnderwhelm,
-} from "./progress";
-import type { Progress } from "./progress-types";
+import { countsAsMastered, isUnderwhelm } from "./progress";
+import type { Mastery, Progress } from "./progress-types";
 import type { ContentPack, PackCopy } from "@/content/pack-types";
+
+/* Read-only views of the progress snapshot. The recommendation engine
+   runs inside render (useMemo), so it must NEVER mutate the store's
+   snapshot — using ensure*() here would lazily insert empty records into
+   the live object during render. These helpers read with safe defaults. */
+function masteryOf(p: Progress, conceptId: string): Mastery {
+  return p.concept[conceptId]?.mastery ?? 0;
+}
+function lessonReadOf(p: Progress, conceptId: string): boolean {
+  return p.concept[conceptId]?.lessonRead ?? false;
+}
+function sectionCompleteOf(p: Progress, sectionId: string): boolean {
+  return p.section[sectionId]?.complete ?? false;
+}
+function sectionPassedOf(p: Progress, section: Section): boolean {
+  const attempts = p.section[section.id]?.testAttempts ?? [];
+  const last = attempts[attempts.length - 1];
+  if (!last) return false;
+  const passPct = section.sectionTest?.passPct ?? 0.7;
+  return last.total > 0 && last.score / last.total >= passPct;
+}
 
 export type Recommendation =
   | { kind: "drill"; section: Section; conceptId: string; href: string; why: string }
@@ -52,8 +67,7 @@ export function recommendForPack(
   for (const section of pack.curriculum.sections) {
     for (const c of section.concepts) {
       if (!c.lesson || !c.quiz) continue;
-      const cp = ensureConcept(p, c.id);
-      if (isUnderwhelm(cp.mastery)) {
+      if (isUnderwhelm(masteryOf(p, c.id))) {
         return {
           kind: "drill",
           section,
@@ -71,14 +85,14 @@ export function recommendForPack(
     const authored = section.concepts.filter((c) => c.lesson && c.quiz);
     if (authored.length === 0) continue;
     const allMastered = authored.every((c) =>
-      countsAsMastered(ensureConcept(p, c.id).mastery)
+      countsAsMastered(masteryOf(p, c.id))
     );
-    if (allMastered && !isSectionPassed(p, section.id)) {
+    if (allMastered && !sectionPassedOf(p, section)) {
       return {
         kind: "section-test",
         section,
         href: `/${packId}/section/${section.id}/test`,
-        why: `Every authored concept in section ${section.n} is at a mastered level. Take the ${copy.sectionTestSingular.toLowerCase()} to lock it in.`,
+        why: `Every authored concept in "${section.title}" is at a mastered level. Take the ${copy.sectionTestSingular.toLowerCase()} to lock it in.`,
       };
     }
   }
@@ -86,13 +100,11 @@ export function recommendForPack(
   // 3. Continue — earliest incomplete section's first not-yet-mastered
   // authored concept.
   for (const section of pack.curriculum.sections) {
-    const sp = ensureSection(p, section.id);
-    if (sp.complete) continue;
+    if (sectionCompleteOf(p, section.id)) continue;
     for (const c of section.concepts) {
       if (!c.lesson || !c.quiz) continue;
-      const cp = ensureConcept(p, c.id);
-      if (countsAsMastered(cp.mastery)) continue;
-      if (!cp.lessonRead) {
+      if (countsAsMastered(masteryOf(p, c.id))) continue;
+      if (!lessonReadOf(p, c.id)) {
         return {
           kind: "lesson",
           section,

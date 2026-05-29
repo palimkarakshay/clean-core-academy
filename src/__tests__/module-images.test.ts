@@ -1,24 +1,26 @@
 import { describe, expect, it } from "vitest";
 import { CURRICULUM } from "@/content/curriculum";
-import { pack } from "../../content-packs/clean-core-academy";
 
-const POLLINATIONS = /^https:\/\/image\.pollinations\.ai\/prompt\/.+seed=\d+/;
-
-describe("module + hero imagery", () => {
-  it("every section has a deterministic Pollinations thumbnail URL", () => {
+/**
+ * Module artwork is now themed Lucide icon *names* (resolved to crisp
+ * vector icons in the shell) rather than runtime-fetched AI images, so
+ * a slow/blocked CDN can never blank a module tile. The contract: every
+ * section carries an icon name and no remote image URL.
+ */
+describe("module imagery (themed icons)", () => {
+  it("every section has a themed icon name", () => {
     for (const s of CURRICULUM.sections) {
-      expect(s.iconImagePath, `iconImagePath for ${s.id}`).toBeDefined();
-      expect(s.iconImagePath as string).toMatch(POLLINATIONS);
+      expect(s.icon, `icon for ${s.id}`).toBeTruthy();
+      expect(typeof s.icon).toBe("string");
     }
   });
 
-  it("the pack config carries a Pollinations hero image", () => {
-    expect(pack.config.heroImagePath).toBeDefined();
-    expect(pack.config.heroImagePath as string).toMatch(POLLINATIONS);
-  });
-
-  it("thumbnail URLs are unique per section (distinct seeds/prompts)", () => {
-    const urls = CURRICULUM.sections.map((s) => s.iconImagePath as string);
-    expect(new Set(urls).size).toBe(urls.length);
+  it("ships no runtime external image URLs on sections", () => {
+    for (const s of CURRICULUM.sections) {
+      expect(
+        s.iconImagePath,
+        `${s.id} should not carry a remote iconImagePath`
+      ).toBeUndefined();
+    }
   });
 });

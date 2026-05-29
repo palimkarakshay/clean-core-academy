@@ -53,6 +53,10 @@ export interface CurrentAttempt {
 
 export interface ConceptProgress {
   lessonRead: boolean;
+  /** When the lesson was (most recently) marked read. Optional/back-compat:
+   *  absent on records written before this field existed. Feeds the study
+   *  streak so a learner who only reads lessons still keeps a streak. */
+  lessonReadAt?: number;
   quizAttempts: QuizAttempt[];
   mastery: Mastery;
   currentAttempt: CurrentAttempt | null;

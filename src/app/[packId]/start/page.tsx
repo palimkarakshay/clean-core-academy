@@ -7,7 +7,6 @@ import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { BeforeYouBegin } from "@/components/dashboard/BeforeYouBegin";
 import { ProgressRail } from "@/components/dashboard/ProgressRail";
 import { WhatYoullLearn } from "@/components/dashboard/WhatYoullLearn";
-import { BuildLaunchpad } from "@/components/dashboard/BuildLaunchpad";
 import { StartSeenMarker } from "@/components/dashboard/StartSeenMarker";
 import { JourneyArt } from "@/components/dashboard/JourneyArt";
 import { CourseAtAGlance } from "@/components/dashboard/CourseAtAGlance";
@@ -152,17 +151,6 @@ export default async function StartPage({
           <ProgressRail />
         </aside>
       </div>
-
-      <SetupSection
-        step="Make it yours"
-        title="Run your own copy"
-        description="Want this as your own academy? Fork or deploy the template, create the accounts you need, and bring your own AI assistant to manage the repo through pipelines — all one-off setup."
-      >
-        <BuildLaunchpad
-          repoUrl={pack.config.repoUrl}
-          aiUrl={pack.config.askAI.projectUrl || pack.config.askAI.fallbackUrl}
-        />
-      </SetupSection>
     </div>
   );
 }

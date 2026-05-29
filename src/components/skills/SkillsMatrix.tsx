@@ -73,11 +73,8 @@ export function SkillsMatrix({
       </section>
 
       {modules.map((m) => (
-        <section key={m.sectionId} aria-label={`Module ${m.n} skills`}>
+        <section key={m.sectionId} aria-label={`${m.title} skills`}>
           <h2 className="mb-2 flex items-baseline gap-2 text-sm font-semibold text-(--ink)">
-            <span className="font-mono text-xs text-(--muted)">
-              Module {String(m.n).padStart(2, "0")}
-            </span>
             <Link
               href={`/${packId}/section/${m.sectionId}`}
               className="hover:text-(--accent-2) hover:underline"

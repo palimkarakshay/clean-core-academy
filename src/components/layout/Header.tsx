@@ -26,13 +26,22 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   rocket: Rocket,
 };
 
-function isActive(item: NavItem, pathname: string | null): boolean {
+function isActive(
+  item: NavItem,
+  pathname: string | null,
+  packId: string | null
+): boolean {
   if (!pathname) return false;
   const matches = item.match ?? [];
   for (const m of matches) {
+    // Match values are authored pack-relative (e.g. "/start", "/section");
+    // prefix with the active packId so they line up with the real pathname
+    // ("/clean-core-academy/start"). "Home" ("/") is an exact match only,
+    // so it doesn't light up on every sub-page.
+    const target = prefixWithPack(m, packId);
     if (m === "/") {
-      if (pathname === "/") return true;
-    } else if (pathname === m || pathname.startsWith(`${m}/`)) {
+      if (pathname === target) return true;
+    } else if (pathname === target || pathname.startsWith(`${target}/`)) {
       return true;
     }
   }
@@ -112,7 +121,7 @@ export function Header() {
           <ul className="hidden items-center gap-2 md:flex">
             {visibleNav.map((item) => {
               const href = prefixWithPack(item.href, packId);
-              const active = isActive(item, pathname);
+              const active = isActive(item, pathname, packId);
               const Icon = item.icon ? ICONS[item.icon] : null;
               return (
                 <li key={item.href}>
