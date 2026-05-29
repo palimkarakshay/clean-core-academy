@@ -29,7 +29,7 @@ export const b01Management: Section = {
     },
     {
       id: "b01-s2",
-      label: "Frame the 3-tier extensibility model as an investment decision",
+      label: "Frame the extensibility approaches as an investment decision",
       conceptId: "b01-c2",
     },
     {
@@ -59,7 +59,7 @@ export const b01Management: Section = {
     },
   ],
   blurb:
-    "Clean Core for decision-makers: why it lowers the cost of change, how the 3-tier model is really an investment choice, who owns governance, the roadmap from zero to a clean bill of health, the KPIs that prove you are getting there, and how to size, fund, and steer the programme — duration, decision rights, conflict, and the issues to expect.",
+    "Clean Core for decision-makers: why it lowers the cost of change, how the extensibility approaches are really an investment choice, who owns governance, the roadmap from zero to a clean bill of health, the KPIs that prove you are getting there, and how to size, fund, and steer the programme — duration, decision rights, conflict, and the issues to expect.",
   concepts: [
     {
       id: "b01-c1",
@@ -161,34 +161,34 @@ export const b01Management: Section = {
     {
       id: "b01-c2",
       code: "M.2",
-      title: "The 3-tier model as an investment decision",
+      title: "Extensibility approaches as an investment decision",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum (business synthesis)",
         paragraphs: [
-          "SAP offers three tiers for building extensions, and each is really a different investment profile. Tier 1, key-user (in-app) extensibility, is done by business power users inside the application itself — adding fields or simple logic. It is the cheapest to own and the lowest risk because no classic development is involved.",
-          "Tier 2, developer extensibility, is custom code that lives inside the SAP system but is written against the modern, supported rules. It needs developers, so it costs more than Tier 1, but it keeps the core clean for anything the in-app tools cannot do. Tier 3, side-by-side, runs the extension on a separate SAP Business Technology Platform (BTP) and connects back through published interfaces. It keeps the core cleanest of all but carries the highest cost to own, because you now operate a second runtime.",
-          "The management rule is to pick the lowest tier that fully meets the requirement, and escalate only when you must. Reaching for Tier 3 when Tier 1 would do is over-engineering you will pay to run for years.",
+          "SAP offers three approaches for building extensions, and each is really a different investment profile. Key-user (in-app) extensibility is done by business power users inside the application itself — adding fields or simple logic. It is the cheapest to own and the lowest risk because no classic development is involved.",
+          "Developer extensibility is custom code that lives inside the SAP system but is written against the modern, supported rules (on-stack ABAP Cloud). It needs developers, so it costs more than key-user changes, but it keeps the core clean for anything the in-app tools cannot do. Side-by-side extensibility runs the extension on a separate SAP Business Technology Platform (BTP) and connects back through published interfaces. It is just as 'clean' for the core as the on-stack options — it is the right choice when an extension needs its own lifecycle or runtime — but it carries the highest cost to own, because you now operate a second platform.",
+          "The management rule is to pick the lowest-effort approach that fully meets the requirement, and escalate only when you must. Reaching for side-by-side when a key-user change would do is over-engineering you will pay to run for years — but note that side-by-side is a deliberate, clean choice, not a fallback.",
         ],
         keyPoints: [
-          "Tier 1 key-user (in-app): cheapest, lowest risk, done by power users — no developers.",
-          "Tier 2 developer extensibility: in-system custom code on supported rules — moderate cost.",
-          "Tier 3 side-by-side on BTP: cleanest core but highest cost to own (a second runtime).",
-          "Always choose the lowest tier that fits the need; escalate only when forced.",
+          "Key-user (in-app): cheapest, lowest risk, done by power users — no developers.",
+          "Developer extensibility (on-stack ABAP Cloud): in-system custom code on supported rules — moderate cost.",
+          "Side-by-side on BTP: just as clean for the core, the right choice for a separate lifecycle, but highest cost to own (a second platform).",
+          "Always choose the lowest-effort approach that fits the need; escalate only when forced.",
         ],
         examples: [
           {
             title: "Matching tier to need",
             variant: "neutral",
-            body: "Adding a field to a screen is a Tier 1 decision. A custom transactional app over a custom table is Tier 2. A heavy custom service with its own release schedule is Tier 3 — and a bigger operating bill.",
+            body: "Adding a field to a screen is a key-user decision. A custom transactional app over a custom table is developer extensibility. A heavy custom service with its own release schedule is side-by-side on BTP — and a bigger operating bill.",
           },
         ],
         simplified: {
           oneLiner:
-            "The three extensibility tiers trade cost and risk — pick the lowest one (key-user, then developer, then side-by-side) that fully meets the need.",
+            "The three extensibility approaches trade cost and risk — pick the lowest-effort one (key-user, then developer, then side-by-side) that fully meets the need; side-by-side is a clean choice for a separate lifecycle, not a penalty.",
           analogy:
-            "Tier 1 is rearranging the furniture, Tier 2 is a permitted renovation, Tier 3 is building a separate annex with its own utilities bill.",
+            "Key-user is rearranging the furniture, developer extensibility is a permitted renovation, side-by-side is building a separate annex with its own utilities bill — all sound, just different costs.",
         },
       },
       quiz: {
@@ -196,62 +196,62 @@ export const b01Management: Section = {
           {
             n: 1,
             question:
-              "Which tier is typically the cheapest to own and the lowest risk?",
+              "Which approach is typically the cheapest to own and the lowest risk?",
             options: {
-              A: "Tier 3 side-by-side on BTP.",
-              B: "Tier 1 key-user (in-app) extensibility.",
-              C: "Tier 2 developer extensibility.",
+              A: "Side-by-side on BTP.",
+              B: "Key-user (in-app) extensibility.",
+              C: "Developer extensibility.",
               D: "Classic modifications to standard.",
             },
             correct: "B",
             explanations: {
-              A: "Side-by-side keeps the core cleanest but is the most expensive to operate.",
+              A: "Side-by-side is clean for the core but the most expensive to operate.",
               B: "Correct — in-app key-user changes need no classic development and carry the least risk.",
-              C: "Developer extensibility needs developers and costs more than Tier 1.",
+              C: "Developer extensibility needs developers and costs more than key-user changes.",
               D: "Modifications are not a Clean Core option and carry the highest upgrade risk.",
             },
             principle:
-              "Tier 1 in-app extensibility is the lowest-cost, lowest-risk option.",
+              "Key-user in-app extensibility is the lowest-cost, lowest-risk approach.",
           },
           {
             n: 2,
             question:
-              "Why does Tier 3 (side-by-side on BTP) carry the highest cost to own?",
+              "Why does side-by-side (on BTP) carry the highest cost to own?",
             options: {
               A: "It runs and is operated as a separate platform with its own lifecycle.",
-              B: "It is the only tier that requires an SAP licence.",
+              B: "It is the only approach that requires an SAP licence.",
               C: "It cannot be connected to S/4HANA at all.",
-              D: "It is always slower than the other tiers.",
+              D: "It is always slower than the other approaches.",
             },
             correct: "A",
             explanations: {
-              A: "Correct — you gain the cleanest core but now operate a second runtime, which is an ongoing cost.",
-              B: "All tiers operate within SAP licensing; this is not the cost driver.",
+              A: "Correct — it is just as clean for the core, but you now operate a second platform, which is an ongoing cost.",
+              B: "All approaches operate within SAP licensing; this is not the cost driver.",
               C: "Side-by-side connects back through published interfaces — connection is the point.",
               D: "Performance is not what makes it the costliest to own.",
             },
             principle:
-              "Side-by-side maximises core cleanliness at the price of a separate platform to run.",
+              "Side-by-side is a clean approach whose cost is operating a separate platform.",
           },
           {
             n: 3,
             question:
-              "What is the guiding rule when choosing an extensibility tier?",
+              "What is the guiding rule when choosing an extensibility approach?",
             options: {
-              A: "Always choose Tier 3 for future-proofing.",
-              B: "Always choose Tier 2 so developers stay busy.",
-              C: "Pick the lowest tier that fully meets the requirement; escalate only when you must.",
-              D: "Let each developer choose their preferred tier per task.",
+              A: "Always choose side-by-side for future-proofing.",
+              B: "Always choose developer extensibility so developers stay busy.",
+              C: "Pick the lowest-effort approach that fully meets the requirement; escalate only when you must.",
+              D: "Let each developer choose their preferred approach per task.",
             },
             correct: "C",
             explanations: {
-              A: "Defaulting to Tier 3 means paying to operate a second runtime you may not need.",
-              B: "Tier choice should follow the requirement, not staffing.",
-              C: "Correct — the lowest sufficient tier minimises long-term cost and risk.",
+              A: "Defaulting to side-by-side means paying to operate a second platform you may not need.",
+              B: "The choice should follow the requirement, not staffing.",
+              C: "Correct — the lowest sufficient approach minimises long-term cost and risk.",
               D: "Inconsistent per-task choices create a sprawl that is expensive to govern.",
             },
             principle:
-              "Lowest-sufficient-tier is the cost-control principle of the model.",
+              "Lowest-sufficient-approach is the cost-control principle.",
           },
         ],
       },
@@ -769,21 +769,21 @@ export const b01Management: Section = {
       {
         n: 2,
         question:
-          "Which extensibility tier is cheapest to own and lowest risk?",
+          "Which extensibility approach is cheapest to own and lowest risk?",
         options: {
-          A: "Tier 1 key-user (in-app) extensibility.",
-          B: "Tier 3 side-by-side on BTP.",
-          C: "Tier 2 developer extensibility.",
+          A: "Key-user (in-app) extensibility.",
+          B: "Side-by-side on BTP.",
+          C: "Developer extensibility.",
           D: "Classic modifications.",
         },
         correct: "A",
         explanations: {
           A: "Correct — in-app changes need no classic development and carry the least risk.",
-          B: "Side-by-side is cleanest for the core but costliest to operate.",
-          C: "Developer extensibility costs more than Tier 1.",
+          B: "Side-by-side is clean for the core but costliest to operate.",
+          C: "Developer extensibility costs more than key-user changes.",
           D: "Modifications are not a Clean Core option.",
         },
-        principle: "Pick the lowest tier that fits; Tier 1 is the cheapest.",
+        principle: "Pick the lowest-effort approach that fits; key-user is the cheapest.",
       },
       {
         n: 3,

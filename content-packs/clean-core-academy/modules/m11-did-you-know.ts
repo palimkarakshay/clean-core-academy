@@ -23,7 +23,7 @@ export const m11DidYouKnow: Section = {
   skills: [
     {
       id: "m11-s1",
-      label: "Use IS INSTANCE OF, SWITCH on strings, CDS let/cast and conversion built-ins for cleaner code",
+      label: "Use IS INSTANCE OF, SWITCH (any comparable type, strings included), CDS let/cast and conversion built-ins for cleaner code",
       conceptId: "m11-c1",
     },
     {
@@ -65,14 +65,14 @@ export const m11DidYouKnow: Section = {
         notesRef: "clean-core-curriculum §11.1",
         paragraphs: [
           "IS INSTANCE OF is the type-safe gate for downcasts, and the detail most developers miss is that it accepts a *class or an interface*. Guarding a CAST with `if obj is instance of zif_serializable` lets you narrow to an interface reference without risking the CX_SY_MOVE_CAST_ERROR that a naked CAST throws when the object doesn't implement it. It turns a runtime exception into a branch you control.",
-          "Two more expressions remove boilerplate. SWITCH works on *strings*, not just numeric or enumerated values, so a chain of IF/ELSEIF on a character field collapses into one readable expression. And in CDS, `cast( expr as abap.fltp )` forces the cast on the database side — the canonical use is integer division, where casting an operand to floating point before dividing avoids the truncation you would otherwise get from integer arithmetic pushed to HANA.",
-          "CDS also ships SQL functions that replace whole function-module calls. currency_conversion( ) and unit_conversion( ) do on the database what most ABAP still does by calling BAPI_CURRENCY_CONV_TO_INTERNAL; concat_with_space( ) joins strings with a separator; and coalesce( a, b ) returns the first non-null argument — standard SQL, fully pushed down. `let ... in` lets you name a reusable expression once inside a single view. Reaching for these keeps logic declarative and out of ABAP loops.",
+          "Two more expressions remove boilerplate. SWITCH evaluates an operand against a list of WHEN values and works with any comparable type — including character fields and strings, not just numeric or enumerated values — so a chain of IF/ELSEIF on a character field collapses into one readable expression. And in CDS, `cast( expr as abap.fltp )` forces the cast on the database side — the canonical use is integer division, where casting an operand to floating point before dividing avoids the truncation you would otherwise get from integer arithmetic pushed to HANA.",
+          "CDS also ships SQL functions that replace whole function-module calls. currency_conversion( ) and unit_conversion( ) do on the database what most ABAP still does by calling BAPI_CURRENCY_CONV_TO_INTERNAL; concat_with_space( ) joins strings with a separator; and coalesce( arg1, arg2 ) returns arg1 if it is not null, otherwise arg2 — in CDS it takes exactly two arguments (ABAP SQL's coalesce is the variadic form that accepts 2 to 255). `let ... in` lets you name a reusable expression once inside a single view. Reaching for these keeps logic declarative and out of ABAP loops.",
         ],
         keyPoints: [
           "IS INSTANCE OF accepts a class OR an interface — guard CASTs with it to avoid CX_SY_MOVE_CAST_ERROR.",
-          "SWITCH works on strings, collapsing IF/ELSEIF chains on character fields.",
+          "SWITCH compares an operand against WHEN values of any comparable type (character fields and strings included), collapsing IF/ELSEIF chains.",
           "CDS `cast( expr as abap.fltp )` forces DB-side float casts — the fix for integer-division precision.",
-          "CDS built-ins currency_conversion / unit_conversion / concat_with_space / coalesce push logic down instead of calling FMs.",
+          "CDS built-ins currency_conversion / unit_conversion / concat_with_space / coalesce (two-argument in CDS) push logic down instead of calling FMs.",
         ],
         examples: [
           {
@@ -100,7 +100,7 @@ export const m11DidYouKnow: Section = {
         ],
         simplified: {
           oneLiner:
-            "IS INSTANCE OF guards a downcast against a class OR interface so it never dumps, SWITCH works on strings, and CDS has built-in conversion functions most devs still call FMs for.",
+            "IS INSTANCE OF guards a downcast against a class OR interface so it never dumps, SWITCH compares an operand against WHEN values of any comparable type (strings included), and CDS has built-in conversion functions most devs still call FMs for.",
           analogy:
             "IS INSTANCE OF is checking a key fits the lock before turning it, instead of forcing it and snapping it off.",
         },
@@ -160,11 +160,11 @@ export const m11DidYouKnow: Section = {
             explanations: {
               A: "concat_with_space joins strings with a separator.",
               B: "currency_conversion converts amounts between currencies.",
-              C: "Correct — coalesce( a, b, ... ) returns the first non-null argument, standard SQL pushed down by CDS.",
+              C: "Correct — coalesce( arg1, arg2 ) returns the first non-null of its two arguments, pushed down by CDS (ABAP SQL's coalesce is the variadic 2–255 form).",
               D: "unit_conversion converts quantities between units of measure.",
             },
             principle:
-              "coalesce( ) returns the first non-null argument — a pushed-down CDS built-in.",
+              "coalesce( arg1, arg2 ) returns the first non-null of its two arguments — a pushed-down CDS built-in (ABAP SQL's form is variadic).",
           },
         ],
       },

@@ -11,7 +11,6 @@ import {
 } from "@/content/curriculum-loader";
 import { ArrowLeft, ArrowRight, ChevronUp } from "lucide-react";
 import { Breadcrumbs } from "@/components/primitives/Breadcrumbs";
-import { NumberedJumper } from "@/components/primitives/NumberedJumper";
 import { journeyTrail } from "@/lib/nav-trail";
 import { SectionConceptList } from "@/components/section/SectionConceptList";
 import { SectionConceptMap } from "@/components/section/SectionConceptMap";
@@ -55,7 +54,7 @@ export async function generateMetadata({
   const section = getSectionFrom(pack.curriculum, sectionId);
   if (!section) return { title: "Section not found" };
   return {
-    title: `Module ${section.n}: ${section.title}`,
+    title: section.title,
     description: section.blurb,
     // Canonicalize the ?tab= variants to the bare section URL so search
     // engines don't see one section as several duplicate-content pages.
@@ -146,39 +145,31 @@ export default async function SectionPage({
           Module <span className="font-mono">{sectionIndex}</span> of{" "}
           <span className="font-mono">{totalSections}</span>
         </span>
-        <NumberedJumper
-          ariaLabel="Jump to module"
-          activeIndex={sectionIndex - 1}
-          items={pack.curriculum.sections.map((s) => ({
-            href: `/${packId}/section/${s.id}`,
-            label: `Module ${s.n}: ${s.title}`,
-          }))}
-        />
         <div className="ml-auto flex flex-wrap items-center gap-2">
           {prevSection ? (
             <Link
               href={`/${packId}/section/${prevSection.id}`}
               aria-label={`Previous module: ${prevSection.title}`}
-              className="inline-flex min-h-9 items-center gap-1 rounded-md border border-(--border) bg-(--panel) px-2 py-1 text-(--ink) no-underline hover:border-(--accent) hover:text-(--accent-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              className="inline-flex min-h-9 max-w-[16rem] items-center gap-1 rounded-md border border-(--border) bg-(--panel) px-2 py-1 text-(--ink) no-underline hover:border-(--accent) hover:text-(--accent-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
             >
-              <ArrowLeft aria-hidden className="h-3 w-3" />
-              <span className="hidden md:inline">
-                Module {prevSection.n}: {prevSection.title}
+              <ArrowLeft aria-hidden className="h-3 w-3 flex-none" />
+              <span className="hidden truncate md:inline">
+                {prevSection.title}
               </span>
-              <span className="md:hidden">Prev module</span>
+              <span className="md:hidden">Previous</span>
             </Link>
           ) : null}
           {nextSection ? (
             <Link
               href={`/${packId}/section/${nextSection.id}`}
               aria-label={`Next module: ${nextSection.title}`}
-              className="inline-flex min-h-9 items-center gap-1 rounded-md border border-(--border) bg-(--panel) px-2 py-1 text-(--ink) no-underline hover:border-(--accent) hover:text-(--accent-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              className="inline-flex min-h-9 max-w-[16rem] items-center gap-1 rounded-md border border-(--border) bg-(--panel) px-2 py-1 text-(--ink) no-underline hover:border-(--accent) hover:text-(--accent-2) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
             >
-              <span className="hidden md:inline">
-                Module {nextSection.n}: {nextSection.title}
+              <span className="hidden truncate md:inline">
+                {nextSection.title}
               </span>
-              <span className="md:hidden">Next module</span>
-              <ArrowRight aria-hidden className="h-3 w-3" />
+              <span className="md:hidden">Next</span>
+              <ArrowRight aria-hidden className="h-3 w-3 flex-none" />
             </Link>
           ) : null}
           <Link
@@ -221,10 +212,6 @@ export default async function SectionPage({
           className="text-(--muted) hover:text-(--ink)"
         >
           ← Back to {pack.config.name} course
-        </Link>
-        <span aria-hidden className="text-(--muted)">·</span>
-        <Link href="/" className="text-(--muted) hover:text-(--ink)">
-          All courses
         </Link>
       </div>
     </Container>

@@ -1,12 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { Flame, Target, BookOpenCheck, Trophy } from "lucide-react";
+import { Flame, Trophy } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { computeStreak } from "@/lib/streak";
 import { useCopy } from "@/content/pack-hooks";
 import { usePack } from "@/content/pack-context";
-import { countsAsMastered } from "@/lib/progress";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
@@ -20,22 +19,17 @@ interface Stat {
   Icon: LucideIcon;
 }
 
+/**
+ * Stats that COMPLEMENT the overall-progress bar rather than restate it.
+ * The mastered-concepts and modules-complete totals live on
+ * OverallProgressBar (and the Progress page), so this panel carries only
+ * the study streak and best practice-exam score — no duplicated %.
+ */
 function buildStats(
   progress: ReturnType<typeof useProgress>["progress"],
   curriculum: Curriculum,
   copy: Required<PackCopy>
 ): Stat[] {
-  const allConcepts = curriculum.sections.flatMap((s) => s.concepts);
-  const totalConcepts = allConcepts.length;
-  const mastered = allConcepts.filter((c) =>
-    countsAsMastered(progress.concept[c.id]?.mastery ?? 0)
-  ).length;
-
-  const totalSections = curriculum.sections.length;
-  const completeSections = curriculum.sections.filter(
-    (s) => progress.section[s.id]?.complete
-  ).length;
-
   const mocks = curriculum.mockExams ?? [];
   let bestMockPct = 0;
   for (const m of mocks) {
@@ -59,17 +53,6 @@ function buildStats(
           ? "study today to keep it"
           : "start a new streak today",
       Icon: Flame,
-    },
-    {
-      label: copy.conceptsMasteredLabel,
-      value: `${mastered} / ${totalConcepts}`,
-      sub: totalConcepts > 0 ? `${Math.round((mastered / totalConcepts) * 100)}%` : undefined,
-      Icon: Target,
-    },
-    {
-      label: copy.sectionsCompleteLabel,
-      value: `${completeSections} / ${totalSections}`,
-      Icon: BookOpenCheck,
     },
     {
       label: copy.bestMockScoreLabel,

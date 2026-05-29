@@ -3,7 +3,7 @@
 
    Source brief: §4 of the Clean Core & HANA Readiness curriculum.
    Audience: intermediate + expert — builders and architects writing
-   on-stack Tier-2 code. Reference release S/4HANA 2023 (758).
+   on-stack ABAP Cloud code. Reference release S/4HANA 2023 (758).
    Follows the m01 authoring template: every concept ships paragraphs
    + keyPoints + simplified.oneLiner + a 3-question quiz with per-option
    explanations; code-bearing concepts add before/after examples in
@@ -41,7 +41,7 @@ export const m04AbapCloud: Section = {
     },
   ],
   blurb:
-    "Build new apps that survive upgrades by design, using SAP's modern approach instead of the old patterns. Covers Tier-2 transactional apps the Clean Core way with RAP (SAP's modern transactional programming model): the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
+    "Build new apps that survive upgrades by design, using SAP's modern approach instead of the old patterns. Covers on-stack transactional apps the Clean Core way with RAP (SAP's modern transactional programming model): the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
   concepts: [
     {
       id: "m04-c1",
@@ -52,7 +52,7 @@ export const m04AbapCloud: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §4.1",
         paragraphs: [
-          "Every Tier-2 transactional app in ABAP Cloud is a RAP business object, and a managed BO is assembled from five mandatory artefacts. The persistence is a DDIC table (or a CDS table function over a custom table); on top of it sits an interface CDS root view entity — `define root view entity` — that carries the model and its annotations. That interface view is the stable, technical layer.",
+          "Every transactional app in ABAP Cloud is a RAP business object, and a managed BO is assembled from five mandatory artefacts. The persistence is a DDIC table (or a CDS table function over a custom table); on top of it sits an interface CDS root view entity — `define root view entity` — that carries the model and its annotations. That interface view is the stable, technical layer.",
           "The projection CDS view exposes a tailored subset of the interface entity to one service, declared with `provider contract transactional_query`; this is the contract a UI or API actually consumes, so it can hide fields and add consumption annotations without disturbing the interface layer. Behavior is split the same way: a behavior definition for the interface entity (declaring create/update/delete, fields, validations, determinations) and a thin projection behavior definition that re-exposes the operations the service offers via `use create/update/delete`.",
           "Finally a service definition (`define service`) lists which projection entities to expose, and a service binding turns that definition into a concrete protocol endpoint — OData V4 UI being the default for Fiori. The reason for the two-layer split (interface vs projection, BDEF vs projection BDEF) is decoupling: SAP and you can evolve the underlying model while each service keeps a narrow, versionable contract, which is exactly the Clean Core promise applied inside your own code.",
         ],
@@ -118,7 +118,7 @@ export const m04AbapCloud: Section = {
         },
         deeper: {
           paragraphs: [
-            "'Managed' means the RAP runtime owns the persistence (it writes your table for you); 'unmanaged' is for wrapping a legacy transaction's own save logic. Greenfield Tier-2 apps are almost always managed. The projection contract keyword matters: `transactional_query` marks a read-write projection for a transactional service, distinct from analytical or value-help contracts.",
+            "'Managed' means the RAP runtime owns the persistence (it writes your table for you); 'unmanaged' is for wrapping a legacy transaction's own save logic. Greenfield ABAP Cloud apps are almost always managed. The projection contract keyword matters: `transactional_query` marks a read-write projection for a transactional service, distinct from analytical or value-help contracts.",
           ],
           keyPoints: [
             "Managed BO = runtime owns persistence; unmanaged = you wrap existing save logic.",

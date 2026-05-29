@@ -58,7 +58,7 @@ export function ConceptHeaderNav({
       >
         <ArrowLeft aria-hidden className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">Back to</span>{" "}
-        <span className="font-medium">{copy.moduleSingular} {section.n}: {section.title}</span>
+        <span className="font-medium">{section.title}</span>
       </Link>
 
       <span aria-hidden className="text-(--muted)">·</span>

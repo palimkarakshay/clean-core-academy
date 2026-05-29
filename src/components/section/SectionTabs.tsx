@@ -20,7 +20,7 @@ const TABS: { id: TabId; label: string; icon: LucideIcon }[] = [
   { id: "goals", label: "Goals", icon: Compass },
   { id: "concepts", label: "Lessons", icon: BookOpen },
   { id: "flashcards", label: "Flashcards", icon: Layers },
-  { id: "quiz", label: "Quiz", icon: Award },
+  { id: "quiz", label: "Module check", icon: Award },
   { id: "apply", label: "Apply", icon: Hammer },
   { id: "games", label: "Games", icon: Gamepad2 },
 ];

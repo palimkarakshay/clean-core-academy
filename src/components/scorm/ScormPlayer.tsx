@@ -88,7 +88,7 @@ export function ScormPlayer({
               className="inline-flex items-center gap-1.5 rounded-md border border-(--border) bg-(--panel) px-3 py-2 text-sm text-(--ink) hover:border-(--accent) hover:text-(--accent-2)"
             >
               <ArrowLeft aria-hidden className="h-4 w-4" />
-              Module {prev.section.n}
+              Previous
             </button>
           ) : (
             <span />
@@ -99,7 +99,7 @@ export function ScormPlayer({
               onClick={() => setActive(next.section.id)}
               className="inline-flex items-center gap-1.5 rounded-md bg-(--accent) px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
             >
-              Next: Module {next.section.n} — {next.section.title}
+              Next: {next.section.title}
               <ArrowRight aria-hidden className="h-4 w-4" />
             </button>
           ) : (
@@ -132,7 +132,7 @@ export function ScormPlayer({
       </header>
 
       <ol className="flex flex-col gap-2">
-        {modules.map(({ section }) => {
+        {modules.map(({ section }, i) => {
           const status = sectionStatus(section.id);
           return (
             <li key={section.id}>
@@ -152,7 +152,7 @@ export function ScormPlayer({
                   {status === "complete" ? (
                     <CheckCircle2 aria-hidden className="h-5 w-5" />
                   ) : (
-                    section.n
+                    i + 1
                   )}
                 </span>
                 <span className="min-w-0 flex-1">

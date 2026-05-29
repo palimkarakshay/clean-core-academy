@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowRight,
-  ClipboardCheck,
   GraduationCap,
   ListChecks,
   Rocket,
@@ -16,11 +14,12 @@ import { OverallProgressBar } from "@/components/dashboard/OverallProgressBar";
 import { RecapStrip } from "@/components/dashboard/RecapStrip";
 import { DailyInsightCard } from "@/components/dashboard/DailyInsightCard";
 import { SectionList } from "@/components/dashboard/SectionList";
+import { AuditCtaCard } from "@/components/dashboard/AuditCtaCard";
 import { TrackFilter } from "@/components/dashboard/TrackFilter";
 import { MockExamPanel } from "@/components/dashboard/MockExamPanel";
-import { JourneyJumper } from "@/components/dashboard/JourneyJumper";
 import { FirstVisitGate } from "@/components/dashboard/FirstVisitGate";
 import { LastVisitTracker } from "@/components/layout/LastVisitTracker";
+import { JourneyArt } from "@/components/dashboard/JourneyArt";
 import { getPack } from "@/content/pack-registry";
 import { siteConfigFor } from "@/lib/pack-helpers";
 
@@ -90,28 +89,17 @@ export default async function PackHomePage({
         href={`/${pack.config.id}`}
       />
 
-      <header className="flex flex-col gap-2">
-        <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
-          Course
-        </p>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-(--ink) md:text-3xl">
-          {cfg.name}
-        </h1>
-        <p className="text-sm text-(--muted)">{cfg.tagline}</p>
-        {cfg.heroImagePath ? (
-          <div className="mt-2 overflow-hidden rounded-lg border border-(--border) bg-(--panel-2)">
-            <Image
-              aria-hidden
-              src={cfg.heroImagePath}
-              alt=""
-              width={1200}
-              height={675}
-              priority
-              unoptimized={/^https?:\/\//.test(cfg.heroImagePath)}
-              className="h-28 w-full object-cover sm:h-36 md:h-44"
-            />
-          </div>
-        ) : null}
+      <header className="flex items-center justify-between gap-4 rounded-xl border border-(--border) bg-gradient-to-br from-(--panel-2) to-(--panel) p-6 md:p-8">
+        <div className="flex flex-col gap-2">
+          <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
+            Course
+          </p>
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-(--ink) md:text-3xl">
+            {cfg.name}
+          </h1>
+          <p className="max-w-prose text-sm text-(--muted)">{cfg.tagline}</p>
+        </div>
+        <JourneyArt className="hidden h-16 w-28 flex-none sm:block md:h-24 md:w-40" />
       </header>
 
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-(--border) bg-(--panel-2) px-4 py-3">
@@ -130,7 +118,6 @@ export default async function PackHomePage({
           Modules
         </h2>
         <div className="flex flex-col gap-4">
-          <JourneyJumper />
           <TrackFilter />
           <SectionList />
         </div>
@@ -148,11 +135,9 @@ export default async function PackHomePage({
           desc="Set your role, check the fit, and track your progress."
         />
         {pack.curriculum.readinessAudit ? (
-          <CtaCard
-            href={`/${pack.config.id}/audit`}
-            icon={ClipboardCheck}
+          <AuditCtaCard
+            packId={pack.config.id}
             title={pack.curriculum.readinessAudit.title}
-            desc="A few questions about your code return a readiness score and a worst-first fix-it list."
           />
         ) : null}
         {hasSkills ? (

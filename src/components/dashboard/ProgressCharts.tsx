@@ -9,12 +9,11 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Target, Trophy, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/* Rough per-concept time-on-task heuristic. The shell has no
-   authored time estimates per concept, so we approximate from the
-   reality of the average pack: ~12 minutes to read the canonical
-   lesson, ~5 minutes per quiz attempt, ~10 minutes for a section
-   test, ~30 minutes for a mock exam. Real PMP candidates often
-   spend more — the chart is a *minimum credible* effort, not a cap. */
+/* Rough per-concept time-on-task heuristic. The shell has no authored
+   per-concept time estimates, so we approximate: ~12 minutes to read the
+   canonical lesson + ~5 for a first quiz attempt, ~10 minutes per module
+   check, ~30 minutes for a practice exam. Most learners spend more — the
+   chart is a *minimum credible* effort, not a cap. */
 const MINUTES_PER_CONCEPT = 17; // lesson + first quiz attempt
 const MINUTES_PER_SECTION_TEST = 10;
 const MINUTES_PER_MOCK_EXAM = 30;
@@ -185,7 +184,7 @@ export function ProgressCharts({ className }: { className?: string }) {
           {stats.sections.map((s) => (
             <li key={s.id}>
               <SectionBar
-                label={`Section ${s.n}: ${s.title}`}
+                label={s.title}
                 mastered={s.mastered}
                 touched={s.touched}
                 notStarted={s.notStarted}

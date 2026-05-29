@@ -1,4 +1,5 @@
 import { CURRICULUM } from "@/content/curriculum";
+import type { Curriculum } from "@/content/curriculum-types";
 import { masteryLevels } from "@/lib/site-config";
 import {
   PROGRESS_STORAGE_KEY,
@@ -159,6 +160,28 @@ export function isUnderwhelm(mastery: Mastery): boolean {
 
 export function countsAsMastered(mastery: Mastery): boolean {
   return Boolean(masteryLevels[mastery]?.countsAsMastered);
+}
+
+/**
+ * The single source of truth for "how many lessons count" across every
+ * progress surface: only concepts that ship both a lesson and a quiz are
+ * counted (stub/lesson-only concepts don't inflate the denominator). All
+ * progress UIs (OverallProgressBar, StatsPanel, ProgressCharts, the
+ * Progress page) route through these so they can't print divergent totals.
+ */
+export function authoredConcepts(curriculum: Curriculum) {
+  return curriculum.sections.flatMap((s) =>
+    s.concepts.filter((c) => c.lesson && c.quiz)
+  );
+}
+
+export function masteredConceptCount(
+  progress: Progress,
+  curriculum: Curriculum
+): number {
+  return authoredConcepts(curriculum).filter((c) =>
+    countsAsMastered(progress.concept[c.id]?.mastery ?? 0)
+  ).length;
 }
 
 export function isSectionPassed(p: Progress, sectionId: string): boolean {

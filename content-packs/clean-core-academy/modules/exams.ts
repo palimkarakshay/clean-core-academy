@@ -42,21 +42,21 @@ export const practiceExam: MockExam = {
   questions: [
     {
       n: 1,
-      question: "Which of the following is NOT one of the five Clean Core dimensions?",
+      question: "Which of the following is NOT one of the six Clean Core dimensions?",
       options: {
-        A: "Software",
-        B: "Master data",
+        A: "Software stack",
+        B: "Data",
         C: "Hardware",
         D: "Operations",
       },
       correct: "C",
       explanations: {
-        A: "Software is the first dimension.",
-        B: "Master data is one of the five.",
-        C: "Correct — the five are software, business processes, master data, integrations, operations.",
-        D: "Operations is one of the five.",
+        A: "Software stack is a dimension — keep the SAP stack current and unmodified.",
+        B: "Data (configuration, master, and transactional data) is a dimension; SAP's name is 'data,' not 'master data.'",
+        C: "Correct — the six are software stack, extensibility, integrations, processes, data, operations. Hardware is not one.",
+        D: "Operations is one of the six.",
       },
-      principle: "The five dimensions: software, processes, master data, integrations, operations.",
+      principle: "The six dimensions: software stack, extensibility, integrations, processes, data, operations.",
     },
     {
       n: 2,

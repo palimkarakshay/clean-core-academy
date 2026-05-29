@@ -130,7 +130,7 @@ export function LessonFlow({
       {/* Module header */}
       <header className="mb-4">
         <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-(--muted)">
-          Module {section.n}
+          Module
         </p>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-2xl md:text-3xl font-semibold text-(--ink)">
           {section.title}
