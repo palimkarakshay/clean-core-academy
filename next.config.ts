@@ -51,6 +51,29 @@ if (PACK_ID !== REQUESTED_PACK_ID) {
  */
 const isDev = process.env.NODE_ENV !== "production";
 
+/**
+ * SCORM packaging build. `SCORM_BUILD=1 NEXT_PUBLIC_SCORM=1 next build`
+ * produces a static `out/` bundle that `scripts/build-scorm.mjs` wraps in
+ * an imsmanifest.xml and zips. The normal Vercel/web build leaves
+ * SCORM_BUILD unset and keeps the strict, frame-blocking baseline below;
+ * ONLY the SCORM export relaxes framing so the SCO can render inside an
+ * LMS iframe. This keeps the public site hardened against clickjacking.
+ */
+const SCORM_BUILD = process.env.SCORM_BUILD === "1";
+
+/**
+ * Opt-in: allow https LMS origins to iframe the LIVE web deploy. Needed
+ * ONLY if you distribute the *embed* SCORM package (build:scorm:embed),
+ * which frames this deployment rather than shipping its own assets. OFF
+ * by default so the public site stays clickjacking-hardened
+ * (frame-ancestors 'none' + X-Frame-Options DENY). The *self-contained*
+ * SCORM package needs none of this — it ships its own assets and runs
+ * fully inside the LMS iframe, so prefer it unless you specifically want
+ * the embed variant, then set ALLOW_LMS_EMBED=1 on that deployment.
+ */
+const ALLOW_LMS_EMBED = process.env.ALLOW_LMS_EMBED === "1";
+const ALLOW_FRAMING = SCORM_BUILD || ALLOW_LMS_EMBED;
+
 const CSP = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
@@ -58,7 +81,10 @@ const CSP = [
   "img-src 'self' data: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://claude.ai https://*.claude.ai",
-  "frame-ancestors 'none'",
+  // Strict by default (blocks clickjacking on the public site). Only the
+  // SCORM export, or an explicit ALLOW_LMS_EMBED opt-in, relaxes this so
+  // the course can render inside an LMS iframe.
+  ALLOW_FRAMING ? "frame-ancestors https:" : "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
@@ -68,7 +94,11 @@ const CSP = [
 const SECURITY_HEADERS = [
   { key: "Content-Security-Policy", value: CSP },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "DENY" },
+  // DENY unless framing is allowed (SCORM export / ALLOW_LMS_EMBED), where
+  // CSP frame-ancestors governs framing so the LMS can embed the SCO.
+  ...(!ALLOW_FRAMING
+    ? [{ key: "X-Frame-Options", value: "DENY" }]
+    : []),
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
     key: "Permissions-Policy",
@@ -86,6 +116,12 @@ const nextConfig: NextConfig = {
   // requires that don't survive webpack bundling — keep it external so
   // the /api/lint-abap serverless function `require()`s it at runtime.
   serverExternalPackages: ["@abaplint/core"],
+  // SCORM export ships as a static bundle (no server): plain HTML/JS,
+  // directory-style index.html files, and root-relative asset URLs so the
+  // package works at any LMS path. Inert on the normal web build.
+  ...(SCORM_BUILD
+    ? { output: "export" as const, trailingSlash: true, assetPrefix: "." }
+    : {}),
   images: {
     formats: ["image/avif", "image/webp"],
     // Module thumbnails + the landing hero are generated on demand by
@@ -94,6 +130,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "image.pollinations.ai" },
     ],
+    // No image-optimization server exists in a static export.
+    ...(SCORM_BUILD ? { unoptimized: true } : {}),
   },
   // Subresource Integrity was previously enabled via experimental.sri.
   // On Vercel the integrity attribute on the initial <script> chunks did
@@ -105,6 +143,9 @@ const nextConfig: NextConfig = {
   // tracked alternative in SECURITY.md). Re-enable only after a
   // matching-bytes verification step in CI.
   async headers() {
+    // Static export emits no server to send headers, and the LMS frames
+    // the SCO — so skip them entirely for the SCORM build.
+    if (SCORM_BUILD) return [];
     return [
       {
         source: "/(.*)",

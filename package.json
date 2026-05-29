@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:scorm": "node scripts/build-scorm.mjs",
+    "build:scorm:embed": "node scripts/build-scorm-embed.mjs",
     "start": "next start",
     "lint": "eslint .",
     "lint:abap": "abaplint exercises/abaplint.json",

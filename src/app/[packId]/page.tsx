@@ -5,10 +5,12 @@ import { notFound } from "next/navigation";
 import {
   ArrowRight,
   ClipboardCheck,
+  GraduationCap,
   ListChecks,
   Rocket,
   type LucideIcon,
 } from "lucide-react";
+import { ViewModeToggle } from "@/components/section/ViewModeToggle";
 import { RecommendationBanner } from "@/components/dashboard/RecommendationBanner";
 import { OverallProgressBar } from "@/components/dashboard/OverallProgressBar";
 import { RecapStrip } from "@/components/dashboard/RecapStrip";
@@ -112,6 +114,13 @@ export default async function PackHomePage({
         ) : null}
       </header>
 
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-(--border) bg-(--panel-2) px-4 py-3">
+        <span className="text-sm text-(--muted)">
+          Choose how you work through each module — switch anytime.
+        </span>
+        <ViewModeToggle />
+      </div>
+
       <OverallProgressBar />
       <RecapStrip />
       <RecommendationBanner />
@@ -154,6 +163,12 @@ export default async function PackHomePage({
             desc="Rate the competencies each module builds."
           />
         ) : null}
+        <CtaCard
+          href={`/${pack.config.id}/export`}
+          icon={GraduationCap}
+          title="Deploy in your LMS"
+          desc="For L&D & SME leads — export this course as a SCORM 1.2 package."
+        />
       </section>
     </div>
   );
