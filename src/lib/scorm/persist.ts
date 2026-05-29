@@ -93,6 +93,13 @@ export function serializeProgress(p: Progress): string {
  * malformed, or wrong-version input so the caller can fall back to a
  * fresh attempt. `firstSectionId` keeps the opening module unlocked.
  */
+// Reject prototype-polluting keys before using an LMS-supplied id as an
+// object key. The LMS is a trusted party in the SCORM model and assigning
+// to `p.section["__proto__"]` only shadows a single fresh object (never
+// Object.prototype globally), but skipping these is free defense-in-depth
+// on externally-supplied suspend_data.
+const UNSAFE_KEY = new Set(["__proto__", "constructor", "prototype"]);
+
 export function deserializeProgress(
   raw: string,
   firstSectionId?: string
@@ -121,7 +128,7 @@ export function deserializeProgress(
 
   if (d.sec && typeof d.sec === "object") {
     for (const [id, t] of Object.entries(d.sec)) {
-      if (!Array.isArray(t)) continue;
+      if (UNSAFE_KEY.has(id) || !Array.isArray(t)) continue;
       const [unlocked, complete, score, total] = t;
       const s: SectionProgress = {
         unlocked: Boolean(unlocked),
@@ -134,7 +141,7 @@ export function deserializeProgress(
 
   if (d.con && typeof d.con === "object") {
     for (const [id, t] of Object.entries(d.con)) {
-      if (!Array.isArray(t)) continue;
+      if (UNSAFE_KEY.has(id) || !Array.isArray(t)) continue;
       const [lessonRead, mastery] = t;
       p.concept[id] = {
         lessonRead: Boolean(lessonRead),
@@ -147,7 +154,7 @@ export function deserializeProgress(
 
   if (d.mok && typeof d.mok === "object") {
     for (const [id, t] of Object.entries(d.mok)) {
-      if (!Array.isArray(t)) continue;
+      if (UNSAFE_KEY.has(id) || !Array.isArray(t)) continue;
       const [score, total] = t;
       p.mock[id] = {
         attempts: Number(total) > 0 ? [synth(score, total)] : [],
