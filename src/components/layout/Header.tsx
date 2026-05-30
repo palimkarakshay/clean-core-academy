@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -8,11 +7,13 @@ import {
   Layers,
   Award,
   TrendingUp,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
 import type { NavIcon, NavItem } from "@/lib/site-config";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "./BrandLogo";
 import { ThemeToggle } from "@/components/primitives/ThemeToggle";
 import { DisplayPrefsMenu } from "@/components/primitives/DisplayPrefsMenu";
 import { cn } from "@/lib/utils";
@@ -22,15 +23,25 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   layers: Layers,
   award: Award,
   "trending-up": TrendingUp,
+  rocket: Rocket,
 };
 
-function isActive(item: NavItem, pathname: string | null): boolean {
+function isActive(
+  item: NavItem,
+  pathname: string | null,
+  packId: string | null
+): boolean {
   if (!pathname) return false;
   const matches = item.match ?? [];
   for (const m of matches) {
+    // Match values are authored pack-relative (e.g. "/start", "/section");
+    // prefix with the active packId so they line up with the real pathname
+    // ("/clean-core-academy/start"). "Home" ("/") is an exact match only,
+    // so it doesn't light up on every sub-page.
+    const target = prefixWithPack(m, packId);
     if (m === "/") {
-      if (pathname === "/") return true;
-    } else if (pathname === m || pathname.startsWith(`${m}/`)) {
+      if (pathname === target) return true;
+    } else if (pathname === target || pathname.startsWith(`${target}/`)) {
       return true;
     }
   }
@@ -61,34 +72,48 @@ export function Header() {
   // in sync with the route.
   const pack = firstSegment ? getPack(firstSegment) : null;
   const packId = pack ? firstSegment : null;
-  const visibleNav = pack
-    ? pack.config.nav.filter((n) => n.href !== "/")
-    : [];
+  // The SCORM single-page package has no route navigation, so the primary
+  // nav is hidden and the brand isn't a link there (it would dead-end).
+  const scorm = process.env.NEXT_PUBLIC_SCORM === "1";
+  const visibleNav =
+    pack && !scorm ? pack.config.nav.filter((n) => n.href !== "/") : [];
   const homeHref = packId ? `/${packId}` : "/";
+
+  // BrandLogo is an inline SVG (no raster asset), so it renders correctly
+  // in the static SCORM export too — only the link wrapper differs.
+  const brand = (
+    <>
+      <BrandLogo className="h-8 w-8 flex-none" />
+      <span className="flex flex-col justify-center gap-0.5">
+        <span className="flex items-center gap-2">
+          <span className="font-[family-name:var(--font-display)] text-base font-semibold tracking-tight text-(--ink)">
+            {BRAND.name}
+          </span>
+          <span className="rounded-full border border-(--accent-2)/40 bg-(--accent-2)/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-(--accent-2)">
+            {BRAND.product}
+          </span>
+        </span>
+        <span className="hidden text-xs text-(--muted) sm:block">
+          {BRAND.tagline}
+        </span>
+      </span>
+    </>
+  );
 
   return (
     <header className="border-b border-(--border) mb-6">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-4">
-        <Link
-          href={homeHref}
-          aria-label={`${BRAND.name} home`}
-          className="flex min-h-11 items-center gap-2 no-underline"
-        >
-          <Image
-            aria-hidden
-            src="/images/brand/final/curio-mark.jpg"
-            alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8 flex-none rounded-md object-cover"
-          />
-          <span className="flex flex-col justify-center gap-0.5">
-            <span className="font-[family-name:var(--font-display)] text-base font-semibold text-(--ink)">
-              {BRAND.name}
-            </span>
-            <span className="text-xs text-(--muted)">{BRAND.tagline}</span>
-          </span>
-        </Link>
+        {scorm ? (
+          <div className="flex min-h-11 items-center gap-2.5">{brand}</div>
+        ) : (
+          <Link
+            href={homeHref}
+            aria-label={`${BRAND.name} — ${BRAND.product} home`}
+            className="flex min-h-11 items-center gap-2.5 no-underline"
+          >
+            {brand}
+          </Link>
+        )}
         <nav
           aria-label="Primary"
           className="flex items-center gap-2 sm:gap-3 text-sm"
@@ -96,7 +121,7 @@ export function Header() {
           <ul className="hidden items-center gap-2 md:flex">
             {visibleNav.map((item) => {
               const href = prefixWithPack(item.href, packId);
-              const active = isActive(item, pathname);
+              const active = isActive(item, pathname, packId);
               const Icon = item.icon ? ICONS[item.icon] : null;
               return (
                 <li key={item.href}>

@@ -355,6 +355,10 @@ function ResultScreen({
 
   return (
     <Card tone="accent" className="flex flex-col gap-4 p-6">
+      <p className="sr-only" role="status">
+        Battle complete. Score {state.score} of {max}, {pct} percent.{" "}
+        {easyCount} easy, {goodCount} good, {hardCount} hard.
+      </p>
       <header className="flex items-center gap-3">
         <span
           aria-hidden

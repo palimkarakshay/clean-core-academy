@@ -4,7 +4,7 @@
    Source brief: §7 of the Clean Core & HANA Readiness curriculum.
    Audience: intermediate builders (T2) and admin / Basis-facing devs.
    The handful of rules, tools and patterns that fix most slow SQL on
-   HANA, plus the gotchas rarely written down. Every concept ships
+   HANA, plus the pitfalls rarely written down. Every concept ships
    paragraphs + keyPoints + simplified.oneLiner and a 3-question quiz
    with per-option explanations; code-bearing concepts add before/after
    examples in lowercase ABAP against S/4HANA 2023 (SAP_BASIS 758).
@@ -41,12 +41,12 @@ export const m07Performance: Section = {
     },
     {
       id: "m07-s5",
-      label: "Avoid the rarely-documented gotchas: FOR UPDATE locks, counter serialization, dynamic Open SQL, and silently dropped duplicate keys",
+      label: "Avoid the rarely-documented pitfalls: FOR UPDATE locks, counter serialization, dynamic Open SQL, and silently dropped duplicate keys",
       conceptId: "m07-c5",
     },
   ],
   blurb:
-    "The five rules that fix 80% of slow SQL, the diagnostics toolkit, the declarative-projected-joined pattern that wins, hints and buffering, and the performance gotchas rarely written down. How to make ABAP fast on a columnar, set-oriented database.",
+    "Find and fix the slow programs that frustrate users and tie up the system — most of it comes down to a handful of habits. Covers the five rules that fix 80% of slow database queries, the diagnostics toolkit, the declarative-projected-joined pattern that wins, hints and buffering, and the performance pitfalls rarely written down. How to make ABAP fast on HANA’s columnar, set-oriented database.",
   concepts: [
     {
       id: "m07-c1",
@@ -547,13 +547,13 @@ export const m07Performance: Section = {
     {
       id: "m07-c5",
       code: "7.5",
-      title: "Performance gotchas rarely written down",
+      title: "Rarely-documented performance pitfalls",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §7.5",
         paragraphs: [
-          "A few performance traps almost never appear in the textbooks yet bite hard in production. The first is `SELECT ... FOR UPDATE`: on HANA it acquires *write* locks, escalating contention, and many developers add it defensively when they only meant to read. Use it only when you genuinely need the consistency guarantee within the same transaction; otherwise you are serializing readers behind a lock they never needed.",
+          "A few performance pitfalls almost never appear in the textbooks yet cause real damage in production. The first is `SELECT ... FOR UPDATE`: on HANA it acquires *write* locks, escalating contention, and many developers add it defensively when they only meant to read. Use it only when you genuinely need the consistency guarantee within the same transaction; otherwise you are serializing readers behind a lock they never needed.",
           "The second is the counter anti-pattern: `UPDATE ... SET f = f + 1`. On HANA's MVCC storage, repeatedly incrementing the same column serializes the row's version chain heavily, so a hot counter becomes a contention point. For counters, use a dedicated number-range object, which is built to hand out values without serializing a row. The third is dynamic Open SQL — `SELECT ... FROM (dyntab)` and similar — which defeats both optimizer plan reuse and the static ATC checks, so you lose performance and analyzability at once.",
           "The fourth is `INSERT ... ACCEPTING DUPLICATE KEYS`: it silently drops rows whose key already exists instead of dumping. That is occasionally exactly what you want, but it is a foot-gun if you did not plan for it — rows simply vanish with no error, and a later reconciliation finds fewer rows than were inserted. Each of these is invisible in a quick read of the code, which is precisely why they belong in a senior developer's checklist.",
         ],

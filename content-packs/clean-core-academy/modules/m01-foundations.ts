@@ -25,7 +25,7 @@ export const m01Foundations: Section = {
     },
     {
       id: "m01-s2",
-      label: "Place any object in the right extensibility tier (key-user / developer / side-by-side)",
+      label: "Place any object in the right extensibility approach (key-user / developer / side-by-side) and grade its cleanliness (Levels A–D)",
       conceptId: "m01-c2",
     },
     {
@@ -45,7 +45,7 @@ export const m01Foundations: Section = {
     },
   ],
   blurb:
-    "What Clean Core actually means, the 3-tier extensibility model, Restricted ABAP, the C0–C3 release contracts, and the software-component boundary. The mental model the rest of the academy builds on.",
+    "The shared vocabulary the whole course rests on: what Clean Core (keeping SAP's standard untouched and building beside it, so upgrades stay easy) actually means and why it lowers upgrade cost and risk. Covers the extensibility approaches (key-user / developer / side-by-side) and the Aug-2025 clean-core compliance levels A–D, Restricted ABAP, the C0–C3 release contracts, and the software-component boundary — the mental model the rest of the academy builds on.",
   concepts: [
     {
       id: "m01-c1",
@@ -56,13 +56,13 @@ export const m01Foundations: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §1.1",
         paragraphs: [
-          "Clean Core is not 'no custom code.' It is a contract about *where* and *how* extensions sit relative to SAP-delivered objects, so that SAP can ship upgrades and feature-pack deltas without colliding with your code, and you can adopt innovation without a custom-code thaw cycle.",
-          "SAP frames Clean Core across five dimensions: software (extend only through released APIs, public SDKs, or side-by-side on BTP), business processes (stay standard end-to-end where you can), master data (quality and ownership), integrations (released, versioned interfaces — no point-to-point dark RFCs), and operations (observable, automatable, no manual config drift).",
+          "Clean Core is not 'no custom code.' It is a contract about *where* and *how* extensions sit relative to SAP-delivered objects, so that SAP can ship upgrades and feature-pack deltas without colliding with your code, and you can adopt innovation without a custom-code thaw cycle. It is also not a verdict on the code you have already written — the instincts that make you good at ABAP, knowing where logic belongs and what depends on what, are exactly what it rewards.",
+          "SAP frames Clean Core across six dimensions: software stack (keep the SAP stack current and unmodified — no modifications or implicit enhancements), extensibility (build custom logic only on released extension points and released APIs, decoupled from the core), integrations (released, versioned, documented interfaces and events — no point-to-point dark RFCs), processes (stay standard end-to-end where you can, using SAP-provided process variability rather than process modification), data (configuration, master, and transactional data with quality, ownership, and governance — 'data,' not just master data), and operations (observable, automatable, no manual config drift). SAP's customer-facing 'five guiding principles of clean core' (Dec 2025) restate the same idea minus software stack — processes, extensibility, data, integration, operations — treating a current, unmodified stack as the baseline precondition rather than a principle you practice.",
           "The payoff is upgrade stability and lower total cost of change. A clean core is one where an FPS or release upgrade is a routine event, not a multi-month regression project.",
         ],
         keyPoints: [
           "Clean Core is a placement-and-method contract, not a ban on Z code.",
-          "Five dimensions: software, business processes, master data, integrations, operations.",
+          "Six dimensions: software stack, extensibility, integrations, processes, data, operations (the Dec-2025 'five guiding principles' drop software stack).",
           "The goal is upgrade-stability: SAP changes the core, your extensions keep working.",
           "Extensions sit beside the core through released contracts — never inside it.",
         ],
@@ -81,11 +81,11 @@ export const m01Foundations: Section = {
         },
         deeper: {
           paragraphs: [
-            "The five dimensions matter because 'clean' code that still drives a heavily-modified process, or integrates through an undocumented RFC, is not upgrade-safe. Clean Core is an end-to-end property of the solution, not just the ABAP.",
+            "The six dimensions matter because 'clean' code that still drives a heavily-modified process, or integrates through an undocumented RFC, is not upgrade-safe. Clean Core is an end-to-end property of the solution, not just the ABAP.",
           ],
           keyPoints: [
             "A clean ABAP layer over a modified process is still not Clean Core.",
-            "Each dimension has its own tooling: ATC for software, process discovery for business processes, the integration assessment for interfaces.",
+            "Each dimension has its own tooling: ATC for the software stack and extensibility, process discovery for processes, the integration assessment for interfaces.",
           ],
         },
       },
@@ -112,22 +112,22 @@ export const m01Foundations: Section = {
           },
           {
             n: 2,
-            question: "Which is NOT one of SAP's five Clean Core dimensions?",
+            question: "Which is NOT one of SAP's six Clean Core dimensions?",
             options: {
-              A: "Software",
+              A: "Extensibility",
               B: "Integrations",
               C: "Hardware",
               D: "Operations",
             },
             correct: "C",
             explanations: {
-              A: "Software is dimension one.",
-              B: "Integrations is one of the five.",
-              C: "Correct — the five are software, business processes, master data, integrations, operations. Hardware is not one.",
-              D: "Operations is one of the five.",
+              A: "Extensibility is one of the six — build only on released extension points and APIs.",
+              B: "Integrations is one of the six.",
+              C: "Correct — the six are software stack, extensibility, integrations, processes, data, operations. Hardware is not one.",
+              D: "Operations is one of the six.",
             },
             principle:
-              "The five dimensions: software, business processes, master data, integrations, operations.",
+              "The six dimensions: software stack, extensibility, integrations, processes, data, operations.",
           },
           {
             n: 3,
@@ -153,34 +153,35 @@ export const m01Foundations: Section = {
     {
       id: "m01-c2",
       code: "1.2",
-      title: "The 3-tier extensibility model",
+      title: "Extensibility approaches and clean-core levels (A–D)",
       bloom: "An",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum §1.2",
         paragraphs: [
-          "SAP offers three tiers of extensibility. Tier 1 — key-user (in-app) extensibility — is Fiori-based: custom fields, custom CDS, and custom logic through BAdIs released to key users. It is the lowest-risk option and needs no classic development.",
-          "Tier 2 — developer extensibility (in-stack) — is ABAP for Cloud Development inside the S/4 stack, in a software component marked for cloud development. This is the sweet spot for Clean-Core-compliant on-stack code.",
-          "Tier 3 — side-by-side — runs on BTP (ABAP environment, Java, Node, Python) connected through released OData/RAP/events. It keeps the core cleanest but carries the highest total cost of ownership.",
+          "SAP describes extensibility as three approaches (types, not numbered tiers), split on two axes: where the code runs (on-stack inside S/4HANA vs side-by-side on SAP BTP) and, for on-stack, which toolset. Key User Extensibility is the low-code, in-app on-stack option — custom fields, custom CDS, and custom logic at released enhancement points, no classic development. Developer Extensibility is pro-code on-stack ABAP Cloud (Embedded Steampunk) in a cloud-enabled software component. Side-by-Side Extensibility runs decoupled on SAP BTP (ABAP environment, Java, Node, Python) over released OData/RAP/events. Pick the lowest-effort approach that meets the requirement; side-by-side is a cleanest-core option (used when you need a separate lifecycle or runtime), not a 'worst' last resort.",
+          "Cleanliness is graded separately, on the Aug-2025 clean-core compliance scale of four levels. Level A ('Extend with SAP Build') uses only publicly released, stable interfaces backed by stability contracts — covering both on-stack ABAP Cloud and side-by-side BTP — and is the gold standard. Level B ('Leverage classic APIs') meets Level A's criteria but also uses SAP's released, documented classic APIs (BAPIs etc.); upgrade-stable and still clean. Level C ('Accesses internal objects') is partially compliant — it reaches SAP internal objects not released for customer use (a grey zone for legacy scenarios). Level D ('Not recommended extensions') is not clean: non-recommended objects, modifications, write access to SAP tables, and implicit enhancements — the highest risk and technical debt.",
+          "For context: SAP's earlier '3-tier extensibility model' (TechEd 2024, for S/4HANA Cloud Private Edition and on-premise) named Tier 1 = ABAP Cloud (both key-user and developer extensibility), Tier 2 = Cloud API enablement (released classic APIs/wrappers for objects not yet released for Tier 1), and Tier 3 = classic ABAP. Side-by-side on BTP was a separate, clean column at the Tier-1 level — never Tier 3. SAP evolved that binary model into the A–D levels in August 2025; the 3-tier model lives on mainly as the ABAP_CLOUD_DEVELOPMENT_3TIER ATC variant for Private-Edition custom-code migration.",
         ],
         keyPoints: [
-          "Tier 1 key-user: in-app, Fiori-based, no classic dev — lowest risk.",
-          "Tier 2 developer extensibility: ABAP Cloud inside the stack — the on-stack sweet spot.",
-          "Tier 3 side-by-side: BTP, connected via released interfaces — cleanest core, highest TCO.",
-          "Pick the lowest tier that meets the requirement; escalate only when you must.",
+          "Three approaches (not tiers): Key User (in-app low-code, on-stack), Developer (pro-code on-stack ABAP Cloud / Embedded Steampunk), Side-by-side (decoupled on BTP).",
+          "Side-by-side is a cleanest-core option for a separate lifecycle/runtime — not the 'worst' last resort.",
+          "Clean-core levels (Aug 2025): A = released/stable APIs (on-stack or BTP), B = released classic APIs too, C = accesses SAP internal objects, D = modifications/table writes/implicit enhancements (not clean).",
+          "Pick the lowest-effort approach that meets the requirement; aim for Level A.",
+          "Legacy context: the old 3-tier model (Tier 1 ABAP Cloud, Tier 2 Cloud API enablement, Tier 3 classic ABAP) was evolved into Levels A–D in Aug 2025.",
         ],
         examples: [
           {
-            title: "Choosing a tier",
+            title: "Choosing an approach",
             variant: "neutral",
-            body: "Add a field to a Fiori app → Tier 1. Build a transactional app over a Z table → Tier 2. Build a heavy custom microservice with its own lifecycle → Tier 3.",
+            body: "Add a field to a Fiori app → Key User extensibility. Build a transactional app over a Z table → Developer extensibility (on-stack ABAP Cloud). Build a heavy custom service with its own lifecycle → Side-by-side on BTP. All three can be Level A when they stay on released, stable APIs; writing to an SAP table or modifying standard is Level D.",
           },
         ],
         simplified: {
           oneLiner:
-            "Three tiers — key-user in-app (Tier 1), developer ABAP Cloud in-stack (Tier 2), and side-by-side on BTP (Tier 3); use the lowest one that fits.",
+            "Three extensibility approaches — Key User (in-app), Developer (on-stack ABAP Cloud), Side-by-side (BTP) — and a separate cleanliness scale, Levels A (released/stable) to D (modifications/table writes); use the lowest-effort approach and aim for Level A.",
           analogy:
-            "Tier 1 is rearranging furniture, Tier 2 is a permitted renovation, Tier 3 is building a separate annex.",
+            "Key User is rearranging the furniture, Developer is a permitted renovation, Side-by-side is a separate annex with its own utilities — and Levels A–D grade how cleanly any of them was built.",
         },
       },
       quiz: {
@@ -188,61 +189,61 @@ export const m01Foundations: Section = {
           {
             n: 1,
             question:
-              "Where does Tier 2 'developer extensibility' run?",
+              "Where does Developer Extensibility run?",
             options: {
               A: "On BTP, connected to S/4 over OData.",
-              B: "In ABAP for Cloud Development inside the S/4 stack.",
+              B: "In ABAP for Cloud Development on-stack inside the S/4 stack.",
               C: "Only in the SAP GUI.",
               D: "In a separate Java microservice.",
             },
             correct: "B",
             explanations: {
-              A: "That describes Tier 3 side-by-side.",
-              B: "Correct — Tier 2 is in-stack ABAP Cloud in a cloud-enabled software component.",
-              C: "SAP GUI is classic development, not the Tier 2 model.",
-              D: "A Java microservice is a Tier 3 side-by-side option.",
+              A: "That describes the side-by-side approach.",
+              B: "Correct — Developer Extensibility is on-stack ABAP Cloud (Embedded Steampunk) in a cloud-enabled software component.",
+              C: "SAP GUI is classic development, not the developer-extensibility approach.",
+              D: "A Java microservice is a side-by-side (BTP) option.",
             },
             principle:
-              "Tier 2 = ABAP for Cloud Development, on-stack — the Clean-Core sweet spot.",
+              "Developer Extensibility = on-stack ABAP Cloud; side-by-side runs on BTP.",
           },
           {
             n: 2,
             question:
-              "A key user wants to add a custom field to a standard Fiori app. Which tier is this?",
+              "A key user wants to add a custom field to a standard Fiori app. Which approach is this?",
             options: {
-              A: "Tier 1 — key-user (in-app) extensibility.",
-              B: "Tier 2 — developer extensibility.",
-              C: "Tier 3 — side-by-side.",
+              A: "Key User (in-app) extensibility.",
+              B: "Developer extensibility (on-stack ABAP Cloud).",
+              C: "Side-by-side on BTP.",
               D: "None — it requires a modification.",
             },
             correct: "A",
             explanations: {
-              A: "Correct — custom fields via the in-app tools are Tier 1 key-user extensibility.",
-              B: "Tier 2 is for classic-style ABAP development objects.",
+              A: "Correct — custom fields via the in-app tools are Key User extensibility.",
+              B: "Developer extensibility is for pro-code on-stack ABAP development objects.",
               C: "Side-by-side is overkill for a custom field.",
               D: "No modification is needed — the in-app tools are designed for this.",
             },
-            principle: "Reach for the lowest tier that satisfies the requirement.",
+            principle: "Reach for the lowest-effort approach that satisfies the requirement.",
           },
           {
             n: 3,
             question:
-              "Which tier keeps the core cleanest but typically costs the most to own?",
+              "On the Aug-2025 clean-core compliance scale, which level is the gold standard?",
             options: {
-              A: "Tier 1 key-user.",
-              B: "Tier 2 developer extensibility.",
-              C: "Tier 3 side-by-side on BTP.",
-              D: "Classic modifications.",
+              A: "Level A — uses only publicly released, stable APIs (on-stack ABAP Cloud or side-by-side BTP).",
+              B: "Level B — also uses released classic APIs (BAPIs).",
+              C: "Level C — accesses SAP internal objects not released for customer use.",
+              D: "Level D — modifications, table writes, implicit enhancements.",
             },
-            correct: "C",
+            correct: "A",
             explanations: {
-              A: "Tier 1 is the lowest risk and low cost, but limited in scope.",
-              B: "Tier 2 is in-stack and moderate cost.",
-              C: "Correct — side-by-side fully decouples from the core but you own a whole separate runtime.",
-              D: "Modifications are not a Clean Core option at all.",
+              A: "Correct — Level A uses only released, stable interfaces backed by stability contracts; it is the cleanest, whether on-stack or side-by-side.",
+              B: "Level B is upgrade-stable and still clean, but adds released classic APIs on top of Level A.",
+              C: "Level C is only partially compliant — a grey zone for legacy scenarios.",
+              D: "Level D is not clean: modifications, SAP-table writes, and implicit enhancements.",
             },
             principle:
-              "Side-by-side maximises core cleanliness at the cost of a separate lifecycle to operate.",
+              "Level A (released/stable APIs only) is the clean-core gold standard; side-by-side is Level A, not a penalty.",
           },
         ],
       },
@@ -460,7 +461,7 @@ export const m01Foundations: Section = {
         notesRef: "clean-core-curriculum §1.5",
         paragraphs: [
           "Custom code lives in a software component (for example a customer-defined one, or HOMEAPP). Two attributes matter: the layer/stack (HOME means it stays on this system; LOCAL packages are not transportable) and the API restriction. When the component is set to 'ABAP for Cloud Development,' the entire component is restricted — you cannot mix restricted and unrestricted code inside one component.",
-          "A common architecture uses one Tier-2 software component for the cloud-clean code and a separate classical component for unavoidable Tier-3 leftovers (for example classic print-workbench forms), with a hard, released interface class between them.",
+          "A common architecture uses one software component for the cloud-clean ABAP Cloud code and a separate classical component for unavoidable classic-ABAP leftovers (for example classic print-workbench forms), with a hard, released interface class between them.",
           "Cross-component access is gated by the consumer's release contract: if your component is restricted, it can only reach the other component through released objects. The boundary is therefore the place where you decide and document what is exposed.",
         ],
         keyPoints: [
@@ -570,21 +571,21 @@ export const m01Foundations: Section = {
       {
         n: 2,
         question:
-          "Which extensibility tier is the on-stack 'sweet spot' for Clean-Core-compliant development?",
+          "Which extensibility approach is on-stack pro-code (ABAP Cloud / Embedded Steampunk) for Clean-Core-compliant development?",
         options: {
-          A: "Tier 1 key-user.",
-          B: "Tier 3 side-by-side.",
-          C: "Tier 2 developer extensibility (ABAP Cloud, in-stack).",
+          A: "Key User extensibility.",
+          B: "Side-by-side on BTP.",
+          C: "Developer extensibility (ABAP Cloud, on-stack).",
           D: "Classic modifications.",
         },
         correct: "C",
         explanations: {
-          A: "Tier 1 is powerful but limited to in-app changes.",
-          B: "Tier 3 is cleanest but highest TCO.",
-          C: "Correct — Tier 2 ABAP Cloud in-stack is the sweet spot.",
-          D: "Modifications are not a Clean Core option.",
+          A: "Key User extensibility is in-app low-code, not pro-code.",
+          B: "Side-by-side runs decoupled on BTP, not on-stack.",
+          C: "Correct — Developer extensibility is on-stack ABAP Cloud (Embedded Steampunk).",
+          D: "Modifications are not a Clean Core option (Level D).",
         },
-        principle: "Tier 2 ABAP Cloud is the on-stack Clean Core target.",
+        principle: "Developer extensibility is the on-stack pro-code ABAP Cloud approach; side-by-side and on-stack can both be Level A clean.",
       },
       {
         n: 3,

@@ -46,7 +46,7 @@ export const m03Language: Section = {
     },
   ],
   blurb:
-    "The obsolete constructs to hunt and their modern replacements, inline declarations with modern Open SQL, the constructor operators worth memorizing, string templates, and the class-based exception hierarchy that Clean ABAP defaults to.",
+    "Bring aging ABAP up to today's standard so it is cheaper to maintain and ready for the cloud. Covers the obsolete constructs to hunt and their modern replacements, inline declarations with modern Open SQL, the constructor operators worth memorizing, string templates, and the class-based exception hierarchy that Clean ABAP (SAP's official style guide) defaults to.",
   concepts: [
     {
       id: "m03-c1",
@@ -57,7 +57,7 @@ export const m03Language: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §3.1",
         paragraphs: [
-          "Modernizing ABAP is largely a search-and-replace of constructs that are obsolete (or outright forbidden in classes and in Restricted ABAP) for their modern forms. MOVE a TO b becomes the assignment operator b = a; MOVE-CORRESPONDING becomes the constructor CORRESPONDING #( ); and a bare LOOP AT itab. with an implicit header line becomes LOOP AT itab ASSIGNING FIELD-SYMBOL(<fs>), because header lines are obsolete and illegal in classes.",
+          "Your logic is sound — most of modernizing ABAP is learning the modern spelling of things you already do well, not relearning the craft. It is largely a search-and-replace of constructs that are obsolete (or outright forbidden in classes and in Restricted ABAP) for their modern forms. MOVE a TO b becomes the assignment operator b = a; MOVE-CORRESPONDING becomes the constructor CORRESPONDING #( ); and a bare LOOP AT itab. with an implicit header line becomes LOOP AT itab ASSIGNING FIELD-SYMBOL(<fs>), because header lines are obsolete and illegal in classes.",
           "Structural relics go too: OCCURS n WITH HEADER LINE becomes a typed DATA itab TYPE STANDARD TABLE OF ty WITH EMPTY KEY; FORM/PERFORM procedures become class methods; and the TABLES statement (outside dynpros) becomes an explicit local DATA declaration. These are not cosmetic — procedural forms and header lines are genuine Clean Core smells that block a package from going to ABAP Cloud.",
           "Finally, prefer the expressive built-ins: DESCRIBE TABLE itab LINES n becomes n = lines( itab ); the double-negative CHECK NOT .. IS INITIAL becomes a positive IF .. IS NOT INITIAL; and CONCATENATE gives way to string templates. Each swap is shorter, inlinable, and easier to read at the call site.",
         ],
@@ -348,6 +348,33 @@ export const m03Language: Section = {
               "The modern Open SQL field list is comma-separated.",
           },
         ],
+      },
+      exercise: {
+        id: "m03-c2-ex",
+        lang: "ABAP",
+        prompt:
+          "Modern ABAP drops the verbose CALL METHOD ... EXPORTING form for the functional call obj->meth( ... ) — abaplint's functional_writing rule flags the old form. Rewrite the call functionally, then re-check until it's clean.",
+        flaggedRules: ["functional_writing"],
+        hint: "Replace `call method me->step exporting iv_x = 1.` with `me->step( iv_x = 1 ).`",
+        successNote:
+          "The functional call is shorter, composes inline, and is the modern default — CALL METHOD now survives only for a few dynamic forms.",
+        starterCode: [
+          "class zcl_au_ex_call definition public final create public.",
+          "  public section.",
+          "    methods run.",
+          "    methods step importing !iv_x type i.",
+          "endclass.",
+          "",
+          "class zcl_au_ex_call implementation.",
+          "  method run.",
+          '    " TODO: CALL METHOD ... EXPORTING is the old call style.',
+          '    " Rewrite it as a functional call me->step( ... ).',
+          "    call method me->step exporting iv_x = 1.",
+          "  endmethod.",
+          "  method step.",
+          "  endmethod.",
+          "endclass.",
+        ].join("\n"),
       },
     },
     {

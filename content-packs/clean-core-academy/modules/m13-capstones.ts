@@ -38,7 +38,7 @@ export const m13Capstones: Section = {
     },
   ],
   blurb:
-    "Three architect-level capstones that integrate the whole course: planning a 12-month Clean Core roadmap for a 4M-LOC codebase, building a released-API-first RAP extension from scratch, and walking a HANA performance regression from SAT to a defensible fix. The quizzes test sequencing, tool choice, and decision-making.",
+    "Put it all together on three realistic, end-to-end scenarios — the kind of judgement calls a lead or architect makes on a real programme. The capstones cover planning a 12-month Clean Core roadmap for a 4M-LOC codebase, building a released-API-first RAP (SAP's modern programming model) extension from scratch, and tracing a HANA performance regression to a defensible fix. The quizzes test sequencing, tool choice, and decision-making.",
   concepts: [
     {
       id: "m13-c1",
@@ -142,7 +142,7 @@ export const m13Capstones: Section = {
         notesRef: "clean-core-curriculum §14.2",
         paragraphs: [
           "The scenario: a greenfield purchase-requisition extension, built released-API-first so it is Clean Core by construction rather than by remediation. Because there is no legacy to migrate, every choice can be the modern one, and the capstone is graded on whether the full RAP stack hangs together and proves itself with tests.",
-          "The build is the canonical Tier-2 stack. One CDS root view entity sits over a Z table; a managed RAP business object adds exactly one validation and one determination, so the learner shows they can place logic in the behaviour layer without over-building. A consumption projection, a service definition, and an OData V4 binding expose it, and a DCL role tied to a PFCG authorization object moves authorisation into the model rather than scattering AUTHORITY-CHECK through the code.",
+          "The build is the canonical on-stack ABAP Cloud stack. One CDS root view entity sits over a Z table; a managed RAP business object adds exactly one validation and one determination, so the learner shows they can place logic in the behaviour layer without over-building. A consumption projection, a service definition, and an OData V4 binding expose it, and a DCL role tied to a PFCG authorization object moves authorisation into the model rather than scattering AUTHORITY-CHECK through the code.",
           "Proof is non-negotiable. The behaviour is unit-tested with cl_abap_behv_aux_factory, which drives the RAP BO without touching the database, and the CDS view is tested with cl_cds_test_environment against injected rows. The whole thing must come up ATC-clean against ABAP_CLOUD_DEVELOPMENT_DEFAULT — the standing proof that nothing reaches an unreleased object and the extension will survive upgrades.",
         ],
         keyPoints: [
@@ -154,7 +154,7 @@ export const m13Capstones: Section = {
         ],
         simplified: {
           oneLiner:
-            "Build the full Tier-2 stack greenfield — CDS root entity over a Z table, a managed RAP BO with one validation and one determination, projection plus service plus OData V4, a DCL role, and tests — all ATC-clean against ABAP_CLOUD_DEVELOPMENT_DEFAULT.",
+            "Build the full on-stack ABAP Cloud stack greenfield — CDS root entity over a Z table, a managed RAP BO with one validation and one determination, projection plus service plus OData V4, a DCL role, and tests — all ATC-clean against ABAP_CLOUD_DEVELOPMENT_DEFAULT.",
           analogy:
             "It is building a house to code from the foundation up, so the inspection (ATC) passes without any retrofits.",
         },

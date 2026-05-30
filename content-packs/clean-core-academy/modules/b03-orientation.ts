@@ -15,7 +15,7 @@ import type { Section } from "../_types";
 
 export const b03Orientation: Section = {
   id: "b03-orientation",
-  n: 16,
+  n: 17,
   title: "Clean Core Orientation for Stakeholders",
   sourceCourse: "clean-core-curriculum (orientation synthesis)",
   audiences: ["stakeholder", "management", "end-user"],
@@ -27,7 +27,7 @@ export const b03Orientation: Section = {
     },
     {
       id: "b03-s2",
-      label: "Name the five Clean Core dimensions and why they span the whole solution",
+      label: "Name the six Clean Core dimensions and why they span the whole solution",
       conceptId: "b03-c2",
     },
     {
@@ -47,7 +47,7 @@ export const b03Orientation: Section = {
     },
   ],
   blurb:
-    "A plain-language orientation to Clean Core for anyone who needs to follow the conversation: what it is, the five dimensions it spans, why it makes upgrades easier, the vocabulary everyone keeps using, and how to read a readiness report without a technical background.",
+    "A plain-language orientation to Clean Core for anyone who needs to follow the conversation: what it is, the six dimensions it spans, why it makes upgrades easier, the vocabulary everyone keeps using, and how to read a readiness report without a technical background.",
   concepts: [
     {
       id: "b03-c1",
@@ -147,32 +147,32 @@ export const b03Orientation: Section = {
     {
       id: "b03-c2",
       code: "O.2",
-      title: "The five Clean Core dimensions",
+      title: "The six Clean Core dimensions",
       bloom: "U",
       lesson: {
         status: "ready",
         notesRef: "clean-core-curriculum (business synthesis)",
         paragraphs: [
-          "Clean Core is not only about code. SAP frames it across five dimensions: software (extensions attach through supported connections), business processes (stay close to the standard way of working where you can), master data (keep core data clean and clearly owned), integrations (connect systems through supported, versioned interfaces rather than hidden point-to-point links), and operations (run the system in an observable, automatable way with no uncontrolled manual changes).",
-          "The point of naming five dimensions is that 'clean' code alone does not make a clean core. A tidy piece of software running on a heavily distorted process, or feeding off poor-quality data through an undocumented link, is still not upgrade-safe. Clean Core is an end-to-end property of the whole solution.",
-          "For a stakeholder this is the key insight: when someone says a project is 'Clean Core,' it should mean attention across all five dimensions — not just that the developers wrote neat code.",
+          "Clean Core is not only about code. SAP frames it across six dimensions: software stack (keep the SAP system current and unmodified), extensibility (build any custom logic only on supported, released connection points — never inside the standard), integrations (connect systems through supported, versioned interfaces rather than hidden point-to-point links), processes (stay close to the standard way of working where you can), data (keep configuration, master, and transactional data clean and clearly owned), and operations (run the system in an observable, automatable way with no uncontrolled manual changes). SAP's customer-facing 'five guiding principles' restate the same idea minus software stack, treating a current, unmodified stack as the baseline.",
+          "The point of naming six dimensions is that 'clean' code alone does not make a clean core. A tidy piece of software running on a heavily distorted process, or feeding off poor-quality data through an undocumented link, is still not upgrade-safe. Clean Core is an end-to-end property of the whole solution.",
+          "For a stakeholder this is the key insight: when someone says a project is 'Clean Core,' it should mean attention across all six dimensions — not just that the developers wrote neat code.",
         ],
         keyPoints: [
-          "Five dimensions: software, business processes, master data, integrations, operations.",
+          "Six dimensions: software stack, extensibility, integrations, processes, data, operations.",
           "Clean code on a distorted process or poor data is still not Clean Core.",
           "Clean Core is end-to-end — a property of the whole solution.",
-          "A genuinely 'Clean Core' project addresses all five, not just the code.",
+          "A genuinely 'Clean Core' project addresses all six, not just the code.",
         ],
         examples: [
           {
-            title: "Five lenses on one project",
+            title: "Six lenses on one project",
             variant: "neutral",
-            body: "A rollout reviews software (supported extensions), processes (kept standard), master data (clean and owned), integrations (supported interfaces), and operations (no manual drift). All five — not just the first — make it Clean Core.",
+            body: "A rollout reviews the software stack (current, unmodified), extensibility (built on released points), integrations (supported interfaces), processes (kept standard), data (clean and owned), and operations (no manual drift). All six — not just the code — make it Clean Core.",
           },
         ],
         simplified: {
           oneLiner:
-            "Clean Core spans five dimensions — software, business processes, master data, integrations, and operations — so it is end-to-end, not just about code.",
+            "Clean Core spans six dimensions — software stack, extensibility, integrations, processes, data, and operations — so it is end-to-end, not just about code.",
           analogy:
             "A building is only sound if structure, plumbing, wiring, foundations, and upkeep are all in order — not just one of them.",
         },
@@ -181,27 +181,27 @@ export const b03Orientation: Section = {
         questions: [
           {
             n: 1,
-            question: "Which is NOT one of the five Clean Core dimensions?",
+            question: "Which is NOT one of the six Clean Core dimensions?",
             options: {
-              A: "Software.",
+              A: "Software stack.",
               B: "Hardware.",
-              C: "Master data.",
+              C: "Data.",
               D: "Operations.",
             },
             correct: "B",
             explanations: {
-              A: "Software is one of the five.",
-              B: "Correct — the five are software, business processes, master data, integrations, and operations. Hardware is not one of them.",
-              C: "Master data is one of the five.",
-              D: "Operations is one of the five.",
+              A: "Software stack is one of the six.",
+              B: "Correct — the six are software stack, extensibility, integrations, processes, data, and operations. Hardware is not one of them.",
+              C: "Data (configuration, master, and transactional data) is one of the six; SAP's name is 'data,' not 'master data.'",
+              D: "Operations is one of the six.",
             },
             principle:
-              "The five dimensions: software, business processes, master data, integrations, operations.",
+              "The six dimensions: software stack, extensibility, integrations, processes, data, operations.",
           },
           {
             n: 2,
             question:
-              "Why does Clean Core span five dimensions instead of just software?",
+              "Why does Clean Core span six dimensions instead of just software?",
             options: {
               A: "To create more documentation.",
               B: "To give each team its own dimension to own.",
@@ -223,20 +223,20 @@ export const b03Orientation: Section = {
             question:
               "When someone calls a project 'Clean Core,' what should that imply?",
             options: {
-              A: "Attention across all five dimensions, not just neat code.",
+              A: "Attention across all six dimensions, not just neat code.",
               B: "That the developers wrote tidy code and nothing more.",
               C: "That no customisation was done at all.",
               D: "That the project skipped testing to move faster.",
             },
             correct: "A",
             explanations: {
-              A: "Correct — a genuine Clean Core project covers software, processes, data, integrations, and operations.",
+              A: "Correct — a genuine Clean Core project covers the software stack, extensibility, integrations, processes, data, and operations.",
               B: "Tidy code alone is not sufficient for Clean Core.",
               C: "Customisation can still happen; it is about how it attaches.",
               D: "Clean Core relies on testing, not skipping it.",
             },
             principle:
-              "'Clean Core' should mean all five dimensions were considered.",
+              "'Clean Core' should mean all six dimensions were considered.",
           },
         ],
       },
@@ -555,21 +555,21 @@ export const b03Orientation: Section = {
       },
       {
         n: 2,
-        question: "Which is NOT one of the five Clean Core dimensions?",
+        question: "Which is NOT one of the six Clean Core dimensions?",
         options: {
           A: "Integrations.",
           B: "Hardware.",
-          C: "Business processes.",
+          C: "Processes.",
           D: "Operations.",
         },
         correct: "B",
         explanations: {
-          A: "Integrations is one of the five.",
-          B: "Correct — the five are software, business processes, master data, integrations, and operations. Hardware is not one.",
-          C: "Business processes is one of the five.",
-          D: "Operations is one of the five.",
+          A: "Integrations is one of the six.",
+          B: "Correct — the six are software stack, extensibility, integrations, processes, data, and operations. Hardware is not one.",
+          C: "Processes is one of the six.",
+          D: "Operations is one of the six.",
         },
-        principle: "Software, business processes, master data, integrations, operations.",
+        principle: "Software stack, extensibility, integrations, processes, data, operations.",
       },
       {
         n: 3,

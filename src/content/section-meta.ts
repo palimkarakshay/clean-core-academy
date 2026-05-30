@@ -36,8 +36,8 @@ export const SECTION_META: Record<string, SectionMeta> = {
     track: "HANA mindset",
     learningObjectives: [
       "Name what actually changed moving to HANA: columnar store, no implicit sort, MVCC reads.",
-      "Avoid the classic gotchas — ORDER BY, SELECT SINGLE without a full key, FOR ALL ENTRIES.",
-      "Recognise the deeper internal-table and cursor gotchas before they bite.",
+      "Avoid the common pitfalls — ORDER BY, SELECT SINGLE without a full key, FOR ALL ENTRIES.",
+      "Recognise the deeper internal-table and cursor pitfalls before they cause defects.",
       "Run the scope-then-fix loop: SCMON → ATC → baseline → re-run per FPS.",
       "Use the Simplification Database for your target release.",
     ],
@@ -95,7 +95,7 @@ export const SECTION_META: Record<string, SectionMeta> = {
       "Apply the five rules that fix most slow SQL on HANA.",
       "Pick the right diagnostic tool (ST05, SAT, SQLM, SWLT, PLANVIZ).",
       "Rewrite loop lookups as projected, joined, declarative reads.",
-      "Use hints and buffering judiciously, and avoid the rare-but-nasty perf gotchas.",
+      "Use hints and buffering judiciously, and avoid the rarely-documented performance pitfalls.",
     ],
   },
   "m08-atc-migration": {
@@ -106,7 +106,7 @@ export const SECTION_META: Record<string, SectionMeta> = {
       "Choose the right ATC variant for the job.",
       "Set up local, central/remote, and CI/CD ATC topologies.",
       "Create and maintain an exemption baseline so only new debt surfaces.",
-      "Run the full custom-code migration loop and handle the Simplification Items that bite.",
+      "Run the full custom-code migration loop and handle the high-impact Simplification Items.",
     ],
   },
   "m09-tools": {
@@ -123,10 +123,10 @@ export const SECTION_META: Record<string, SectionMeta> = {
   "m10-gotchas": {
     academyUrl: CLEAN_ABAP,
     timeMinutes: 55,
-    track: "Gotchas",
+    track: "Common pitfalls",
     learningObjectives: [
-      "Spot the Open SQL and internal-table gotchas that produce silent wrong results.",
-      "Avoid the RAP and CDS traps (ETag, IN LOCAL MODE, #CHECK without DCL).",
+      "Identify the Open SQL and internal-table pitfalls that produce silently incorrect results.",
+      "Avoid the RAP and CDS pitfalls (ETag, IN LOCAL MODE, #CHECK without DCL).",
       "Handle the AMDP and ABAP Cloud edge cases.",
       "Transport CDS/DCL/behaviour artefacts together to avoid half-working objects.",
     ],
@@ -134,11 +134,11 @@ export const SECTION_META: Record<string, SectionMeta> = {
   "m11-did-you-know": {
     academyUrl: HELP,
     timeMinutes: 40,
-    track: "Curiosities",
+    track: "Advanced techniques",
     learningObjectives: [
       "Use lesser-known language features (IS INSTANCE OF, CDS built-ins, SWITCH on strings).",
       "Discover ADT and ATC tooling shortcuts.",
-      "Reach for hidden released APIs (GZIP, BASE64, HMAC, parallel processing).",
+      "Reach for lesser-known released APIs (GZIP, BASE64, HMAC, parallel processing).",
       "Choose the right numeric types for money, counters, and timestamps.",
     ],
   },
@@ -161,6 +161,19 @@ export const SECTION_META: Record<string, SectionMeta> = {
       "Sequence a 12-month custom-code migration from zero to ATC-green.",
       "Build a greenfield extension released-API-first, end to end.",
       "Run a performance-forensics investigation from symptom to fix.",
+    ],
+  },
+  "m14-delivery": {
+    academyUrl: CLEAN_CORE,
+    timeMinutes: 50,
+    track: "Delivery & PM",
+    learningObjectives: [
+      "Justify Clean Core as a managed cross-team programme, not ad-hoc cleanup.",
+      "Size a migration from measurable drivers and express duration as phases with exit criteria.",
+      "Name the team interfaces (functional, Basis, security, SAP) and run handoffs with a shared definition of done.",
+      "Prevent transport collisions and resolve priority friction with impersonal, pre-agreed rules.",
+      "Prioritise the backlog by usage × standard-impact × cost, weighted by upgrade severity.",
+      "Recognise the common programme issues and apply the known resolution for each.",
     ],
   },
   "b01-management": {

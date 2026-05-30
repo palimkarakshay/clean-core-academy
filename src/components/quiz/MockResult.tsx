@@ -4,9 +4,34 @@ import type { MockExam } from "@/content/curriculum-types";
 import type { QuizAttempt } from "@/lib/progress-types";
 import { QuizResult } from "./QuizResult";
 import { useCopy, usePackId } from "@/content/pack-hooks";
+import { bandForScore } from "./mock-band";
 
-function bandFor(mock: MockExam, score: number) {
-  return mock.scoreBands.find((b) => score >= b.min && score <= b.max) ?? null;
+/**
+ * The headline verdict band for a mock attempt (score → verdict + message).
+ * Rendered both on the dedicated result route and, via QuizRunner's
+ * `resultHeader`, immediately on submit. Returns null when the pack defines
+ * no band for the score.
+ */
+export function MockVerdictBanner({
+  mock,
+  attempt,
+}: {
+  mock: MockExam;
+  attempt: QuizAttempt;
+}) {
+  const band = bandForScore(mock, attempt.score, attempt.total);
+  if (!band) return null;
+  return (
+    <section
+      aria-label="Verdict"
+      className="mb-5 rounded-lg border border-(--accent)/40 bg-(--accent)/5 p-4"
+    >
+      <h2 className="text-base font-semibold text-(--accent-2)">
+        {band.verdict}
+      </h2>
+      <p className="mt-1 text-sm text-(--ink)">{band.message}</p>
+    </section>
+  );
 }
 
 export function MockResult({
@@ -16,22 +41,11 @@ export function MockResult({
   mock: MockExam;
   attempt: QuizAttempt;
 }) {
-  const band = bandFor(mock, attempt.score);
   const packId = usePackId();
   const copy = useCopy();
   return (
     <div>
-      {band ? (
-        <section
-          aria-label="Verdict"
-          className="mb-5 rounded-lg border border-(--accent)/40 bg-(--accent)/5 p-4"
-        >
-          <h2 className="text-base font-semibold text-(--accent-2)">
-            {band.verdict}
-          </h2>
-          <p className="mt-1 text-sm text-(--ink)">{band.message}</p>
-        </section>
-      ) : null}
+      <MockVerdictBanner mock={mock} attempt={attempt} />
       <QuizResult
         title={mock.title}
         questions={mock.questions}

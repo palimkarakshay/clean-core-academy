@@ -13,14 +13,21 @@ export const packConfig: PackConfig = {
   id: "clean-core-academy",
   name: "Clean Core Academy",
   shortName: "Clean Core",
-  tagline: "Modernize ABAP toward SAP Clean Core.",
+  tagline: "Make SAP upgrades painless — modernize ABAP toward Clean Core (keeping SAP's standard system untouched and building custom needs beside it).",
   description:
-    "Turn the ABAP-Utilities SAP-modernization cookbooks into hands-on modules: ABAP anti-patterns, Clean Core & ATC, BDC→API, RAP/CDS, and Fiori conversion. Every lesson pairs concept notes with before/after ABAP and a spot-the-Clean-Core-violation quiz.",
+    "Cut the cost and risk of every SAP upgrade by moving custom ABAP to Clean Core — SAP's approach of leaving the standard system untouched and building extensions beside it. Hands-on modules turn the ABAP-Utilities modernization cookbooks into lessons: anti-patterns to retire, ATC (SAP's automated code-quality checker), replacing batch input with released APIs (the official, upgrade-safe interfaces SAP supports), RAP/CDS (SAP's modern programming and data-modeling layers), and Fiori (SAP's modern web UI) conversion. Every lesson pairs plain-language concept notes with before/after ABAP and a spot-the-violation quiz.",
   url: "https://clean-core-academy.vercel.app",
   repoUrl: "https://github.com/palimkarakshay/clean-core-academy",
   author: "palimkarakshay",
   nav: [
     { label: "Home", href: "/", icon: "home", mobile: true, match: ["/"] },
+    {
+      label: "Start here",
+      href: "/start",
+      icon: "rocket",
+      mobile: true,
+      match: ["/start"],
+    },
     {
       label: "Modules",
       href: "/#sections",
@@ -30,10 +37,10 @@ export const packConfig: PackConfig = {
     },
     {
       label: "Progress",
-      href: "/#progress",
+      href: "/progress",
       icon: "trending-up",
       mobile: true,
-      match: [],
+      match: ["/progress"],
     },
   ],
   askAI: {
@@ -103,7 +110,7 @@ export const packConfig: PackConfig = {
   prerequisites: {
     heading: "Before you begin",
     intro:
-      "This course assumes working ABAP and walks through modernizing it toward SAP Clean Core. You don't need a live system to read the lessons, but a sandbox makes the exercises stick.",
+      "This course assumes working ABAP and walks through modernizing it toward SAP Clean Core — keeping SAP's standard system untouched and building custom needs beside it, so upgrades stay easy. You don't need a live system to read the lessons, but a sandbox makes the exercises stick.",
     requirements: [
       {
         label: "Comfortable reading ABAP",
@@ -121,7 +128,7 @@ export const packConfig: PackConfig = {
     assumptions: [
       {
         label: "ATC with the Clean Core variants",
-        detail: "CLOUD_READINESS + S4HANA_READINESS are the authoritative checks; abaplint catches the style layer.",
+        detail: "ABAP_CLOUD_DEVELOPMENT_DEFAULT (with ABAP_CLEAN_CORE_DEVELOPMENT, new in 2025, grading against clean-core Levels A–D) plus the target-release S4HANA_READINESS_<year> are the authoritative checks (the course pins examples to S/4HANA 2023, so S4HANA_READINESS_2023 there); abaplint catches the style layer.",
       },
     ],
     externalLinks: [

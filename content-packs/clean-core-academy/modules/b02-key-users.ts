@@ -15,7 +15,7 @@ import type { Section } from "../_types";
 
 export const b02KeyUsers: Section = {
   id: "b02-key-users",
-  n: 15,
+  n: 16,
   title: "Clean Core for Key & End Users",
   sourceCourse: "clean-core-curriculum (key-user synthesis)",
   audiences: ["end-user"],

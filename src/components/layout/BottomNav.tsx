@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, Award, TrendingUp } from "lucide-react";
+import { Home, Layers, Award, TrendingUp, Rocket } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getPack } from "@/content/pack-registry";
 import type { NavIcon, NavItem } from "@/lib/site-config";
@@ -13,15 +13,23 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   layers: Layers,
   award: Award,
   "trending-up": TrendingUp,
+  rocket: Rocket,
 };
 
-function isActive(item: NavItem, pathname: string | null): boolean {
+function isActive(
+  item: NavItem,
+  pathname: string | null,
+  packId: string | null
+): boolean {
   if (!pathname) return false;
   const matches = item.match ?? [];
   for (const m of matches) {
+    // Pack-relative match values prefixed with the active packId so they
+    // line up with the real pathname; "Home" ("/") matches exactly only.
+    const target = prefixWithPack(m, packId);
     if (m === "/") {
-      if (pathname === "/") return true;
-    } else if (pathname === m || pathname.startsWith(`${m}/`)) {
+      if (pathname === target) return true;
+    } else if (pathname === target || pathname.startsWith(`${target}/`)) {
       return true;
     }
   }
@@ -74,7 +82,7 @@ export function BottomNav() {
         {items.map((item) => {
           const Icon = item.icon ? ICONS[item.icon] : Home;
           const href = prefixWithPack(item.href, packId);
-          const active = isActive(item, pathname);
+          const active = isActive(item, pathname, packId);
           return (
             <li key={item.href} className="flex-1">
               <Link

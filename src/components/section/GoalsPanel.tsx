@@ -19,8 +19,8 @@ export function GoalsPanel({ section, meta, formatMinutes }: GoalsPanelProps) {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <p className="font-mono text-xs text-(--muted)">
-          Section {String(section.n).padStart(2, "0")}
+        <p className="font-mono text-xs uppercase tracking-wide text-(--muted)">
+          Module
           {section.sourceCourse ? ` · ${section.sourceCourse}` : null}
           {meta?.track ? ` · ${meta.track}` : null}
         </p>

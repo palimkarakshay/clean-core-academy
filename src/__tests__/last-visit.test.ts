@@ -1,9 +1,9 @@
 /* ------------------------------------------------------------------
    last-visit store contract.
 
-   The home page's ResumeLearningCard reads from this store via
-   useSyncExternalStore. The contract tested here is what the card
-   depends on:
+   The persistent header progress/resume affordance reads from this
+   store via useSyncExternalStore. The contract tested here is what
+   that reader depends on:
 
    - getServerSnapshot is always null (so SSR matches first client
      render before hydration; without this, the resume card would

@@ -8,7 +8,8 @@
    under ./modules/ and is tagged with the `audiences` it serves; the
    track filter on the course home reads those tags.
 
-   - Modules m01–m13 cover the developer/cross-cutting content.
+   - Modules m01–m14 cover the developer/cross-cutting content
+     (m14 is the delivery / project-management lens over m08 + m13).
    - Modules b01–b03 are the business / stakeholder lenses.
    - The Quiz Bank (brief §13) is delivered as the practice exam.
    - The readiness self-audit links each risk to the module that fixes it.
@@ -32,14 +33,16 @@ import { m10Gotchas } from "./modules/m10-gotchas";
 import { m11DidYouKnow } from "./modules/m11-did-you-know";
 import { m12Recipes } from "./modules/m12-recipes";
 import { m13Capstones } from "./modules/m13-capstones";
+import { m14Delivery } from "./modules/m14-delivery";
 import { b01Management } from "./modules/b01-management";
 import { b02KeyUsers } from "./modules/b02-key-users";
 import { b03Orientation } from "./modules/b03-orientation";
 import { practiceExam } from "./modules/exams";
+import { withModuleIcons } from "./module-images";
 
 export const CURRICULUM: Curriculum = {
   schemaVersion: 1,
-  sections: [
+  sections: withModuleIcons([
     m01Foundations,
     m02HanaReadiness,
     m03Language,
@@ -53,15 +56,16 @@ export const CURRICULUM: Curriculum = {
     m11DidYouKnow,
     m12Recipes,
     m13Capstones,
+    m14Delivery,
     b01Management,
     b02KeyUsers,
     b03Orientation,
-  ],
+  ]),
   mockExams: [practiceExam],
   readinessAudit: {
     title: "Clean Core readiness self-audit",
     intro:
-      "Answer honestly about your custom ABAP. Each risky practice is weighted by how hard it blocks Clean Core; the result is a readiness score plus a remediation list sorted worst-first, each linked to the module that fixes it. This is a triage — the authoritative check is ATC with the CLOUD_READINESS variant on your target system.",
+      "Answer honestly about your custom ABAP. Each risky practice is weighted by how hard it blocks Clean Core; the result is a readiness score plus a remediation list sorted worst-first, each linked to the module that fixes it. This is a triage — the authoritative check is ATC with the ABAP_CLOUD_DEVELOPMENT_DEFAULT variant on your target system.",
     bands: [
       {
         min: 0,
@@ -89,7 +93,7 @@ export const CURRICULUM: Curriculum = {
         max: 100,
         verdict: "Clean Core ready",
         message:
-          "Strong posture. Confirm with ATC CLOUD_READINESS / S4HANA_READINESS on your target system and keep the gate green.",
+          "Strong posture. Confirm with ATC ABAP_CLOUD_DEVELOPMENT_DEFAULT (or ABAP_CLEAN_CORE_DEVELOPMENT for level-based grading) plus the target-release S4HANA_READINESS_<year> on your target system, and keep the gate green.",
       },
     ],
     questions: [
@@ -114,7 +118,7 @@ export const CURRICULUM: Curriculum = {
         weight: 5,
         riskAnswer: "yes",
         remediation:
-          "Replace modifications with released BAdIs / extension points or the 3-tier extensibility model; request an extension point from SAP if none exists.",
+          "Replace modifications with released BAdIs / extension points (key-user or developer extensibility); request an extension point from SAP if none exists.",
         moduleId: "m01-foundations",
       },
       {
@@ -213,7 +217,7 @@ export const CURRICULUM: Curriculum = {
         id: "a-atc",
         dimension: "Tooling",
         question:
-          "Do you run ATC with the CLOUD_READINESS / S4HANA_READINESS variants regularly?",
+          "Do you run ATC with the Clean Core variants regularly (ABAP_CLOUD_DEVELOPMENT_DEFAULT or ABAP_CLEAN_CORE_DEVELOPMENT, plus the target-release S4HANA_READINESS_<year>)?",
         weight: 4,
         riskAnswer: "no",
         remediation:

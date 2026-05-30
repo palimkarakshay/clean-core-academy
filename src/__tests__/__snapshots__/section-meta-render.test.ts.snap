@@ -18,5 +18,6 @@ exports[`section meta render > formatMinutes renders human-readable time for eve
   "m11-did-you-know": "40 min",
   "m12-recipes": "55 min",
   "m13-capstones": "1 hr",
+  "m14-delivery": "50 min",
 }
 `;

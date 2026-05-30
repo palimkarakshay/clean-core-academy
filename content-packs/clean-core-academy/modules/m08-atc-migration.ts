@@ -46,7 +46,7 @@ export const m08AtcMigration: Section = {
     },
   ],
   blurb:
-    "The ATC variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today's debt, the full Custom Code Migration loop, and the Simplification Items that bite hardest in an upgrade.",
+    "Measure where your custom code stands and clean it up in a controlled, repeatable way — turning a vague risk into a tracked plan. Built around ATC (SAP’s automated code-quality checker): the variants every team should know, the local/central/CI-CD topology, the exemption baseline that hides today’s debt, the full Custom Code Migration loop, and the Simplification Items with the greatest upgrade impact.",
   concepts: [
     {
       id: "m08-c1",
@@ -58,15 +58,16 @@ export const m08AtcMigration: Section = {
         notesRef: "clean-core-curriculum §8.1",
         paragraphs: [
           "An ATC check variant is just a named bundle of Code Inspector checks with their severities. Which variant you run decides what 'clean' even means, so a senior team treats variant selection as a deliberate decision, not a default. SAP ships several you should recognise on sight. `DEFAULT` is the broad, general-purpose variant — useful, but it knows nothing about Clean Core or your target release.",
-          "`S4HANA_READINESS_2023` is the release-aligned variant: it runs the Simplification checks (against the Simplification Database for that target release) plus HANA-readiness checks, and it is what you point at custom code before and during a conversion. `ABAP_CLOUD_DEVELOPMENT_DEFAULT` is the Clean Core variant: it enforces Restricted ABAP and released-only API consumption, so it is the source of truth for whether code could live in a Tier-2 cloud package. `PERFORMANCE_DB` concentrates on database-centric performance findings, and `SECURITY_CHECK` runs the Code Vulnerability Analyzer (CVA) checks, which are licence-gated and off unless your system is entitled.",
+          "`S4HANA_READINESS_<year>` is the release-aligned variant: it runs the Simplification checks (against the Simplification Database for that target release) plus HANA-readiness checks, and it is what you point at custom code before and during a conversion — the suffix tracks the *target* release, so converting to S/4HANA 2025 means `S4HANA_READINESS_2025` (`S4HANA_READINESS_2023` is now the prior-release variant; same purpose, older target). For ABAP Cloud / Clean Core, SAP distinguishes two ATC procedures. `ABAP_CLOUD_DEVELOPMENT_DEFAULT` runs the *ABAP Cloud readiness* procedure — it enforces Restricted ABAP and released-only API consumption, so it is the source of truth for whether code could run on-stack as ABAP Cloud; `ABAP_CLOUD_READINESS` measures the 'distance to Tier 1' for mass-scanning legacy code to baseline. New in 2025, `ABAP_CLEAN_CORE_DEVELOPMENT` runs the *clean core readiness* procedure (for remote ATC in the SAP BTP ABAP environment and S/4HANA 2025 FPS01+): it drops the ABAP Language Version / Allowed Object Types checks and a 'Usage of APIs' check replaces 'Usage of Released APIs,' grading against clean-core Levels A–D rather than a binary pass/fail (SAP also plans a preconfigured `ABAP_CLEAN_CORE_READINESS` with SAP BTP ABAP environment 2605). `PERFORMANCE_DB` concentrates on database-centric performance findings, and `SECURITY_CHECK` runs the Code Vulnerability Analyzer (CVA) checks, which are licence-gated and off unless your system is entitled.",
           "Because each variant answers a different question, mature teams build one custom variant that is a union of the relevant SAP variants, then tune the severities to their own codebase — promoting the findings they will block a transport on to error, and demoting the rest to warning or information. The union variant becomes the single thing the pipeline and every developer runs, so 'green locally' and 'green in CI' mean the same thing.",
         ],
         keyPoints: [
           "DEFAULT is broad and release-agnostic — not Clean Core or readiness aware.",
-          "S4HANA_READINESS_2023 = Simplification + HANA readiness for the target release.",
-          "ABAP_CLOUD_DEVELOPMENT_DEFAULT enforces Restricted ABAP and released-only consumption.",
+          "S4HANA_READINESS_<year> = Simplification + HANA readiness; the suffix tracks the TARGET release (use S4HANA_READINESS_2025 for S/4HANA 2025; 2023 is the prior-release variant).",
+          "ABAP_CLOUD_DEVELOPMENT_DEFAULT = ABAP Cloud readiness (Restricted ABAP, released-only); ABAP_CLOUD_READINESS measures 'distance to Tier 1' for baselining legacy code.",
+          "ABAP_CLEAN_CORE_DEVELOPMENT (new 2025, BTP ABAP env + S/4HANA 2025 FPS01+) = clean core readiness, grading against Levels A–D, not pass/fail.",
           "PERFORMANCE_DB is DB performance; SECURITY_CHECK is CVA and licence-gated.",
-          "Build one custom union variant with team-tuned severities as the single source of truth.",
+          "Recommended setup: copy ABAP_CLOUD_DEVELOPMENT_DEFAULT and add the clean core checks; expose one team union variant with tuned severities as the single source of truth.",
         ],
         examples: [
           {
@@ -96,7 +97,7 @@ export const m08AtcMigration: Section = {
           {
             n: 1,
             question:
-              "Which ATC variant is the source of truth for whether code could run in a Tier-2 ABAP Cloud package?",
+              "Which ATC variant is the source of truth for whether code could run on-stack as ABAP Cloud (Restricted ABAP)?",
             options: {
               A: "ABAP_CLOUD_DEVELOPMENT_DEFAULT.",
               B: "DEFAULT.",
@@ -116,7 +117,7 @@ export const m08AtcMigration: Section = {
           {
             n: 2,
             question:
-              "What does the S4HANA_READINESS_2023 variant primarily check?",
+              "What does an S4HANA_READINESS_<year> variant primarily check (e.g. S4HANA_READINESS_2025 for a conversion to S/4HANA 2025)?",
             options: {
               A: "Only ABAP code style and formatting.",
               B: "Only side-by-side BTP connectivity.",
@@ -127,11 +128,11 @@ export const m08AtcMigration: Section = {
             explanations: {
               A: "Style is a Clean ABAP concern, not the focus of the readiness variant.",
               B: "BTP connectivity is not what the readiness variant inspects.",
-              C: "Correct — it bundles the release-aligned Simplification checks with HANA-readiness checks.",
+              C: "Correct — it bundles the release-aligned Simplification checks with HANA-readiness checks; the year suffix tracks the target release.",
               D: "Licence checks are unrelated to the readiness variant.",
             },
             principle:
-              "The readiness variant pairs Simplification-DB checks with HANA readiness for a target release.",
+              "The readiness variant pairs Simplification-DB checks with HANA readiness for the TARGET release (the year suffix tracks that target).",
           },
           {
             n: 3,
@@ -180,7 +181,7 @@ export const m08AtcMigration: Section = {
           {
             title: "Why the Simplification DB sits centrally",
             variant: "neutral",
-            body: "Rather than installing and patching the Simplification catalog on every box, the central ATC system holds the current release's DB and runs S4HANA_READINESS remotely against each source system over RFC.",
+            body: "Rather than installing and patching the Simplification catalog on every box, the central ATC system holds the current release's DB and runs S4HANA_READINESS_<year> (the target-release variant) remotely against each source system over RFC.",
           },
         ],
         simplified: {
@@ -364,7 +365,7 @@ export const m08AtcMigration: Section = {
         notesRef: "clean-core-curriculum §8.5",
         paragraphs: [
           "Custom Code Migration is not a one-shot scan; it is a loop, and running it in order is what keeps the effort proportionate to the value. It starts with scope by usage: enable SCMON on the productive system for a representative period so you know which custom objects are actually executed, and combine it with SUSG when you need a landscape-wide, multi-system roll-up. There is no point spending a sprint fixing a report nobody has run since 2014.",
-          "With scope in hand you run the quality scan — ATC with the `S4HANA_READINESS_2023` variant, remotely from the central system against the source — and export the findings (to Excel, or via the results API into a spreadsheet or BI tool) so you can plan rather than firefight. Then you prioritise on three axes at once: is the object actually used, does it touch a standard object that the Simplification items are changing, and what is the cost to fix. High-usage, standard-impacting, low-cost items go first; unused or trivially isolated ones can wait or be retired.",
+          "With scope in hand you run the quality scan — ATC with the `S4HANA_READINESS_<year>` variant for your target release (e.g. `S4HANA_READINESS_2025`), remotely from the central system against the source — and export the findings (to Excel, or via the results API into a spreadsheet or BI tool) so you can plan rather than firefight. Then you prioritise on three axes at once: is the object actually used, does it touch a standard object that the Simplification items are changing, and what is the cost to fix. High-usage, standard-impacting, low-cost items go first; unused or trivially isolated ones can wait or be retired.",
           "Adaptation means rewriting to released APIs wherever feasible; you grant an exemption only where the rewrite cost is genuinely unjustified this cycle (a legacy interface you will retire next year, say), so exemptions stay the rare exception, not the habit. Finally you re-baseline each sprint, which both records the debt you actually paid down and resets the 'new debt' line for the next iteration — turning migration into a steady, measurable cadence instead of a heroic push.",
         ],
         keyPoints: [
@@ -456,7 +457,7 @@ export const m08AtcMigration: Section = {
     {
       id: "m08-c5",
       code: "8.5",
-      title: "Simplification Items that bite",
+      title: "High-impact Simplification Items",
       bloom: "An",
       lesson: {
         status: "ready",
@@ -500,7 +501,7 @@ export const m08AtcMigration: Section = {
         ],
         simplified: {
           oneLiner:
-            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) bite hardest — bridge old reads with the released I_* interface views (e.g. I_OperationalAcctgDocItem).",
+            "A few data-model changes (konv→prcd_elements, mseg+matdoc, bseg→acdoca, nast→Output Management) have the greatest impact — bridge old reads with the released I_* interface views (e.g. I_OperationalAcctgDocItem).",
           analogy:
             "The old address still gets some mail, but the household has moved — forward your reads through the released interface view to reach the real, current data.",
         },
@@ -586,7 +587,7 @@ export const m08AtcMigration: Section = {
         },
         correct: "A",
         explanations: {
-          A: "Correct — it is the Clean Core variant for Tier-2 cloud eligibility.",
+          A: "Correct — it runs the ABAP Cloud readiness procedure (Restricted ABAP, released-only API consumption).",
           B: "DEFAULT is broad and not Clean Core aware.",
           C: "PERFORMANCE_DB is database performance.",
           D: "SECURITY_CHECK runs licence-gated CVA checks.",

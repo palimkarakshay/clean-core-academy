@@ -4,11 +4,14 @@
   "private": true,
   "description": "Clean Core Academy — an interactive course that turns the ABAP-Utilities SAP-modernization cookbooks into lessons, built on the content-agnostic learning-app shell.",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.9"
   },
+  "packageManager": "npm@11.13.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:scorm": "node scripts/build-scorm.mjs",
+    "build:scorm:embed": "node scripts/build-scorm-embed.mjs",
     "start": "next start",
     "lint": "eslint .",
     "lint:abap": "abaplint exercises/abaplint.json",
@@ -51,6 +54,8 @@
   },
   "overrides": {
     "postcss": "^8.5.10",
-    "brace-expansion": "^5.0.6"
+    "@typescript-eslint/typescript-estree": {
+      "brace-expansion": "^5.0.6"
+    }
   }
 }

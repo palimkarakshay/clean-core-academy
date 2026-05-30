@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { MasteryMeter } from "@/components/primitives/MasteryMeter";
+import { ModuleIcon } from "@/components/primitives/ModuleIcon";
 import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { useCopy, usePackId } from "@/content/pack-hooks";
@@ -115,20 +115,8 @@ export function SectionList() {
             )}
           >
             <div className="flex items-start gap-3">
-              {section.iconImagePath ? (
-                <Image
-                  aria-hidden
-                  src={section.iconImagePath}
-                  alt=""
-                  width={56}
-                  height={56}
-                  className="h-14 w-14 flex-none overflow-hidden rounded-md border border-(--border) bg-(--panel-2) object-cover"
-                />
-              ) : null}
+              <ModuleIcon name={section.icon} className="h-12 w-12" />
               <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-mono text-xs text-(--muted)">
-                  {String(section.n).padStart(2, "0")}.
-                </span>
                 <Link
                   href={`/${packId}/section/${section.id}`}
                   className="text-base font-semibold text-(--ink) no-underline hover:underline"

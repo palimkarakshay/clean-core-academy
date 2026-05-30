@@ -192,7 +192,7 @@ export function ReadinessAuditView({
           ) : (
             <p className="rounded-md border-l-4 border-(--good) bg-(--good)/10 p-3 text-sm text-(--good)">
               No risky practices flagged in what you answered. Confirm with ATC
-              CLOUD_READINESS on your target system.
+              ABAP_CLOUD_DEVELOPMENT_DEFAULT on your target system.
             </p>
           )}
           <p className="text-xs text-(--muted)">

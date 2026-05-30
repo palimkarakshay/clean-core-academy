@@ -1,4 +1,5 @@
 import { CURRICULUM } from "@/content/curriculum";
+import type { Curriculum } from "@/content/curriculum-types";
 import { masteryLevels } from "@/lib/site-config";
 import {
   PROGRESS_STORAGE_KEY,
@@ -42,8 +43,20 @@ export function loadProgressFor(
     if (!raw) return newProgress(firstSectionId);
     const obj = JSON.parse(raw) as Progress;
     if (!obj || obj.schemaVersion !== 1) return newProgress(firstSectionId);
-    if (!obj.mock) obj.mock = {};
-    if (obj.location && !("mockId" in (obj.location as object))) {
+    // Defensive: a corrupt or partial persisted blob may be missing buckets.
+    // Normalize them so later ensureSection/ensureConcept/location reads can't
+    // throw inside a React event handler (where there is no try/catch).
+    if (!obj.concept || typeof obj.concept !== "object") obj.concept = {};
+    if (!obj.section || typeof obj.section !== "object") obj.section = {};
+    if (!obj.mock || typeof obj.mock !== "object") obj.mock = {};
+    if (!obj.location || typeof obj.location !== "object") {
+      obj.location = {
+        view: "dashboard",
+        sectionId: null,
+        conceptId: null,
+        mockId: null,
+      };
+    } else if (!("mockId" in (obj.location as object))) {
       obj.location.mockId = null;
     }
     // Self-heal: an older persisted shape may pre-date the pack-aware
@@ -147,6 +160,28 @@ export function isUnderwhelm(mastery: Mastery): boolean {
 
 export function countsAsMastered(mastery: Mastery): boolean {
   return Boolean(masteryLevels[mastery]?.countsAsMastered);
+}
+
+/**
+ * The single source of truth for "how many lessons count" across every
+ * progress surface: only concepts that ship both a lesson and a quiz are
+ * counted (stub/lesson-only concepts don't inflate the denominator). All
+ * progress UIs (OverallProgressBar, StatsPanel, ProgressCharts, the
+ * Progress page) route through these so they can't print divergent totals.
+ */
+export function authoredConcepts(curriculum: Curriculum) {
+  return curriculum.sections.flatMap((s) =>
+    s.concepts.filter((c) => c.lesson && c.quiz)
+  );
+}
+
+export function masteredConceptCount(
+  progress: Progress,
+  curriculum: Curriculum
+): number {
+  return authoredConcepts(curriculum).filter((c) =>
+    countsAsMastered(progress.concept[c.id]?.mastery ?? 0)
+  ).length;
 }
 
 export function isSectionPassed(p: Progress, sectionId: string): boolean {

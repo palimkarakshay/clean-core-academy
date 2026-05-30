@@ -41,7 +41,7 @@ export const m05ReleasedApis: Section = {
     },
   ],
   blurb:
-    "Finding and consuming the released contracts that replace legacy APIs: where the released-objects catalog lives, the high-yield legacy-to-released replacement map, the XCO helper library, and the rule that the interface CDS view — not the table — is the contract.",
+    "Swap fragile legacy connections for the official interfaces SAP promises to keep stable — so upgrades stop breaking your code. Covers released APIs (the official, upgrade-safe interfaces SAP supports) that replace legacy ones: where the released-objects catalog lives, the high-yield legacy-to-released replacement map, the XCO helper library, and the rule that the interface CDS view (SAP's modern data-modeling layer) — not the table — is the contract.",
   concepts: [
     {
       id: "m05-c1",
@@ -52,7 +52,7 @@ export const m05ReleasedApis: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §5.1",
         paragraphs: [
-          "Knowing the replacement exists is half the job; finding it is the other half, and there are three complementary entry points. In-system, ADT's Project Explorer has a System Library node with a Released Objects branch — it lists every released object on your system and lets you filter by type (function module, class, CDS view, BAdI), so you can browse what is actually available on your exact release without leaving the IDE.",
+          "You already know these BAPIs and function modules cold — Clean Core is not asking you to forget them, but to reach the same business logic through a door that won't move on you at the next upgrade. Knowing the replacement exists is half the job; finding it is the other half, and there are three complementary entry points. In-system, ADT's Project Explorer has a System Library node with a Released Objects branch — it lists every released object on your system and lets you filter by type (function module, class, CDS view, BAdI), so you can browse what is actually available on your exact release without leaving the IDE.",
           "Externally, the catalog at api.sap.com has an ABAP APIs area that documents released APIs across releases, with signatures and notes — useful when you are deciding an approach before you are even logged into a system. It is the authoritative, release-spanning reference.",
           "In-code, when you are already looking at an object, its Properties pane shows the API State directly — the same C0/C1/C2/C3 contract you met in §1.4. This is the fastest check while reading code: select the object, read its API State, and you know immediately whether you may consume it. The three sources agree; use whichever fits the moment — browse Released Objects to discover, api.sap.com to research, the Properties pane to verify a specific reference.",
         ],
@@ -150,14 +150,14 @@ export const m05ReleasedApis: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §5.2",
         paragraphs: [
-          "A handful of legacy calls account for most of the migration work, and each has a known released replacement. User detail: `bapi_user_get_detail` gives way to the `xco_cp_user` / `xco_cp` factory. Alpha conversion: the function module `conversion_exit_alpha_input` (C2 from Cloud) is replaced by the string-template form `|{ value alpha = in }|`, which is C1 and type-safe. Number ranges: `number_get_next` becomes the released `cl_numberrange_runtime`. Long text: `read_text` moves to `xco_cp_long_text` where available per release. Outbound mail: the legacy `cl_bcs` is replaced by the released `cl_bcs_mail` for in-stack sending.",
+          "A handful of legacy calls account for most of the migration work, and each has a known released replacement. User detail: `bapi_user_get_detail` gives way to the `xco_cp_user` / `xco_cp` factory. Alpha conversion: the function module `conversion_exit_alpha_input` (C2 from Cloud) is replaced by the string-template form `|{ value alpha = in }|`, which is C1 and type-safe. Number ranges: `number_get_next` becomes the released `cl_numberrange_runtime`. Long text: `read_text` moves to `xco_cp_long_text` where available per release. Outbound mail: the legacy `cl_bcs` is replaced by the released `cl_bcs_mail_message` for in-stack sending.",
           "The case that trips people up is `rfc_read_table`: it is not released for cloud consumption, and there is no drop-in API replacement. The correct move is architectural — expose the data you need through a released CDS view and read that view instead. There is no 'read any table generically' API in Clean Core by design, because that capability is exactly what breaks upgrade stability.",
           "The discipline is to treat the legacy call as a smell and look up its row in this table before reaching for an exemption. Most replacements are not just compliant but better: the alpha template is inlineable and avoids a function-call round-trip; `cl_numberrange_runtime` is a clean object API; the XCO helpers are fluent and testable. Migration here usually improves the code rather than merely satisfying ATC.",
         ],
         keyPoints: [
           "BAPI_USER_GET_DETAIL → XCO_CP_USER / XCO_CP factory.",
           "CONVERSION_EXIT_ALPHA_INPUT → string template `|{ value ALPHA = IN }|` (C1, type-safe).",
-          "NUMBER_GET_NEXT → CL_NUMBERRANGE_RUNTIME; READ_TEXT → XCO_CP_LONG_TEXT; CL_BCS → CL_BCS_MAIL.",
+          "NUMBER_GET_NEXT → CL_NUMBERRANGE_RUNTIME; READ_TEXT → XCO_CP_LONG_TEXT; CL_BCS → CL_BCS_MAIL_MESSAGE.",
           "RFC_READ_TABLE is NOT released — read a released CDS view instead; there is no generic table-read API by design.",
           "Replacements are usually better code, not just ATC-compliant.",
         ],
@@ -209,7 +209,7 @@ export const m05ReleasedApis: Section = {
         ],
         simplified: {
           oneLiner:
-            "Swap legacy calls for released ones: BAPI_USER_GET_DETAIL→XCO_CP_USER, CONVERSION_EXIT_ALPHA_INPUT→`|{ value ALPHA = IN }|`, NUMBER_GET_NEXT→CL_NUMBERRANGE_RUNTIME, READ_TEXT→XCO_CP_LONG_TEXT, CL_BCS→CL_BCS_MAIL; RFC_READ_TABLE has no API replacement — read a CDS view.",
+            "Swap legacy calls for released ones: BAPI_USER_GET_DETAIL→XCO_CP_USER, CONVERSION_EXIT_ALPHA_INPUT→`|{ value ALPHA = IN }|`, NUMBER_GET_NEXT→CL_NUMBERRANGE_RUNTIME, READ_TEXT→XCO_CP_LONG_TEXT, CL_BCS→CL_BCS_MAIL_MESSAGE; RFC_READ_TABLE has no API replacement — read a CDS view.",
           analogy:
             "Each legacy tool has a modern equivalent in the shop — except the universal skeleton key (RFC_READ_TABLE), which simply isn't sold any more.",
         },
@@ -280,7 +280,7 @@ export const m05ReleasedApis: Section = {
               A: "Correct — number-range allocation moves to the released CL_NUMBERRANGE_RUNTIME.",
               B: "READ_TEXT maps to XCO_CP_LONG_TEXT, not CL_BCS.",
               C: "BAPI_USER_GET_DETAIL maps to XCO_CP_USER/XCO_CP, not the unreleased RFC_READ_TABLE.",
-              D: "CL_BCS maps to CL_BCS_MAIL; alpha conversion is a separate concern.",
+              D: "CL_BCS maps to CL_BCS_MAIL_MESSAGE; alpha conversion is a separate concern.",
             },
             principle:
               "Number ranges use CL_NUMBERRANGE_RUNTIME; learn the high-yield map.",

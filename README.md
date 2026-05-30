@@ -25,7 +25,13 @@ Every lesson pairs:
 > skills matrix** (`/<pack>/skills`) are all live.
 
 Every lesson pairs concept notes, before/after ABAP, and quizzes; code shown is
-written against S/4HANA 2023 (ABAP Platform 758).
+written against S/4HANA 2023 (ABAP Platform 758). Note that **S/4HANA 2025
+(ABAP Platform 2025 / SAP_BASIS 816, GA 2025-10-08)** is now the latest release —
+the readiness ATC variant should track your *target* release
+(`S4HANA_READINESS_2025` when converting to 2025). The private/on-prem releases
+use year naming (2023, 2025); **S/4HANA Cloud Public Edition** uses a biannual
+`YYMM` cadence (currently **2508** = Aug 2025; next is 2602 = Feb 2026) — a
+different scheme, not a different product generation.
 
 ---
 
@@ -44,7 +50,8 @@ serves intermediate + admin). Modules with no tag appear in every track.
 (the DB mindset) · ABAP Language Modernization · ABAP Cloud & RAP · Released APIs
 & Extensibility Contracts · CDS, AMDP & Code Pushdown · Performance & SQL on HANA
 · ATC, Custom-Code Migration & Simplification · Lesser-Known Tools & Utilities ·
-The Gotchas Catalog · Did You Know? · How-To Recipes · Capstone Scenarios.
+Common Pitfalls & Defect Patterns · Advanced Techniques & Lesser-Known APIs ·
+How-To Recipes · Capstone Scenarios.
 
 **Business tracks (b01–b03)** — Clean Core for Management & Leads · Clean Core for
 Key & End Users · Clean Core Orientation for Stakeholders.
@@ -111,7 +118,7 @@ Verification loop:
 
 ```sh
 npm run type-check     # tsc --noEmit
-npm test               # vitest — 295 unit/contract tests (incl. the abaplint + audit checks)
+npm test               # vitest — unit/contract suite under src/__tests__ (incl. the abaplint + audit checks)
 npm run lint           # eslint
 npm run build          # next build (prerenders every module/concept/quiz/audit route)
 npm run lint:abap      # abaplint over the ABAP reference solutions (see below)
@@ -126,7 +133,7 @@ Code exercises are linted with the **same rules the reference repo uses**:
 [`abap-utilities/abaplint.json`](https://github.com/palimkarakshay/abap-utilities/blob/main/abaplint.json),
 and it is the single source of truth for **both** the CLI and the in-app check.
 
-**In-app (the learner flow).** The guard-clauses lesson (`m1-c4`) ships a code
+**In-app (the learner flow).** The guard-clauses lesson (`m03-c1`) ships a code
 exercise: the starter trips `exit_or_check` (a `CHECK` deep in a method). The
 learner edits it in the lesson, clicks **Check with abaplint**, and the
 submission is POSTed to `/api/lint-abap`, where `@abaplint/core` runs the
@@ -154,7 +161,7 @@ starter is flagged and a guard-clause fix lints clean.
 
 **Scope.** abaplint is the **style + parser** gate (keyword case, indentation,
 `7bit_ascii`, `exit_or_check`, …). The **semantic** Clean Core findings
-(released-API usage, `CLOUD_READINESS`) are an **ATC** concern — abaplint can't
+(released-API usage, `ABAP_CLOUD_DEVELOPMENT_DEFAULT`) are an **ATC** concern — abaplint can't
 resolve SAP's released-API classification offline, as module 6 explains.
 
 ---

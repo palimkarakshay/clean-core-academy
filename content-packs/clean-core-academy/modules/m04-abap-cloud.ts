@@ -3,7 +3,7 @@
 
    Source brief: §4 of the Clean Core & HANA Readiness curriculum.
    Audience: intermediate + expert — builders and architects writing
-   on-stack Tier-2 code. Reference release S/4HANA 2023 (758).
+   on-stack ABAP Cloud code. Reference release S/4HANA 2023 (758).
    Follows the m01 authoring template: every concept ships paragraphs
    + keyPoints + simplified.oneLiner + a 3-question quiz with per-option
    explanations; code-bearing concepts add before/after examples in
@@ -41,7 +41,7 @@ export const m04AbapCloud: Section = {
     },
   ],
   blurb:
-    "Building Tier-2 transactional apps the Clean Core way: the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
+    "Build new apps that survive upgrades by design, using SAP's modern approach instead of the old patterns. Covers on-stack transactional apps the Clean Core way with RAP (SAP's modern transactional programming model): the five-artefact RAP scaffold, the behavior-pool implementation pattern, the Restricted ABAP forbidden list, and the BAdI rules — including the released-spot-with-unreleased-filter trap.",
   concepts: [
     {
       id: "m04-c1",
@@ -52,7 +52,7 @@ export const m04AbapCloud: Section = {
         status: "ready",
         notesRef: "clean-core-curriculum §4.1",
         paragraphs: [
-          "Every Tier-2 transactional app in ABAP Cloud is a RAP business object, and a managed BO is assembled from five mandatory artefacts. The persistence is a DDIC table (or a CDS table function over a custom table); on top of it sits an interface CDS root view entity — `define root view entity` — that carries the model and its annotations. That interface view is the stable, technical layer.",
+          "Every transactional app in ABAP Cloud is a RAP business object, and a managed BO is assembled from five mandatory artefacts. The persistence is a DDIC table (or a CDS table function over a custom table); on top of it sits an interface CDS root view entity — `define root view entity` — that carries the model and its annotations. That interface view is the stable, technical layer.",
           "The projection CDS view exposes a tailored subset of the interface entity to one service, declared with `provider contract transactional_query`; this is the contract a UI or API actually consumes, so it can hide fields and add consumption annotations without disturbing the interface layer. Behavior is split the same way: a behavior definition for the interface entity (declaring create/update/delete, fields, validations, determinations) and a thin projection behavior definition that re-exposes the operations the service offers via `use create/update/delete`.",
           "Finally a service definition (`define service`) lists which projection entities to expose, and a service binding turns that definition into a concrete protocol endpoint — OData V4 UI being the default for Fiori. The reason for the two-layer split (interface vs projection, BDEF vs projection BDEF) is decoupling: SAP and you can evolve the underlying model while each service keeps a narrow, versionable contract, which is exactly the Clean Core promise applied inside your own code.",
         ],
@@ -118,7 +118,7 @@ export const m04AbapCloud: Section = {
         },
         deeper: {
           paragraphs: [
-            "'Managed' means the RAP runtime owns the persistence (it writes your table for you); 'unmanaged' is for wrapping a legacy transaction's own save logic. Greenfield Tier-2 apps are almost always managed. The projection contract keyword matters: `transactional_query` marks a read-write projection for a transactional service, distinct from analytical or value-help contracts.",
+            "'Managed' means the RAP runtime owns the persistence (it writes your table for you); 'unmanaged' is for wrapping a legacy transaction's own save logic. Greenfield ABAP Cloud apps are almost always managed. The projection contract keyword matters: `transactional_query` marks a read-write projection for a transactional service, distinct from analytical or value-help contracts.",
           ],
           keyPoints: [
             "Managed BO = runtime owns persistence; unmanaged = you wrap existing save logic.",
@@ -452,6 +452,36 @@ export const m04AbapCloud: Section = {
           },
         ],
       },
+      exercise: {
+        id: "m04-c3-ex",
+        lang: "ABAP",
+        prompt:
+          "Macros (DEFINE ... END-OF-DEFINITION) are on the forbidden list for ABAP for Cloud Development — abaplint flags the DEFINE. Replace the macro with plain inline ABAP so the method reads straight through, then re-check until it's clean.",
+        flaggedRules: ["avoid_use"],
+        hint: "Delete the DEFINE/END-OF-DEFINITION block and its call, and write the one line it expanded to directly: rv_x = iv_x + 1.",
+        successNote:
+          "Macros hide control flow from the reader, the debugger, and the compiler. Inline ABAP is debuggable, refactorable, and Cloud-legal.",
+        starterCode: [
+          "class zcl_au_ex_mac definition public final create public.",
+          "  public section.",
+          "    class-methods bump",
+          "      importing !iv_x type i",
+          "      returning value(rv_x) type i.",
+          "endclass.",
+          "",
+          "class zcl_au_ex_mac implementation.",
+          "  method bump.",
+          '    " TODO: macros are forbidden in ABAP for Cloud Development.',
+          '    " Replace this DEFINE macro with inline ABAP.',
+          "    define _add_one.",
+          "      &1 = &1 + 1.",
+          "    end-of-definition.",
+          "    rv_x = iv_x.",
+          "    _add_one rv_x.",
+          "  endmethod.",
+          "endclass.",
+        ].join("\n"),
+      },
     },
     {
       id: "m04-c4",
@@ -469,7 +499,7 @@ export const m04AbapCloud: Section = {
         keyPoints: [
           "Only released enhancement spots are visible in a cloud package; unreleased spots cannot be picked.",
           "You can implement a released BAdI normally — its supertype interface being released is what matters.",
-          "Gotcha: a released BAdI may expose UNRELEASED (C2) filter values.",
+          "Caution: a released BAdI may expose UNRELEASED (C2) filter values.",
           "Referencing a C2 filter constant is a violation ATC flags, even though the BAdI is released.",
           "Fix: define your own constant for the filter value and document its binding to the SAP value.",
         ],
@@ -512,7 +542,7 @@ export const m04AbapCloud: Section = {
         },
         deeper: {
           paragraphs: [
-            "This mirrors the §1.4 gotcha that a C1 API can surface a C2 type: release state does not propagate transitively. A released spot guarantees the spot and its interface are stable, not every value, type, or constant reachable through it. The discipline is always 'check what you actually reference,' not 'trust the headline release state of the container.'",
+            "This mirrors the §1.4 pitfall that a C1 API can surface a C2 type: release state does not propagate transitively. A released spot guarantees the spot and its interface are stable, not every value, type, or constant reachable through it. The discipline is always 'check what you actually reference,' not 'trust the headline release state of the container.'",
           ],
           keyPoints: [
             "Release state is not transitive — a released BAdI does not bless its C2 filter values.",

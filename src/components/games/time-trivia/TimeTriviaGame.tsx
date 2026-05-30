@@ -232,6 +232,15 @@ function PlayScreen({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Screen-reader announcement of the reveal outcome (conveyed only by
+          colour visually). Empty during play so the timer tick doesn't spam. */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {state.phase === "revealing" && lastOutcome
+          ? lastOutcome.correct
+            ? `Correct. Score ${state.score} points.`
+            : `Incorrect. The correct answer is ${q.correct}: ${q.options[q.correct]}.`
+          : ""}
+      </p>
       <header className="flex items-center justify-between text-xs">
         <span className="font-mono text-(--muted)">
           Question {state.questionIdx + 1} of {total}
@@ -357,6 +366,10 @@ function ResultScreen({
 
   return (
     <Card tone="accent" className="flex flex-col gap-4 p-6">
+      <p className="sr-only" role="status">
+        Round complete. Score {state.score} of {max}, {pct} percent accuracy,{" "}
+        {correctCount} of {state.questions.length} correct.
+      </p>
       <header className="flex items-center gap-3">
         <span
           aria-hidden

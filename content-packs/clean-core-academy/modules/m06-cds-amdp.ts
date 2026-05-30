@@ -47,7 +47,7 @@ export const m06CdsAmdp: Section = {
     },
   ],
   blurb:
-    "Where Clean Core meets HANA: the pushdown ladder, CDS patterns that compress code, CDS table functions over AMDP, AMDP write paths, and CDS access control via DCL. Push logic down to the database in the most declarative form that can express it.",
+    "Get reports and heavy calculations to run far faster by letting the database do the work. This is where Clean Core meets HANA performance using CDS (SAP's modern data-modeling layer) and AMDP (database procedures written in ABAP): the pushdown ladder, CDS patterns that compress code, CDS table functions over AMDP, AMDP write paths, and CDS access control via DCL. Push logic down to the database in the most declarative form that can express it.",
   concepts: [
     {
       id: "m06-c1",
@@ -168,7 +168,7 @@ export const m06CdsAmdp: Section = {
         paragraphs: [
           "A surprising amount of classic ABAP — nested loops, COLLECT statements, manual subtotalling — collapses into a few lines of CDS. The three patterns that compress the most code are aggregation (count, sum, max, min, avg), associations (declared joins you navigate by name), and group by. Written as a `define view entity ... as select from ...`, the view is pushed to HANA and consumable everywhere.",
           "Aggregation replaces hand-rolled totalling: `count(*)`, `sum(h.total)`, `max(h.orderdate)` are computed on the database in a single scan. Associations replace repeated explicit joins: you declare `association [0..*] to zorder_item as _items on ...` once and expose or navigate it by name, and the join is materialized only when the association is actually used. Together they turn a screen of procedural code into a declarative contract.",
-          "The hard rule that bites newcomers: when a view aggregates, the `group by` must list *every* non-aggregated field in the select list. Miss one and the view often activates but errors at runtime — the activator catches many cases, but not when an expression appears in the select. Treat it as a discipline: every plain field in the projection appears verbatim in the group by.",
+          "The rule that commonly trips up newcomers: when a view aggregates, the `group by` must list *every* non-aggregated field in the select list. Miss one and the view often activates but errors at runtime — the activator catches many cases, but not when an expression appears in the select. Treat it as a discipline: every plain field in the projection appears verbatim in the group by.",
         ],
         keyPoints: [
           "Aggregation (count/sum/max/min/avg), associations, and group by compress the most code.",
