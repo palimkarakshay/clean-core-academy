@@ -39,6 +39,7 @@
 
 import "server-only";
 import { generateText } from "ai";
+import { getVercelOidcTokenSync } from "@vercel/oidc";
 import {
   cacheKey,
   getCached,
@@ -85,7 +86,15 @@ const DEFAULT_MAX_TOKENS = 1024;
 
 /** AI is "configured" when a gateway credential is present. */
 function isConfigured(): boolean {
-  return Boolean(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN);
+  if (process.env.AI_GATEWAY_API_KEY) return true;
+  // Keyless Vercel: the OIDC token is request-scoped (x-vercel-oidc-token header),
+  // not in process.env at runtime. getVercelOidcTokenSync() resolves it from the
+  // ambient request context (or VERCEL_OIDC_TOKEN locally) and THROWS when absent.
+  try {
+    return Boolean(getVercelOidcTokenSync());
+  } catch {
+    return false;
+  }
 }
 
 /**
