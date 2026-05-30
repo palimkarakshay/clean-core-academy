@@ -42,9 +42,10 @@ browser.
 **All LLM calls go through `src/lib/ai/router.ts`.** Do not import
 `@anthropic-ai/sdk`, `openai`, or any provider SDK elsewhere in
 `src/`. The router is the single seam that holds vendor neutrality
-(OpenRouter as the API surface) and the `not-configured` fallback that
-keeps the app honest when no API key is set. It is **scaffolded — not
-yet wired**; `OPENROUTER_API_KEY` is unset by default.
+(the Vercel AI Gateway via the AI SDK is the API surface) and the
+`not-configured` fallback that keeps the app honest when no credential
+is set. It is **scaffolded — not yet wired** to any feature;
+`AI_GATEWAY_API_KEY` (and the Vercel OIDC fallback) are unset by default.
 
 Prompt templates live in `prompts/*.md`, imported as strings. Do not
 inline system prompts in TypeScript.
