@@ -69,8 +69,9 @@ test currently covers a subset of live keys — see issues for the gap.)
 
 All LLM calls are funneled through `src/lib/ai/router.ts`. No provider SDK
 is imported anywhere else in `src/`. The router uses `server-only` to stay
-out of the client bundle, and with no `OPENROUTER_API_KEY` set it returns a
-structured `not-configured` result rather than throwing. It is **scaffolded
+out of the client bundle, and with no gateway credential (`AI_GATEWAY_API_KEY`
+or a Vercel OIDC token) set it returns a structured `not-configured` result
+rather than throwing. It is **scaffolded
 and not yet wired** to any live feature. Separately, the **Ask Claude**
 panel is a client-side hand-off that opens `claude.ai` in the browser — it
 does not call the router, which is why `connect-src` allows `claude.ai`.

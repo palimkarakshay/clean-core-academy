@@ -100,10 +100,12 @@ runtime. Clean reference solutions live in `exercises/src/*.clas.abap`; the
   `src/__tests__/storage-key-discipline.test.ts` fails if a storage-key literal
   appears outside its owning module. Keys are namespaced per `pack.id`, so packs
   don't collide in one browser.
-- **AI boundary.** All LLM calls go through `src/lib/ai/router.ts` (OpenRouter
-  as the surface; **scaffolded — not wired** until an API key + the v2 work
-  land). Do not import a provider SDK elsewhere in `src/`. Prompt templates live
-  in `prompts/*.md` imported as strings. Separately, the **Ask Claude** panel
+- **AI boundary.** All LLM calls go through `src/lib/ai/router.ts` (Vercel AI
+  Gateway via the AI SDK's `generateText` as the surface; cost defenses in
+  `src/lib/ai/cost-controls.ts`; **scaffolded — not wired** to a feature until
+  a credential + the v2 work land). Do not import a provider SDK elsewhere in
+  `src/`. Prompt templates live in `prompts/*.md` imported as strings.
+  Separately, the **Ask Claude** panel
   (`AskClaudePanel.tsx`) is a *client-side hand-off* that opens `claude.ai` in
   the browser — that's why the CSP `connect-src` allows `claude.ai`.
 - **Quiz quality.** New MCQs must not skew the correct letter past 60% on a
@@ -148,8 +150,10 @@ inherited material references things that **don't exist here**:
 - **`.env.example`** documents v2/roadmap features whose source files are absent:
   the *Adept* designer lane + `NEXT_PUBLIC_ADEPT_ENABLED` (no `src/middleware.ts`
   in this repo), `src/lib/journey-decoder.ts`, `LearningGoalCapture.tsx` /
-  `DesignerJourneyDecoder.tsx`, Clerk auth, Neon `DATABASE_URL`, and the
-  OpenRouter `router.ts` wiring. Treat these as roadmap, not current behavior.
+  `DesignerJourneyDecoder.tsx`, Clerk auth, Neon `DATABASE_URL`, and a wired
+  consumer of `router.ts`. Treat these as roadmap, not current behavior. (The
+  router itself now targets the Vercel AI Gateway via the AI SDK, but no
+  feature calls it yet.)
 - **`content-packs/README.md`** documents demo packs (`cca-f-prep`,
   `learn-french`, `sample-pack`, `sewing-beginners`) and a `web/` directory
   prefix — none exist here. The swap *mechanism* it describes is accurate.
